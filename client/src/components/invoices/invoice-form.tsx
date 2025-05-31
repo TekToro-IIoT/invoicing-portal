@@ -50,6 +50,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     notes: invoice?.notes || "",
     equipmentPurchasedDescription: invoice?.equipmentPurchasedDescription || "",
     items: invoice?.items?.length > 0 ? invoice.items : [{ 
+      jobCode: "",
       servicePoint: "", 
       afeLoe: "", 
       afeNumber: "", 
@@ -78,6 +79,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         notes: invoice.notes || "",
         equipmentPurchasedDescription: invoice.equipmentPurchasedDescription || "",
         items: invoice.items?.length > 0 ? invoice.items : [{ 
+          jobCode: "",
           servicePoint: "", 
           afeLoe: "", 
           afeNumber: "", 
@@ -186,6 +188,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     setFormData({
       ...formData,
       items: [...formData.items, { 
+        jobCode: "",
         servicePoint: "", 
         afeLoe: "", 
         afeNumber: "", 
@@ -310,7 +313,16 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
             <div className="space-y-4">
               {formData.items.map((item: any, index: number) => (
                 <Card key={index} className="p-4 bg-gray-800 border-gray-600">
-                  <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-end">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Job Code#</label>
+                      <Input
+                        value={item.jobCode}
+                        onChange={(e) => updateItem(index, 'jobCode', e.target.value)}
+                        placeholder="JC001"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
                     <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-white mb-2">Service Point</label>
                       <Input
