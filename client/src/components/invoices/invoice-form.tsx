@@ -281,7 +281,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         onChange={(e) => updateItem(index, 'servicePoint', e.target.value)}
                         placeholder="JGK E-72"
                         className="bg-gray-700 border-gray-600 text-white"
-                        required
                       />
                     </div>
                     <div className="md:col-span-1">
@@ -327,7 +326,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         onChange={(e) => updateItem(index, 'service', e.target.value)}
                         placeholder="Sr. Programmer Rate"
                         className="bg-gray-700 border-gray-600 text-white"
-                        required
                       />
                     </div>
                     <div className="md:col-span-1">
@@ -340,7 +338,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         onChange={(e) => updateItem(index, 'rate', parseFloat(e.target.value) || 0)}
                         placeholder="$200.00"
                         className="bg-gray-700 border-gray-600 text-white"
-                        required
                       />
                     </div>
                     <div className="md:col-span-1">
