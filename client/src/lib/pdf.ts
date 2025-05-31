@@ -275,12 +275,12 @@ function generatePDFHTML(invoice: any): string {
               <img src="${company.logo}" alt="Company Logo" class="company-logo" />
             </div>` : ''}
             <div class="company-details">
-              <div class="company-name">${company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
-              <div>${company.address || '103 South Church St.'}</div>
-              <div>${company.city || 'George Town'}, ${company.state || ''} ${company.zipCode || 'PO Box 472'}</div>
-              <div>${company.country || 'Cayman Islands'}</div>
-              <div>Phone: ${company.phone || '5872275305'}</div>
-              <div>Email: ${company.email || 'al.doucet@tektoro.com'}</div>
+              ${company.name ? `<div class="company-name">${company.name}</div>` : ''}
+              ${company.address ? `<div>${company.address}</div>` : ''}
+              ${company.city ? `<div>${company.city}${company.state ? `, ${company.state}` : ''}${company.zipCode ? ` ${company.zipCode}` : ''}</div>` : ''}
+              ${company.country ? `<div>${company.country}</div>` : ''}
+              ${company.phone ? `<div>Phone: ${company.phone}</div>` : ''}
+              ${company.email ? `<div>Email: ${company.email}</div>` : ''}
               ${company.website ? `<div>Web: ${company.website}</div>` : ''}
             </div>
           </div>
