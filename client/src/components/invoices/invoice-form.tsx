@@ -325,31 +325,46 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       />
                     </div>
                     <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        min="0.1"
-                        value={item.quantity}
-                        onChange={(e) => updateItem(index, 'quantity', parseFloat(e.target.value) || 0)}
-                        required
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Rate</label>
+                      <label className="block text-sm font-medium text-white mb-2">Rate</label>
                       <Input
                         type="number"
                         step="0.01"
                         min="0"
                         value={item.rate}
                         onChange={(e) => updateItem(index, 'rate', parseFloat(e.target.value) || 0)}
+                        placeholder="$200.00"
+                        className="bg-gray-700 border-gray-600 text-white"
                         required
                       />
                     </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-                      <div className="text-lg font-semibold text-gray-900">
-                        ${(parseFloat(item.quantity.toString()) * parseFloat(item.rate.toString())).toFixed(2)}
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Hrs</label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={item.hrs}
+                        onChange={(e) => updateItem(index, 'hrs', parseFloat(e.target.value) || 0)}
+                        placeholder="1"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Qty</label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={item.qty}
+                        onChange={(e) => updateItem(index, 'qty', parseFloat(e.target.value) || 0)}
+                        placeholder="1"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
+                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center">
+                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
                       </div>
                     </div>
                     <div className="md:col-span-1">
