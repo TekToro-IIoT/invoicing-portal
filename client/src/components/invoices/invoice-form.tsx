@@ -22,7 +22,7 @@ const invoiceSchema = z.object({
   clientId: z.number(),
   issueDate: z.string(),
   dueDate: z.string(),
-  taxRate: z.number().min(0).max(100),
+  taxRate: z.string(),
   notes: z.string().optional(),
   items: z.array(z.object({
     servicePoint: z.string().optional(),
@@ -124,7 +124,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       const validatedData = invoiceSchema.parse({
         ...formData,
         clientId: parseInt(formData.clientId),
-        taxRate: parseFloat(formData.taxRate.toString()),
+        taxRate: formData.taxRate.toString(),
         items: formData.items.map((item: any) => ({
           ...item,
           rate: parseFloat(item.rate?.toString() || '0'),
