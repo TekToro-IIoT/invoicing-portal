@@ -12,6 +12,7 @@ import Invoices from "@/pages/invoices";
 
 
 import UserProfiles from "@/pages/user-profiles";
+import Profile from "@/pages/profile";
 import Companies from "@/pages/companies";
 import CompanyProfile from "@/pages/company-profile";
 import Sidebar from "@/components/layout/sidebar";
@@ -41,6 +42,7 @@ function Router() {
         <>
           <Route path="/" component={DashboardLayout} />
           <Route path="/invoices" component={InvoicesLayout} />
+          <Route path="/profile" component={ProfileLayout} />
           <Route path="/user-profiles" component={UserProfilesLayout} />
           <Route path="/companies" component={CompaniesLayout} />
           <Route path="/company-profile" component={CompanyProfileLayout} />
@@ -78,6 +80,20 @@ function InvoicesLayout() {
 
 
 
+
+function ProfileLayout() {
+  return (
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <Header title="My Profile" subtitle="Manage your personal information and account settings" />
+        <main className="p-6">
+          <Profile />
+        </main>
+      </div>
+    </div>
+  );
+}
 
 function UserProfilesLayout() {
   return (

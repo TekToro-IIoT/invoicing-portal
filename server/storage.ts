@@ -43,6 +43,10 @@ export interface IStorage {
   updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
   updateUserRole(id: string, role: string): Promise<User | undefined>;
   updateUserCredentials(id: string, email?: string, password?: string): Promise<User | undefined>;
+  
+  // Profile management (for authenticated users)
+  updateProfile(id: string, firstName?: string, lastName?: string, email?: string): Promise<User | undefined>;
+  updatePassword(id: string, currentPassword: string, newPassword: string): Promise<boolean>;
 
   // Client operations
   getClients(userId: string): Promise<ClientWithCompany[]>;
