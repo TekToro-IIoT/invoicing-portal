@@ -386,10 +386,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create new items
       if (items && items.length > 0) {
         for (const item of items) {
-          await storage.createInvoiceItem({
-            ...item,
-            invoiceId: id
-          });
+          try {
+            const itemData = {
+              ...item,
+              invoiceId: id,
+              amount: parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))
+            };
+            console.log('Creating updated invoice item:', itemData);
+            await storage.createInvoiceItem(itemData);
+          } catch (itemError) {
+            console.error('Error creating updated invoice item:', itemError, 'Item data:', item);
+          }
         }
       }
       
