@@ -26,6 +26,7 @@ const invoiceSchema = z.object({
   notes: z.string().optional(),
   equipmentPurchasedDescription: z.string().optional(),
   items: z.array(z.object({
+    jobCode: z.string().optional(),
     servicePoint: z.string().optional(),
     afeLoe: z.string().optional(),
     afeNumber: z.string().optional(),
