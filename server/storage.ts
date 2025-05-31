@@ -173,6 +173,37 @@ export class DatabaseStorage implements IStorage {
     return updatedUser;
   }
 
+  async updateProfile(id: string, firstName?: string, lastName?: string, email?: string): Promise<User | undefined> {
+    const updateData: any = { updatedAt: new Date() };
+    if (firstName !== undefined) updateData.firstName = firstName;
+    if (lastName !== undefined) updateData.lastName = lastName;
+    if (email !== undefined) updateData.email = email;
+
+    const [user] = await db
+      .update(users)
+      .set(updateData)
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async updatePassword(id: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    if (!user || !user.password) return false;
+
+    const bcrypt = require('bcrypt');
+    const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!isValidPassword) return false;
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    await db
+      .update(users)
+      .set({ password: hashedNewPassword, updatedAt: new Date() })
+      .where(eq(users.id, id));
+    
+    return true;
+  }
+
   // Client operations
   async getClients(userId: string): Promise<ClientWithCompany[]> {
     const results = await db
