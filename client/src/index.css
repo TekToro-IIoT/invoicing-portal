@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+  --background: 210 11% 98%; /* #F8FAFC */
+  --foreground: 215 13% 34%; /* #374151 */
+  --muted: 210 40% 96%; /* #F1F5F9 */
+  --muted-foreground: 215 16% 47%; /* #64748B */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 215 13% 34%; /* #374151 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 215 13% 34%; /* #374151 */
+  --border: 220 13% 91%; /* #E2E8F0 */
+  --input: 220 13% 91%; /* #E2E8F0 */
+  --primary: 217 90% 61%; /* #1E3A8A */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 210 40% 96%; /* #F1F5F9 */
+  --secondary-foreground: 215 25% 27%; /* #334155 */
+  --accent: 210 40% 96%; /* #F1F5F9 */
+  --accent-foreground: 215 25% 27%; /* #334155 */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 217 90% 61%; /* #1E3A8A */
+  --radius: 0.5rem;
+  
+  /* TekToro brand colors */
+  --tektoro-blue: 217 90% 61%; /* #1E3A8A */
+  --tektoro-orange: 24 95% 53%; /* #F97316 */
+  --tektoro-gray: 215 13% 34%; /* #374151 */
+  --tektoro-light: 210 11% 98%; /* #F8FAFC */
+}
+
+.dark {
+  --background: 222 84% 5%; /* #0F172A */
+  --foreground: 210 40% 96%; /* #F1F5F9 */
+  --muted: 217 33% 17%; /* #1E293B */
+  --muted-foreground: 215 20% 65%; /* #94A3B8 */
+  --popover: 222 84% 5%; /* #0F172A */
+  --popover-foreground: 210 40% 96%; /* #F1F5F9 */
+  --card: 222 84% 5%; /* #0F172A */
+  --card-foreground: 210 40% 96%; /* #F1F5F9 */
+  --border: 217 33% 17%; /* #1E293B */
+  --input: 217 33% 17%; /* #1E293B */
+  --primary: 217 90% 61%; /* #1E3A8A */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 217 33% 17%; /* #1E293B */
+  --secondary-foreground: 210 40% 96%; /* #F1F5F9 */
+  --accent: 217 33% 17%; /* #1E293B */
+  --accent-foreground: 210 40% 96%; /* #F1F5F9 */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 217 90% 61%; /* #1E3A8A */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-inter antialiased bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .tektoro-blue {
+    color: hsl(var(--tektoro-blue));
+  }
+  
+  .bg-tektoro-blue {
+    background-color: hsl(var(--tektoro-blue));
+  }
+  
+  .tektoro-orange {
+    color: hsl(var(--tektoro-orange));
+  }
+  
+  .bg-tektoro-orange {
+    background-color: hsl(var(--tektoro-orange));
+  }
+  
+  .invoice-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .scada-border {
+    border: 2px solid hsl(var(--border));
+    border-radius: 8px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
