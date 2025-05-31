@@ -1,51 +1,28 @@
 // PDF generation utility for invoices
 // This creates a professional PDF document matching the TekToro design
 
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-
 export async function generatePDF(invoice: any) {
   try {
-    // Get the invoice template element from the DOM
-    const element = document.getElementById('invoice-template');
-    if (!element) {
-      throw new Error('Invoice template not found');
+    // Create a new window with the invoice content for PDF generation
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      throw new Error('Could not open print window. Please check your popup blocker.');
     }
 
-    // Use html2canvas to capture the exact visual appearance
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      width: element.scrollWidth,
-      height: element.scrollHeight
-    });
-
-    const imgData = canvas.toDataURL('image/png');
+    const pdfContent = generatePDFHTML(invoice);
     
-    // Create PDF with the captured image
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 210;
-    const pageHeight = 295;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-
-    let position = 0;
-
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-
-    // Download the PDF
-    pdf.save(`invoice-${invoice.invoiceNumber}.pdf`);
+    printWindow.document.write(pdfContent);
+    printWindow.document.close();
+    
+    // Wait for content to load then trigger print dialog
+    printWindow.onload = () => {
+      printWindow.print();
+      
+      // Close the window after printing (optional)
+      printWindow.onafterprint = () => {
+        printWindow.close();
+      };
+    };
     
   } catch (error) {
     console.error('PDF generation error:', error);
@@ -122,6 +99,33 @@ function generatePDFHTML(invoice: any): string {
           padding: 4px;
           -webkit-print-color-adjust: exact;
           color-adjust: exact;
+        }
+        
+        .logo-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+        
+        .logo-icon {
+          margin-bottom: 2px;
+        }
+        
+        .logo-text {
+          color: #22c55e;
+          font-weight: bold;
+          font-size: 10px;
+          line-height: 1;
+          margin-bottom: 1px;
+        }
+        
+        .logo-subtitle {
+          color: #22c55e;
+          font-size: 6px;
+          line-height: 1;
+          opacity: 0.8;
         }
         
         .logo-img {
@@ -268,10 +272,16 @@ function generatePDFHTML(invoice: any): string {
           <div class="company-info">
             <div class="logo-section">
               <div class="company-logo-box">
-                <svg width="48" height="48" viewBox="0 0 100 100" style="color: #22c55e;">
-                  <path d="M20 30 L50 60 L80 30 L50 45 Z" fill="#22c55e" />
-                  <path d="M35 45 L50 60 L65 45 L50 55 Z" fill="#22c55e" style="opacity: 0.7;" />
-                </svg>
+                <div class="logo-content">
+                  <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 100 100" style="color: #22c55e;">
+                      <path d="M20 30 L50 60 L80 30 L50 45 Z" fill="#22c55e" />
+                      <path d="M35 45 L50 60 L65 45 L50 55 Z" fill="#22c55e" style="opacity: 0.7;" />
+                    </svg>
+                  </div>
+                  <div class="logo-text">TekToro</div>
+                  <div class="logo-subtitle">IoT Solutions</div>
+                </div>
               </div>
             </div>
             <div class="company-details">
