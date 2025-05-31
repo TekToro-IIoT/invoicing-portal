@@ -68,10 +68,19 @@ export default function CompanyProfile() {
 
   const updateCompanyMutation = useMutation({
     mutationFn: async (data: any) => {
-      // For now, we'll work with JSON data without logo upload
-      // Logo upload functionality can be added later with proper backend support
+      // Convert logo file to base64 if present
+      let logoData = null;
+      if (logoFile) {
+        logoData = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(logoFile);
+        });
+      }
+
       const payload = {
         ...data,
+        logo: logoData,
         isDefault: true
       };
 
