@@ -202,11 +202,16 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                 <div>
                   <Label className="text-white">Client</Label>
                   <Select 
-                    value={formData.clientId.toString()} 
+                    value={formData.clientId} 
                     onValueChange={(value) => setFormData({ ...formData, clientId: value })}
                   >
                     <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
-                      <SelectValue placeholder="Select a client" />
+                      <SelectValue>
+                        {formData.clientId ? 
+                          clients?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select client"
+                          : "Select client"
+                        }
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-gray-700 border-gray-600">
                       {clients?.map((client: any) => (
