@@ -23,7 +23,7 @@ export default function Companies() {
 
   const createCompanyMutation = useMutation({
     mutationFn: async (companyData: any) => {
-      await apiRequest('/api/companies', 'POST', companyData);
+      await apiRequest('POST', '/api/companies', companyData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
@@ -45,7 +45,7 @@ export default function Companies() {
 
   const updateCompanyMutation = useMutation({
     mutationFn: async ({ id, ...companyData }: any) => {
-      await apiRequest(`/api/companies/${id}`, 'PUT', companyData);
+      await apiRequest('PUT', `/api/companies/${id}`, companyData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
@@ -67,7 +67,7 @@ export default function Companies() {
 
   const deleteCompanyMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/companies/${id}`, 'DELETE');
+      await apiRequest('DELETE', `/api/companies/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
@@ -87,7 +87,7 @@ export default function Companies() {
 
   const setDefaultMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/companies/${id}/default`, 'PUT');
+      await apiRequest('PUT', `/api/companies/${id}/default`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
