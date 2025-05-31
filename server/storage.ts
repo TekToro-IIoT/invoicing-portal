@@ -70,9 +70,8 @@ export interface IStorage {
 
   // Dashboard stats
   getDashboardStats(userId: string): Promise<{
-    totalRevenue: number;
     activeInvoices: number;
-    hoursTracked: number;
+    outstandingInvoices: number;
     totalClients: number;
   }>;
 
@@ -514,57 +513,25 @@ export class DatabaseStorage implements IStorage {
 
   // Dashboard stats
   async getDashboardStats(userId: string): Promise<{
-    totalRevenue: number;
     activeInvoices: number;
     outstandingInvoices: number;
-    hoursTracked: number;
     totalClients: number;
   }> {
-    // Get total revenue from paid invoices
-    const revenueResult = await db
-      .select()
-      .from(invoices)
-      .where(and(eq(invoices.userId, userId), eq(invoices.status, 'paid')));
-    
-    const totalRevenue = revenueResult.reduce((sum, invoice) => sum + parseFloat(invoice.total || '0'), 0);
-
-    // Get active invoices count (draft and sent)
+    // Get active invoices count (sent status)
     const activeInvoicesResult = await db
       .select()
       .from(invoices)
-      .where(and(
-        eq(invoices.userId, userId), 
-        or(eq(invoices.status, 'sent'), eq(invoices.status, 'draft'))
-      ));
+      .where(and(eq(invoices.userId, userId), eq(invoices.status, 'sent')));
     
     const activeInvoices = activeInvoicesResult.length;
 
-    // Get outstanding invoices count (draft only)
+    // Get outstanding invoices count (draft status)
     const outstandingInvoicesResult = await db
       .select()
       .from(invoices)
       .where(and(eq(invoices.userId, userId), eq(invoices.status, 'draft')));
     
     const outstandingInvoices = outstandingInvoicesResult.length;
-
-    // Get total hours tracked from time entries
-    const timeEntriesResult = await db
-      .select()
-      .from(timeEntries)
-      .where(eq(timeEntries.userId, userId));
-    
-    const totalMinutes = timeEntriesResult.reduce((sum, entry) => sum + (entry.duration || 0), 0);
-    const timeEntriesHours = totalMinutes / 60;
-
-    // Get total hours tracked from time tickets
-    const timeTicketsResult = await db
-      .select()
-      .from(timeTickets)
-      .where(eq(timeTickets.userId, userId));
-    
-    const timeTicketsHours = timeTicketsResult.reduce((sum, ticket) => sum + parseFloat(ticket.totalHours || '0'), 0);
-    
-    const hoursTracked = Math.round((timeEntriesHours + timeTicketsHours) * 10) / 10;
 
     // Get total clients count
     const clientsResult = await db
@@ -575,10 +542,8 @@ export class DatabaseStorage implements IStorage {
     const totalClients = clientsResult.length;
 
     return {
-      totalRevenue,
       activeInvoices,
       outstandingInvoices,
-      hoursTracked,
       totalClients,
     };
   }

@@ -59,26 +59,7 @@ export default function Dashboard() {
   return (
     <main className="p-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-        <Card className="invoice-shadow scada-border">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  ${stats?.totalRevenue?.toLocaleString() || '0'}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <i className="fas fa-dollar-sign text-green-600 text-xl"></i>
-              </div>
-            </div>
-            <div className="mt-4">
-              <span className="text-green-600 text-sm font-medium">Revenue</span>
-              <span className="text-gray-500 text-sm ml-2">from paid invoices</span>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 
         <Card className="invoice-shadow scada-border">
           <CardContent className="p-6">
@@ -116,23 +97,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="invoice-shadow scada-border">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Hours Tracked</p>
-                <p className="text-3xl font-bold text-gray-900">{stats?.hoursTracked || 0}</p>
-              </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <i className="fas fa-clock text-orange-600 text-xl"></i>
-              </div>
-            </div>
-            <div className="mt-4">
-              <span className="text-orange-600 text-sm font-medium">Total hours</span>
-              <span className="text-gray-500 text-sm ml-2">across all projects</span>
-            </div>
-          </CardContent>
-        </Card>
+
 
         <Card className="invoice-shadow scada-border">
           <CardContent className="p-6">
