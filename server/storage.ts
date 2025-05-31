@@ -24,6 +24,7 @@ import {
   type Company,
   type InsertCompany,
   type ClientWithUser,
+  type ClientWithCompany,
   type ProjectWithClient,
   type TimeEntryWithProject,
   type InvoiceWithClient,
@@ -43,7 +44,7 @@ export interface IStorage {
   updateUserRole(id: string, role: string): Promise<User | undefined>;
 
   // Client operations
-  getClients(userId: string): Promise<Client[]>;
+  getClients(userId: string): Promise<ClientWithCompany[]>;
   getClient(id: number, userId: string): Promise<Client | undefined>;
   getClientByName(name: string, userId: string): Promise<Client | undefined>;
   createClient(client: InsertClient): Promise<Client>;
@@ -149,13 +150,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Client operations
-  async getClients(userId: string): Promise<Client[]> {
-    return await db
+  async getClients(userId: string): Promise<ClientWithCompany[]> {
+    const results = await db
       .select()
       .from(clients)
       .leftJoin(companies, eq(clients.companyId, companies.id))
       .where(eq(clients.userId, userId))
       .orderBy(asc(clients.name));
+
+    return results.map(result => ({
+      ...result.clients,
+      company: result.companies || undefined,
+    }));
   }
 
   async getClient(id: number, userId: string): Promise<Client | undefined> {
@@ -351,7 +357,10 @@ export class DatabaseStorage implements IStorage {
       if (!invoiceMap.has(invoice.id)) {
         invoiceMap.set(invoice.id, {
           ...invoice,
-          client: result.clients!,
+          client: {
+            ...result.clients!,
+            company: result.companies || undefined,
+          },
           items: [],
         });
       }
@@ -369,6 +378,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(invoices)
       .leftJoin(clients, eq(invoices.clientId, clients.id))
+      .leftJoin(companies, eq(clients.companyId, companies.id))
       .leftJoin(invoiceItems, eq(invoices.id, invoiceItems.invoiceId))
       .leftJoin(timeEntries, eq(invoiceItems.timeEntryId, timeEntries.id))
       .where(and(eq(invoices.id, id), eq(invoices.userId, userId)));
@@ -376,7 +386,10 @@ export class DatabaseStorage implements IStorage {
     if (results.length === 0) return undefined;
 
     const invoice = results[0].invoices;
-    const client = results[0].clients!;
+    const client = {
+      ...results[0].clients!,
+      company: results[0].companies || undefined,
+    };
     const items = results
       .filter(r => r.invoice_items)
       .map(r => ({

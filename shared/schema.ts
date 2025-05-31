@@ -325,11 +325,12 @@ export type TimeTicket = typeof timeTickets.$inferSelect;
 
 // Extended types with relations
 export type ClientWithUser = Client & { user: User };
+export type ClientWithCompany = Client & { company?: Company };
 export type ProjectWithClient = Project & { client: Client };
 export type TimeEntryWithProject = TimeEntry & { project: ProjectWithClient };
-export type InvoiceWithClient = Invoice & { client: Client; items: InvoiceItem[] };
+export type InvoiceWithClient = Invoice & { client: ClientWithCompany; items: InvoiceItem[] };
 export type InvoiceWithDetails = Invoice & { 
-  client: Client; 
+  client: ClientWithCompany; 
   items: (InvoiceItem & { timeEntry?: TimeEntry })[];
 };
 export type TimeTicketWithUser = TimeTicket & { user: User };
