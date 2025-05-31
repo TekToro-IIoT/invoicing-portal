@@ -6,6 +6,7 @@ interface InvoiceTableProps {
   onView: (invoice: any) => void;
   onEdit: (invoice: any) => void;
   onDelete: (id: number) => void;
+  onDownloadPDF: (invoice: any) => void;
   onStatusChange: (id: number, status: string) => void;
   onNewInvoice: () => void;
   isDeleting: boolean;
@@ -16,6 +17,7 @@ export default function InvoiceTable({
   onView, 
   onEdit, 
   onDelete, 
+  onDownloadPDF,
   onStatusChange,
   onNewInvoice,
   isDeleting
@@ -137,9 +139,9 @@ export default function InvoiceTable({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Download PDF functionality would go here
+                      onDownloadPDF(invoice);
                     }}
-                    className="text-tektoro-orange hover:text-orange-600 p-1"
+                    className="text-gray-700 hover:text-gray-900 p-1"
                     title="Download PDF"
                   >
                     <i className="fas fa-download"></i>
