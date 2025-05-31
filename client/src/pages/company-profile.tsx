@@ -197,45 +197,45 @@ export default function CompanyProfile() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <Label htmlFor="name" className="text-gray-300">Company Name</Label>
+                  <Label htmlFor="name" className="text-white font-medium">Company Name</Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="bg-tektoro-input border-tektoro-border text-white"
+                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                     placeholder="Your Company Name"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="address" className="text-gray-300">Address</Label>
+                  <Label htmlFor="address" className="text-white font-medium">Address</Label>
                   <Input
                     id="address"
                     value={formData.address}
                     onChange={(e) => handleInputChange("address", e.target.value)}
-                    className="bg-tektoro-input border-tektoro-border text-white"
+                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                     placeholder="Street Address"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="city" className="text-gray-300">City</Label>
+                    <Label htmlFor="city" className="text-white font-medium">City</Label>
                     <Input
                       id="city"
                       value={formData.city}
                       onChange={(e) => handleInputChange("city", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="City"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="state" className="text-gray-300">State</Label>
+                    <Label htmlFor="state" className="text-white font-medium">State</Label>
                     <Input
                       id="state"
                       value={formData.state}
                       onChange={(e) => handleInputChange("state", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="State"
                     />
                   </div>
@@ -243,22 +243,22 @@ export default function CompanyProfile() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="zipCode" className="text-gray-300">ZIP Code</Label>
+                    <Label htmlFor="zipCode" className="text-white font-medium">ZIP Code</Label>
                     <Input
                       id="zipCode"
                       value={formData.zipCode}
                       onChange={(e) => handleInputChange("zipCode", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="ZIP Code"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="country" className="text-gray-300">Country</Label>
+                    <Label htmlFor="country" className="text-white font-medium">Country</Label>
                     <Input
                       id="country"
                       value={formData.country}
                       onChange={(e) => handleInputChange("country", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="Country"
                     />
                   </div>
@@ -266,23 +266,23 @@ export default function CompanyProfile() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="phone" className="text-gray-300">Phone</Label>
+                    <Label htmlFor="phone" className="text-white font-medium">Phone</Label>
                     <Input
                       id="phone"
                       value={formData.phone}
                       onChange={(e) => handleInputChange("phone", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="Phone Number"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email" className="text-gray-300">Email</Label>
+                    <Label htmlFor="email" className="text-white font-medium">Email</Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="Email Address"
                     />
                   </div>
@@ -290,22 +290,22 @@ export default function CompanyProfile() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="website" className="text-gray-300">Website</Label>
+                    <Label htmlFor="website" className="text-white font-medium">Website</Label>
                     <Input
                       id="website"
                       value={formData.website}
                       onChange={(e) => handleInputChange("website", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="www.yourcompany.com"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="taxId" className="text-gray-300">Tax ID</Label>
+                    <Label htmlFor="taxId" className="text-white font-medium">Tax ID</Label>
                     <Input
                       id="taxId"
                       value={formData.taxId}
                       onChange={(e) => handleInputChange("taxId", e.target.value)}
-                      className="bg-tektoro-input border-tektoro-border text-white"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
                       placeholder="Tax ID Number"
                     />
                   </div>
