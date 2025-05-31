@@ -22,11 +22,16 @@ export default function Login() {
       return await apiRequest("/api/auth/login", "POST", credentials);
     },
     onSuccess: () => {
+      // Invalidate the auth query to refresh user state
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       toast({
         title: "Login Successful",
         description: "Welcome to TekToro Invoice Management",
       });
-      setLocation("/");
+      // Small delay to allow auth state to update
+      setTimeout(() => {
+        setLocation("/");
+      }, 100);
     },
     onError: (error: Error) => {
       toast({
