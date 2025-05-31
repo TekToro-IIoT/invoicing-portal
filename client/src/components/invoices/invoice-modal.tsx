@@ -92,11 +92,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
             <div className="flex justify-between items-start mb-8">
               <div>
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-12 h-12 bg-tektoro-orange rounded-lg flex items-center justify-center">
-                    <i className="fas fa-bolt text-white text-xl"></i>
-                  </div>
+                  <img 
+                    src="/attached_assets/tektoro-logo.png" 
+                    alt="Company Logo" 
+                    className="w-12 h-12 object-contain"
+                  />
                   <div>
-                    <h1 className="text-2xl font-bold text-tektoro-blue">TekToro</h1>
                     <p className="text-sm text-gray-600">Professional Services</p>
                   </div>
                 </div>

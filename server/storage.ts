@@ -683,21 +683,35 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTimeTicket(timeTicket: InsertTimeTicket): Promise<TimeTicket> {
+    // Calculate total hours from regular and overtime hours
+    const regularHours = parseFloat(timeTicket.regularTimeHours || '0');
+    const overtimeHours = parseFloat(timeTicket.overtimeHours || '0');
+    const totalHours = (regularHours + overtimeHours).toString();
+
     const [ticket] = await db
       .insert(timeTickets)
-      .values(timeTicket)
+      .values({
+        ...timeTicket,
+        totalHours
+      })
       .returning();
     
     return ticket;
   }
 
   async updateTimeTicket(id: number, timeTicket: Partial<InsertTimeTicket>, userId: string): Promise<TimeTicket | undefined> {
+    // Calculate total hours if regular or overtime hours are being updated
+    let updateData = { ...timeTicket, updatedAt: new Date() };
+    
+    if (timeTicket.regularTimeHours !== undefined || timeTicket.overtimeHours !== undefined) {
+      const regularHours = parseFloat(timeTicket.regularTimeHours || '0');
+      const overtimeHours = parseFloat(timeTicket.overtimeHours || '0');
+      updateData.totalHours = (regularHours + overtimeHours).toString();
+    }
+
     const [updatedTicket] = await db
       .update(timeTickets)
-      .set({
-        ...timeTicket,
-        updatedAt: new Date(),
-      })
+      .set(updateData)
       .where(and(eq(timeTickets.id, id), eq(timeTickets.userId, userId)))
       .returning();
     

@@ -82,18 +82,12 @@ function generatePDFHTML(invoice: any): string {
           margin-bottom: 20px;
         }
         
-        .logo-icon {
+        .logo-img {
           width: 48px;
           height: 48px;
-          background: #f97316;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           margin-right: 12px;
+          object-fit: contain;
         }
-        
-        .logo-icon i {
           color: white;
           font-size: 24px;
         }
@@ -277,11 +271,8 @@ function generatePDFHTML(invoice: any): string {
         <div class="header">
           <div class="company-info">
             <div class="logo">
-              <div class="logo-icon">
-                <i class="fas fa-bolt"></i>
-              </div>
+              <img src="/attached_assets/tektoro-logo.png" alt="Company Logo" class="logo-img">
               <div>
-                <h1 class="company-name">TekToro</h1>
                 <p class="company-tagline">Professional Services</p>
               </div>
             </div>
