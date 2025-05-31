@@ -136,9 +136,11 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       mutation.mutate(validatedData);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("Validation errors:", error.errors);
+        const errorMessages = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
         toast({
           title: "Validation Error",
-          description: "Please check all required fields",
+          description: errorMessages || "Please check all required fields",
           variant: "destructive",
         });
       }
