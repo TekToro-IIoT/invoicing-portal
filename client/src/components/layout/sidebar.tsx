@@ -100,7 +100,7 @@ export default function Sidebar() {
           </div>
           <button 
             className="text-gray-400 hover:text-white"
-            onClick={() => window.location.href = '/api/logout'}
+            onClick={() => window.location.href = '/api/auth/logout'}
           >
             <i className="fas fa-sign-out-alt"></i>
           </button>
