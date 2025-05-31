@@ -64,8 +64,8 @@ export default function UserProfiles() {
   });
 
   const updateCredentialsMutation = useMutation({
-    mutationFn: async ({ userId, email, password }: { userId: string, email?: string, password?: string }) => {
-      await apiRequest(`/api/admin/users/${userId}/credentials`, 'PUT', { email, password });
+    mutationFn: async ({ userId, username, email, password }: { userId: string, username?: string, email?: string, password?: string }) => {
+      await apiRequest(`/api/admin/users/${userId}/credentials`, 'PUT', { username, email, password });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -113,18 +113,20 @@ export default function UserProfiles() {
     if (!editingUser) return;
 
     const formData = new FormData(e.currentTarget);
+    const username = formData.get('username') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
     // Only send fields that have values
-    const updates: { userId: string, email?: string, password?: string } = { userId: editingUser.id };
+    const updates: { userId: string, username?: string, email?: string, password?: string } = { userId: editingUser.id };
+    if (username && username.trim()) updates.username = username.trim();
     if (email && email.trim()) updates.email = email.trim();
     if (password && password.trim()) updates.password = password.trim();
 
-    if (!updates.email && !updates.password) {
+    if (!updates.username && !updates.email && !updates.password) {
       toast({
         title: "No Changes",
-        description: "Please enter an email or password to update",
+        description: "Please enter a username, email, or password to update",
         variant: "destructive",
       });
       return;
@@ -314,14 +316,28 @@ export default function UserProfiles() {
           
           <form onSubmit={handleUpdateCredentials} className="space-y-4">
             <div>
+              <Label htmlFor="username" className="text-gray-400">Username</Label>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                defaultValue={editingUser?.username || ''}
+                placeholder="Enter username"
+                className="bg-gray-700 border-gray-600 text-white"
+                required
+              />
+            </div>
+
+            <div>
               <Label htmlFor="email" className="text-gray-400">Email Address</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
                 defaultValue={editingUser?.email || ''}
-                placeholder="Enter new email address"
+                placeholder="Enter email address"
                 className="bg-gray-700 border-gray-600 text-white"
+                required
               />
             </div>
 

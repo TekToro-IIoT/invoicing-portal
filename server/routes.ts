@@ -87,13 +87,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/users/:id/credentials', isAuthenticated, isAdmin, async (req: any, res) => {
     try {
       const userId = req.params.id;
-      const { email, password } = req.body;
+      const { username, email, password } = req.body;
       
-      if (!email && !password) {
-        return res.status(400).json({ message: "Email or password must be provided" });
+      if (!username && !email && !password) {
+        return res.status(400).json({ message: "Username, email, or password must be provided" });
       }
 
-      const updatedUser = await storage.updateUserCredentials(userId, email, password);
+      const updatedUser = await storage.updateUserCredentials(userId, username, email, password);
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
       }

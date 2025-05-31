@@ -42,7 +42,7 @@ export interface IStorage {
   getAllUsers(): Promise<User[]>;
   updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
   updateUserRole(id: string, role: string): Promise<User | undefined>;
-  updateUserCredentials(id: string, email?: string, password?: string): Promise<User | undefined>;
+  updateUserCredentials(id: string, username?: string, email?: string, password?: string): Promise<User | undefined>;
   
   // Profile management (for authenticated users)
   updateProfile(id: string, firstName?: string, lastName?: string, email?: string): Promise<User | undefined>;
@@ -153,8 +153,12 @@ export class DatabaseStorage implements IStorage {
     return updatedUser;
   }
 
-  async updateUserCredentials(id: string, email?: string, password?: string): Promise<User | undefined> {
+  async updateUserCredentials(id: string, username?: string, email?: string, password?: string): Promise<User | undefined> {
     const updates: any = { updatedAt: new Date() };
+    
+    if (username) {
+      updates.username = username;
+    }
     
     if (email) {
       updates.email = email;
