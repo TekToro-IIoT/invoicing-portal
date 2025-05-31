@@ -155,8 +155,8 @@ export default function Companies() {
         <div className="flex items-center gap-3">
           <Building2 className="h-8 w-8 text-green-400" />
           <div>
-            <h1 className="text-2xl font-bold text-white">Company Management</h1>
-            <p className="text-gray-400">Manage company information for billing and invoices</p>
+            <h1 className="text-2xl font-bold text-white">Client Management</h1>
+            <p className="text-gray-400">Manage client information for billing and invoices</p>
           </div>
         </div>
         
@@ -167,13 +167,13 @@ export default function Companies() {
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add Company
+              Add Client
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-gray-800 border-gray-700 max-w-2xl">
             <DialogHeader>
               <DialogTitle className="text-white">
-                {editingCompany ? 'Edit Company' : 'Add New Company'}
+                {editingCompany ? 'Edit Client' : 'Add New Client'}
               </DialogTitle>
             </DialogHeader>
             

@@ -97,7 +97,7 @@ function CompaniesLayout() {
     <div className="min-h-screen flex">
       <Sidebar />
       <div className="flex-1 ml-64">
-        <Header title="Company Management" subtitle="Manage company information for billing and invoices" />
+        <Header title="Client Management" subtitle="Manage client information for billing and invoices" />
         <main className="p-6">
           <Companies />
         </main>

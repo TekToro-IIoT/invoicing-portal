@@ -301,8 +301,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const invoiceNumber = await storage.generateInvoiceNumber();
+      
+      // Get the company and find or create corresponding client
+      const companyId = parseInt(req.body.clientId);
+      const company = await storage.getCompany(companyId, userId);
+      if (!company) {
+        return res.status(400).json({ message: "Company not found" });
+      }
+      
+      // Find existing client for this company or create one
+      let client = await storage.getClientByName(company.name, userId);
+      if (!client) {
+        client = await storage.createClient({
+          name: company.name,
+          email: company.email,
+          phone: company.phone,
+          address: company.address,
+          city: company.city,
+          state: company.state,
+          zipCode: company.zipCode,
+          country: company.country,
+          companyId: company.id,
+          userId: userId
+        });
+      }
+      
       const invoiceData = insertInvoiceSchema.parse({ 
         ...req.body, 
+        clientId: client.id,
         userId,
         invoiceNumber 
       });
