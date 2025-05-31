@@ -105,6 +105,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         taxAmount: taxAmount.toFixed(2),
         total: total.toFixed(2),
         status: 'draft',
+        equipmentPurchasedDescription: data.equipmentPurchasedDescription || '',
       };
 
       if (isEditing) {
