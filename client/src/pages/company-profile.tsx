@@ -67,26 +67,18 @@ export default function CompanyProfile() {
 
   const updateCompanyMutation = useMutation({
     mutationFn: async (data: any) => {
-      const formPayload = new FormData();
-      Object.keys(data).forEach(key => {
-        if (data[key] !== null && data[key] !== undefined) {
-          formPayload.append(key, data[key]);
-        }
-      });
-      
-      if (logoFile) {
-        formPayload.append('logo', logoFile);
-      }
+      // For now, we'll work with JSON data without logo upload
+      // Logo upload functionality can be added later with proper backend support
+      const payload = {
+        ...data,
+        isDefault: true
+      };
 
-      return company?.id 
-        ? apiRequest(`/api/companies/${company.id}`, {
-            method: "PUT",
-            body: formPayload,
-          })
-        : apiRequest("/api/companies", {
-            method: "POST",
-            body: formPayload,
-          });
+      if (company?.id) {
+        return await apiRequest(`/api/companies/${company.id}`, "PUT", payload);
+      } else {
+        return await apiRequest("/api/companies", "POST", payload);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/companies/default"] });
