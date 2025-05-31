@@ -7,6 +7,7 @@ export default function Sidebar() {
 
   const navItems = [
     { path: "/", label: "Dashboard", icon: "fas fa-chart-line" },
+    { path: "/time-tickets", label: "Time Tickets", icon: "fas fa-ticket-alt" },
     { path: "/invoices", label: "Invoices", icon: "fas fa-file-invoice" },
     { path: "/time-tracking", label: "Time Tracking", icon: "fas fa-clock" },
   ];

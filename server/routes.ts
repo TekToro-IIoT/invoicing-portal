@@ -317,6 +317,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Time tickets routes
+  app.get('/api/time-tickets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const timeTickets = await storage.getTimeTickets(userId);
+      res.json(timeTickets);
+    } catch (error) {
+      console.error("Error fetching time tickets:", error);
+      res.status(500).json({ message: "Failed to fetch time tickets" });
+    }
+  });
+
+  app.get('/api/time-tickets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const timeTicket = await storage.getTimeTicket(ticketId, userId);
+      if (!timeTicket) {
+        return res.status(404).json({ message: "Time ticket not found" });
+      }
+      
+      res.json(timeTicket);
+    } catch (error) {
+      console.error("Error fetching time ticket:", error);
+      res.status(500).json({ message: "Failed to fetch time ticket" });
+    }
+  });
+
+  app.post('/api/time-tickets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const timeTicketData = { ...req.body, userId };
+      
+      const timeTicket = await storage.createTimeTicket(timeTicketData);
+      res.status(201).json(timeTicket);
+    } catch (error) {
+      console.error("Error creating time ticket:", error);
+      res.status(500).json({ message: "Failed to create time ticket" });
+    }
+  });
+
+  app.put('/api/time-tickets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const timeTicket = await storage.updateTimeTicket(ticketId, req.body, userId);
+      if (!timeTicket) {
+        return res.status(404).json({ message: "Time ticket not found" });
+      }
+      
+      res.json(timeTicket);
+    } catch (error) {
+      console.error("Error updating time ticket:", error);
+      res.status(500).json({ message: "Failed to update time ticket" });
+    }
+  });
+
+  app.delete('/api/time-tickets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deleteTimeTicket(ticketId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Time ticket not found" });
+      }
+      
+      res.json({ message: "Time ticket deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting time ticket:", error);
+      res.status(500).json({ message: "Failed to delete time ticket" });
+    }
+  });
+
+  app.post('/api/time-tickets/:id/submit', isAuthenticated, async (req: any, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const timeTicket = await storage.submitTimeTicket(ticketId, userId);
+      if (!timeTicket) {
+        return res.status(404).json({ message: "Time ticket not found" });
+      }
+      
+      res.json(timeTicket);
+    } catch (error) {
+      console.error("Error submitting time ticket:", error);
+      res.status(500).json({ message: "Failed to submit time ticket" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

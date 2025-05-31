@@ -5,6 +5,7 @@ import {
   timeEntries,
   invoices,
   invoiceItems,
+  timeTickets,
   type User,
   type UpsertUser,
   type Client,
@@ -17,6 +18,8 @@ import {
   type InsertInvoice,
   type InvoiceItem,
   type InsertInvoiceItem,
+  type TimeTicket,
+  type InsertTimeTicket,
   type ClientWithUser,
   type ProjectWithClient,
   type TimeEntryWithProject,
@@ -497,6 +500,69 @@ export class DatabaseStorage implements IStorage {
       hoursTracked,
       totalClients,
     };
+  }
+
+  // Time ticket operations
+  async getTimeTickets(userId: string): Promise<TimeTicket[]> {
+    const tickets = await db
+      .select()
+      .from(timeTickets)
+      .where(eq(timeTickets.userId, userId))
+      .orderBy(desc(timeTickets.createdAt));
+    
+    return tickets;
+  }
+
+  async getTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined> {
+    const [ticket] = await db
+      .select()
+      .from(timeTickets)
+      .where(and(eq(timeTickets.id, id), eq(timeTickets.userId, userId)));
+    
+    return ticket;
+  }
+
+  async createTimeTicket(timeTicket: InsertTimeTicket): Promise<TimeTicket> {
+    const [ticket] = await db
+      .insert(timeTickets)
+      .values(timeTicket)
+      .returning();
+    
+    return ticket;
+  }
+
+  async updateTimeTicket(id: number, timeTicket: Partial<InsertTimeTicket>, userId: string): Promise<TimeTicket | undefined> {
+    const [updatedTicket] = await db
+      .update(timeTickets)
+      .set({
+        ...timeTicket,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(timeTickets.id, id), eq(timeTickets.userId, userId)))
+      .returning();
+    
+    return updatedTicket;
+  }
+
+  async deleteTimeTicket(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(timeTickets)
+      .where(and(eq(timeTickets.id, id), eq(timeTickets.userId, userId)));
+    
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async submitTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined> {
+    const [submittedTicket] = await db
+      .update(timeTickets)
+      .set({
+        status: "submitted",
+        updatedAt: new Date(),
+      })
+      .where(and(eq(timeTickets.id, id), eq(timeTickets.userId, userId)))
+      .returning();
+    
+    return submittedTicket;
   }
 }
 
