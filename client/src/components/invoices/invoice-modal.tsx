@@ -47,6 +47,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   // Transform invoice data for display
   const invoiceData = {
     ...invoice,
+    company: defaultCompany, // Include company data with logo
     client: invoice.client || {
       name: 'Client Name',
       email: 'client@example.com',
@@ -111,14 +112,16 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
-                  <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center">
-                    <img 
-                      src="/attached_assets/Untitled design (89).png"
-                      alt="TekToro Digital IIoT Solutions Logo" 
-                      className="w-full h-full object-contain"
-                      style={{ maxWidth: '80px', maxHeight: '80px' }}
-                    />
-                  </div>
+                  {defaultCompany?.logo && (
+                    <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center">
+                      <img 
+                        src={defaultCompany.logo}
+                        alt="Company Logo" 
+                        className="w-full h-full object-contain"
+                        style={{ maxWidth: '80px', maxHeight: '80px' }}
+                      />
+                    </div>
+                  )}
                   
                   {/* Company Information */}
                   <div>
