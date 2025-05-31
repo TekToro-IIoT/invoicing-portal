@@ -113,12 +113,41 @@ export const invoiceItems = pgTable("invoice_items", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Time tickets table
+export const timeTickets = pgTable("time_tickets", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  todaysDate: date("todays_date").notNull(),
+  serviceDate: date("service_date").notNull(),
+  submittedBy: varchar("submitted_by").notNull(),
+  client: text("client").notNull(),
+  project: text("project").notNull(),
+  area: text("area").notNull(),
+  milestoneAchieved: text("milestone_achieved"),
+  internalJobNumber: text("internal_job_number"),
+  clientJobCode: text("client_job_code"),
+  regularTimeHours: decimal("regular_time_hours", { precision: 10, scale: 2 }).default("0"),
+  overtimeHours: decimal("overtime_hours", { precision: 10, scale: 2 }).default("0"),
+  totalHours: decimal("total_hours", { precision: 10, scale: 2 }).default("0"),
+  servicePoint: text("service_point"),
+  afeType: text("afe_type"),
+  afeNumber: text("afe_number"),
+  wellName: text("well_name"),
+  wellNumber: text("well_number"),
+  detailedServiceDescription: text("detailed_service_description"),
+  equipmentDescription: text("equipment_description"),
+  status: varchar("status").default("draft"), // draft, submitted
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   clients: many(clients),
   projects: many(projects),
   timeEntries: many(timeEntries),
   invoices: many(invoices),
+  timeTickets: many(timeTickets),
 }));
 
 export const clientsRelations = relations(clients, ({ one, many }) => ({
@@ -177,6 +206,13 @@ export const invoiceItemsRelations = relations(invoiceItems, ({ one }) => ({
   }),
 }));
 
+export const timeTicketsRelations = relations(timeTickets, ({ one }) => ({
+  user: one(users, {
+    fields: [timeTickets.userId],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
@@ -212,6 +248,12 @@ export const insertInvoiceItemSchema = createInsertSchema(invoiceItems).omit({
   createdAt: true,
 });
 
+export const insertTimeTicketSchema = createInsertSchema(timeTickets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -226,6 +268,9 @@ export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoiceItem = z.infer<typeof insertInvoiceItemSchema>;
 export type InvoiceItem = typeof invoiceItems.$inferSelect;
 
+export type InsertTimeTicket = z.infer<typeof insertTimeTicketSchema>;
+export type TimeTicket = typeof timeTickets.$inferSelect;
+
 // Extended types with relations
 export type ClientWithUser = Client & { user: User };
 export type ProjectWithClient = Project & { client: Client };
@@ -235,3 +280,4 @@ export type InvoiceWithDetails = Invoice & {
   client: Client; 
   items: (InvoiceItem & { timeEntry?: TimeEntry })[];
 };
+export type TimeTicketWithUser = TimeTicket & { user: User };

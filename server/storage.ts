@@ -76,6 +76,14 @@ export interface IStorage {
     hoursTracked: number;
     totalClients: number;
   }>;
+
+  // Time ticket operations
+  getTimeTickets(userId: string): Promise<TimeTicket[]>;
+  getTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined>;
+  createTimeTicket(timeTicket: InsertTimeTicket): Promise<TimeTicket>;
+  updateTimeTicket(id: number, timeTicket: Partial<InsertTimeTicket>, userId: string): Promise<TimeTicket | undefined>;
+  deleteTimeTicket(id: number, userId: string): Promise<boolean>;
+  submitTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
