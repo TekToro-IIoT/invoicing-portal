@@ -364,12 +364,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         className="bg-gray-700 border-gray-600 text-white"
                       />
                     </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
-                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
-                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
-                      </div>
-                    </div>
                     <div className="md:col-span-1">
                       <Button 
                         type="button" 
@@ -380,6 +374,12 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       >
                         <i className="fas fa-trash"></i>
                       </Button>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
+                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
+                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
+                      </div>
                     </div>
                   </div>
                 </Card>
