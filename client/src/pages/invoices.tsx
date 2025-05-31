@@ -65,8 +65,21 @@ export default function Invoices() {
     return matchesSearch && matchesStatus;
   }) || [];
 
-  const handleViewInvoice = (invoice: any) => {
-    setSelectedInvoice(invoice);
+  const handleViewInvoice = async (invoice: any) => {
+    try {
+      // Fetch full invoice details including items for viewing
+      const fullInvoiceData = await queryClient.fetchQuery({
+        queryKey: [`/api/invoices/${invoice.id}`],
+      });
+      setSelectedInvoice(fullInvoiceData);
+    } catch (error) {
+      console.error('Error fetching invoice details for viewing:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load invoice details",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditInvoice = async (invoice: any) => {
