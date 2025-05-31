@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { generatePDF } from "@/lib/pdf";
-import { printInvoice } from "@/lib/print";
 
 interface InvoiceModalProps {
   invoice: any;
@@ -29,16 +28,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     }
   };
 
-  const handlePrint = () => {
-    if (!invoiceData) return;
-    printInvoice(invoiceData);
-  };
 
-  const handleEmail = () => {
-    if (!invoiceData) return;
-    // Email functionality would be implemented here
-    console.log("Email invoice:", invoiceData);
-  };
 
   if (!invoice) {
     return null;
@@ -81,13 +71,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
             <span>Invoice Preview</span>
             <div className="flex items-center space-x-3">
               <Button onClick={handleDownloadPDF} className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
-                <i className="fas fa-download mr-2"></i>Download PDF
-              </Button>
-              <Button onClick={handlePrint} className="bg-gray-500 hover:bg-gray-600" disabled={isLoading}>
-                <i className="fas fa-print mr-2"></i>Print
-              </Button>
-              <Button onClick={handleEmail} className="bg-green-500 hover:bg-green-600" disabled={isLoading}>
-                <i className="fas fa-envelope mr-2"></i>Email
+                Download PDF
               </Button>
             </div>
           </DialogTitle>
