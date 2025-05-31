@@ -50,7 +50,14 @@ export default function TimeTickets() {
   // Create time ticket mutation
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      return apiRequest('/api/time-tickets', 'POST', data);
+      const response = await fetch('/api/time-tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Failed to create time ticket');
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/time-tickets'] });
@@ -92,7 +99,14 @@ export default function TimeTickets() {
   // Submit time ticket mutation
   const submitMutation = useMutation({
     mutationFn: async (data: any) => {
-      return apiRequest('/api/time-tickets', 'POST', { ...data, status: 'submitted' });
+      const response = await fetch('/api/time-tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, status: 'submitted' }),
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Failed to submit time ticket');
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/time-tickets'] });
