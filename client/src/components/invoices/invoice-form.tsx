@@ -61,8 +61,8 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     }],
   });
 
-  const { data: companies } = useQuery({
-    queryKey: ["/api/companies"],
+  const { data: clients } = useQuery({
+    queryKey: ["/api/clients"],
     retry: false,
   });
 
@@ -210,15 +210,15 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                     <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                       <SelectValue>
                         {formData.clientId ? 
-                          companies?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select company"
+                          clients?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select company"
                           : "Select company"
                         }
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-gray-700 border-gray-600">
-                      {companies?.map((company: any) => (
-                        <SelectItem key={company.id} value={company.id.toString()} className="text-white hover:bg-gray-600">
-                          {company.name}
+                      {clients?.map((client: any) => (
+                        <SelectItem key={client.id} value={client.id.toString()} className="text-white hover:bg-gray-600">
+                          {client.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
