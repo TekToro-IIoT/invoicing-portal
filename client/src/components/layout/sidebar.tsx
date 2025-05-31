@@ -50,6 +50,30 @@ export default function Sidebar() {
               </Link>
             );
           })}
+
+          {/* Admin-only navigation */}
+          {user?.role === 'admin' && (
+            <>
+              <div className="pt-4 border-t border-gray-600">
+                <p className="text-xs text-gray-400 uppercase tracking-wider mb-2 px-3">Admin</p>
+                {adminNavItems.map((item) => {
+                  const isActive = location === item.path;
+                  return (
+                    <Link key={item.path} href={item.path}>
+                      <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
+                        isActive 
+                          ? 'bg-tektoro-primary text-white' 
+                          : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
+                      }`}>
+                        <i className={`${item.icon} w-5`}></i>
+                        <span>{item.label}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </nav>
       </div>
       
