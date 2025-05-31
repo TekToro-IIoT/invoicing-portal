@@ -110,23 +110,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
                   <div className="w-20 h-20 flex-shrink-0 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden flex items-center justify-center">
-                    {defaultCompany?.logo ? (
-                      <img 
-                        src={defaultCompany.logo} 
-                        alt="Company Logo" 
-                        className="w-full h-full object-contain p-2"
-                      />
-                    ) : (
-                      <img 
-                        src="attached_assets/tektoro-logo.png" 
-                        alt="TekToro Logo" 
-                        className="w-full h-full object-contain p-2"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
-                    )}
+                    <img 
+                      src="attached_assets/tektoro-logo.png" 
+                      alt="TekToro Logo" 
+                      className="w-full h-full object-contain p-2"
+                      style={{ filter: 'brightness(1.2)' }}
+                    />
                   </div>
                   
                   {/* Company Information */}
