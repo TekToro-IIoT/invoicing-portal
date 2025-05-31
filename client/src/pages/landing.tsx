@@ -6,11 +6,11 @@ export default function Landing() {
     <div className="min-h-screen bg-tektoro-bg flex items-center justify-center p-4">
       <div className="max-w-4xl mx-auto text-center">
         <div className="flex items-center justify-center mb-8">
-          <div className="w-16 h-16 flex items-center justify-center">
+          <div className="w-32 h-16 flex items-center justify-center">
             <img 
-              src="/attached_assets/tektoro-logo.png" 
-              alt="Company Logo" 
-              className="w-16 h-16 object-contain"
+              src="/attached_assets/Untitled design (89).png" 
+              alt="TekToro Digital IIoT Solutions Logo" 
+              className="w-full h-full object-contain"
             />
           </div>
         </div>
