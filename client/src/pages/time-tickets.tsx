@@ -16,7 +16,7 @@ export default function TimeTickets() {
   const [formData, setFormData] = useState({
     todaysDate: new Date().toISOString().split('T')[0],
     serviceDate: new Date().toISOString().split('T')[0],
-    submittedBy: user?.email || '',
+    submittedBy: (user as any)?.email || '',
     client: '',
     project: '',
     area: '',
@@ -50,10 +50,7 @@ export default function TimeTickets() {
   // Create time ticket mutation
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      return apiRequest('/api/time-tickets', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+      return apiRequest('/api/time-tickets', 'POST', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/time-tickets'] });

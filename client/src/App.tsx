@@ -9,6 +9,7 @@ import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import Invoices from "@/pages/invoices";
 import TimeTracking from "@/pages/time-tracking";
+import TimeTickets from "@/pages/time-tickets";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 
@@ -35,6 +36,7 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={DashboardLayout} />
+          <Route path="/time-tickets" component={TimeTicketsLayout} />
           <Route path="/invoices" component={InvoicesLayout} />
           <Route path="/time-tracking" component={TimeTrackingLayout} />
         </>
@@ -63,6 +65,19 @@ function InvoicesLayout() {
       <div className="flex-1 ml-64">
         <Header title="Invoice Management" subtitle="Create, edit, and manage your invoices" />
         <Invoices />
+      </div>
+    </div>
+  );
+}
+
+function TimeTicketsLayout() {
+  return (
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <main>
+          <TimeTickets />
+        </main>
       </div>
     </div>
   );
