@@ -114,9 +114,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       };
 
       if (isEditing) {
-        return await apiRequest("PUT", `/api/invoices/${invoice.id}`, invoiceData);
+        return await apiRequest(`/api/invoices/${invoice.id}`, "PUT", invoiceData);
       } else {
-        return await apiRequest("POST", "/api/invoices", invoiceData);
+        return await apiRequest("/api/invoices", "POST", invoiceData);
       }
     },
     onSuccess: () => {
