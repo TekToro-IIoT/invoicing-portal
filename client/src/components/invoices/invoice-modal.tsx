@@ -34,11 +34,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     printInvoice(invoiceData);
   };
 
-  const handleEmail = () => {
-    if (!invoiceData) return;
-    // Email functionality would be implemented here
-    console.log("Email invoice:", invoiceData);
-  };
+
 
   if (!invoice) {
     return null;
@@ -89,9 +85,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <Button onClick={handlePrint} className="bg-gray-500 hover:bg-gray-600" disabled={isLoading}>
                 <i className="fas fa-print mr-2"></i>Print
               </Button>
-              <Button onClick={handleEmail} className="bg-green-500 hover:bg-green-600" disabled={isLoading}>
-                <i className="fas fa-envelope mr-2"></i>Email
-              </Button>
+
             </div>
           </DialogTitle>
         </DialogHeader>
