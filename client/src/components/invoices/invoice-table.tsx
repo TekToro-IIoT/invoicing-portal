@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface InvoiceTableProps {
   invoices: any[];
@@ -6,6 +7,7 @@ interface InvoiceTableProps {
   onEdit: (invoice: any) => void;
   onDelete: (id: number) => void;
   onEmail: (invoice: any) => void;
+  onStatusChange: (id: number, status: string) => void;
   isDeleting: boolean;
   isEmailing: boolean;
 }
@@ -16,6 +18,7 @@ export default function InvoiceTable({
   onEdit, 
   onDelete, 
   onEmail, 
+  onStatusChange,
   isDeleting, 
   isEmailing 
 }: InvoiceTableProps) {
@@ -92,9 +95,37 @@ export default function InvoiceTable({
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
-                  {invoice.status}
-                </span>
+                <Select value={invoice.status} onValueChange={(status) => onStatusChange(invoice.id, status)}>
+                  <SelectTrigger className="w-24 h-7">
+                    <SelectValue>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
+                        {invoice.status}
+                      </span>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="draft">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        draft
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="sent">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        sent
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="paid">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        paid
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="overdue">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        overdue
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center space-x-2">

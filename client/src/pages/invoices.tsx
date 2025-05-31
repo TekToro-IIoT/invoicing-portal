@@ -116,6 +116,42 @@ export default function Invoices() {
     }
   };
 
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: number; status: string }) => {
+      await apiRequest("PUT", `/api/invoices/${id}`, { status });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
+      toast({
+        title: "Success",
+        description: "Invoice status updated successfully",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error as Error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to update invoice status",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleStatusChange = (id: number, status: string) => {
+    updateStatusMutation.mutate({ id, status });
+  };
+
   if (isLoading) {
     return (
       <main className="p-6">
@@ -183,6 +219,7 @@ export default function Invoices() {
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
           onEmail={handleEmailInvoice}
+          onStatusChange={handleStatusChange}
           isDeleting={deleteInvoiceMutation.isPending}
           isEmailing={emailInvoiceMutation.isPending}
         />
