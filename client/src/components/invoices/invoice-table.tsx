@@ -6,11 +6,9 @@ interface InvoiceTableProps {
   onView: (invoice: any) => void;
   onEdit: (invoice: any) => void;
   onDelete: (id: number) => void;
-  onEmail: (invoice: any) => void;
   onStatusChange: (id: number, status: string) => void;
   onNewInvoice: () => void;
   isDeleting: boolean;
-  isEmailing: boolean;
 }
 
 export default function InvoiceTable({ 
@@ -18,11 +16,9 @@ export default function InvoiceTable({
   onView, 
   onEdit, 
   onDelete, 
-  onEmail, 
   onStatusChange,
   onNewInvoice,
-  isDeleting, 
-  isEmailing 
+  isDeleting
 }: InvoiceTableProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -148,27 +144,7 @@ export default function InvoiceTable({
                   >
                     <i className="fas fa-download"></i>
                   </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Print functionality would go here
-                    }}
-                    className="text-gray-600 hover:text-gray-800 p-1"
-                    title="Print"
-                  >
-                    <i className="fas fa-print"></i>
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEmail(invoice);
-                    }}
-                    className="text-green-600 hover:text-green-800 p-1"
-                    title="Email"
-                    disabled={isEmailing}
-                  >
-                    <i className="fas fa-envelope"></i>
-                  </button>
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

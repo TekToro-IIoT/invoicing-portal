@@ -56,36 +56,7 @@ export default function Invoices() {
     },
   });
 
-  const emailInvoiceMutation = useMutation({
-    mutationFn: async ({ id, email }: { id: number; email: string }) => {
-      await apiRequest("POST", `/api/invoices/${id}/email`, { recipientEmail: email });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
-      toast({
-        title: "Success",
-        description: "Invoice sent successfully",
-      });
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-      toast({
-        title: "Error",
-        description: "Failed to send invoice",
-        variant: "destructive",
-      });
-    },
-  });
+
 
   const filteredInvoices = invoices?.filter((invoice: any) => {
     const matchesSearch = invoice.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -122,12 +93,7 @@ export default function Invoices() {
     }
   };
 
-  const handleEmailInvoice = (invoice: any) => {
-    const email = prompt("Enter recipient email:", invoice.client?.email || "");
-    if (email) {
-      emailInvoiceMutation.mutate({ id: invoice.id, email });
-    }
-  };
+
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
@@ -235,14 +201,12 @@ export default function Invoices() {
           onView={handleViewInvoice}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
-          onEmail={handleEmailInvoice}
           onStatusChange={handleStatusChange}
           onNewInvoice={() => {
             setEditingInvoice(null);
             setShowInvoiceForm(true);
           }}
           isDeleting={deleteInvoiceMutation.isPending}
-          isEmailing={emailInvoiceMutation.isPending}
         />
       </Card>
 
