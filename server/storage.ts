@@ -50,21 +50,7 @@ export interface IStorage {
   updateClient(id: number, client: Partial<InsertClient>, userId: string): Promise<Client | undefined>;
   deleteClient(id: number, userId: string): Promise<boolean>;
 
-  // Project operations
-  getProjects(userId: string): Promise<ProjectWithClient[]>;
-  getProject(id: number, userId: string): Promise<ProjectWithClient | undefined>;
-  createProject(project: InsertProject): Promise<Project>;
-  updateProject(id: number, project: Partial<InsertProject>, userId: string): Promise<Project | undefined>;
-  deleteProject(id: number, userId: string): Promise<boolean>;
 
-  // Time entry operations
-  getTimeEntries(userId: string): Promise<TimeEntryWithProject[]>;
-  getTimeEntry(id: number, userId: string): Promise<TimeEntryWithProject | undefined>;
-  getRunningTimeEntry(userId: string): Promise<TimeEntryWithProject | undefined>;
-  createTimeEntry(timeEntry: InsertTimeEntry): Promise<TimeEntry>;
-  updateTimeEntry(id: number, timeEntry: Partial<InsertTimeEntry>, userId: string): Promise<TimeEntry | undefined>;
-  deleteTimeEntry(id: number, userId: string): Promise<boolean>;
-  stopTimeEntry(id: number, userId: string): Promise<TimeEntry | undefined>;
 
   // Invoice operations
   getInvoices(userId: string): Promise<InvoiceWithClient[]>;

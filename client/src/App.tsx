@@ -8,7 +8,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import Invoices from "@/pages/invoices";
-import TimeTracking from "@/pages/time-tracking";
+
 
 import UserProfiles from "@/pages/user-profiles";
 import Companies from "@/pages/companies";
@@ -40,7 +40,6 @@ function Router() {
         <>
           <Route path="/" component={DashboardLayout} />
           <Route path="/invoices" component={InvoicesLayout} />
-          <Route path="/time-tracking" component={TimeTrackingLayout} />
           <Route path="/user-profiles" component={UserProfilesLayout} />
           <Route path="/companies" component={CompaniesLayout} />
           <Route path="/company-profile" component={CompanyProfileLayout} />
@@ -77,17 +76,7 @@ function InvoicesLayout() {
 
 
 
-function TimeTrackingLayout() {
-  return (
-    <div className="min-h-screen flex">
-      <Sidebar />
-      <div className="flex-1 ml-64">
-        <Header title="Time Tracking" subtitle="Track time for projects and generate billable hours" />
-        <TimeTracking />
-      </div>
-    </div>
-  );
-}
+
 
 function UserProfilesLayout() {
   return (
