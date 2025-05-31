@@ -7,11 +7,12 @@ export default function Landing() {
     <div className="min-h-screen bg-tektoro-bg flex items-center justify-center p-4">
       <div className="max-w-4xl mx-auto text-center">
         <div className="flex items-center justify-center mb-8">
-          <div className="w-96 h-32 flex items-center justify-center">
+          <div className="w-full max-w-2xl h-24 flex items-center justify-center">
             <img 
               src={logoPath} 
               alt="TekToro Digital IIoT Solutions Logo" 
               className="w-full h-full object-contain"
+              style={{ maxWidth: '100%' }}
             />
           </div>
         </div>
