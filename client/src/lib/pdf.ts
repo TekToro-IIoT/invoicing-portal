@@ -35,6 +35,9 @@ function generatePDFHTML(invoice: any): string {
   const taxAmount = parseFloat(invoice.taxAmount || '0');
   const total = parseFloat(invoice.total || '0');
   const taxRate = parseFloat(invoice.taxRate || '0');
+  
+  // Get company info from the invoice (it should include the company data)
+  const company = invoice.company || {};
 
   return `
     <!DOCTYPE html>
@@ -43,8 +46,6 @@ function generatePDFHTML(invoice: any): string {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Invoice ${invoice.invoiceNumber} - TekToro</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
       <style>
         * {
           margin: 0;
@@ -53,62 +54,54 @@ function generatePDFHTML(invoice: any): string {
         }
         
         body {
-          font-family: 'Inter', sans-serif;
+          font-family: Arial, sans-serif;
           line-height: 1.4;
-          color: #374151;
+          color: #333;
           background: white;
+          font-size: 12px;
         }
         
         .invoice-container {
-          max-width: 800px;
+          max-width: 1000px;
           margin: 0 auto;
-          padding: 40px;
+          padding: 20px;
         }
         
         .header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          margin-bottom: 40px;
+          margin-bottom: 30px;
+          border-bottom: 2px solid #333;
+          padding-bottom: 20px;
         }
         
         .company-info {
           flex: 1;
+          display: flex;
+          align-items: flex-start;
         }
         
-        .logo {
-          display: flex;
-          align-items: center;
-          margin-bottom: 20px;
+        .logo-section {
+          margin-right: 20px;
         }
         
         .logo-img {
-          width: 48px;
-          height: 48px;
-          margin-right: 12px;
+          width: 60px;
+          height: 60px;
           object-fit: contain;
-        }
-          color: white;
-          font-size: 24px;
-        }
-        
-        .company-name {
-          font-size: 28px;
-          font-weight: 700;
-          color: #1e3a8a;
-          margin: 0;
-        }
-        
-        .company-tagline {
-          font-size: 14px;
-          color: #6b7280;
-          margin: 0;
         }
         
         .company-details {
-          font-size: 14px;
-          color: #6b7280;
-          line-height: 1.5;
+          font-size: 11px;
+          line-height: 1.3;
+        }
+        
+        .company-name {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: #1e3a8a;
         }
         
         .invoice-info {
@@ -116,141 +109,107 @@ function generatePDFHTML(invoice: any): string {
         }
         
         .invoice-title {
-          font-size: 36px;
-          font-weight: 700;
-          color: #111827;
-          margin-bottom: 16px;
+          font-size: 28px;
+          font-weight: bold;
+          color: #333;
+          margin-bottom: 10px;
         }
         
         .invoice-details {
-          font-size: 14px;
-          color: #6b7280;
-          line-height: 1.6;
-        }
-        
-        .invoice-details strong {
-          color: #111827;
+          font-size: 11px;
+          line-height: 1.4;
         }
         
         .bill-to {
-          margin-bottom: 40px;
+          margin-bottom: 30px;
         }
         
         .bill-to h3 {
-          font-size: 18px;
-          font-weight: 600;
-          color: #111827;
-          margin-bottom: 12px;
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: 8px;
         }
         
         .client-info {
-          background: #f8fafc;
-          padding: 20px;
-          border-radius: 8px;
-          font-size: 14px;
-          line-height: 1.6;
-        }
-        
-        .client-name {
-          font-weight: 600;
-          color: #111827;
-          margin-bottom: 4px;
+          background: #f8f9fa;
+          padding: 15px;
+          border: 1px solid #ddd;
+          font-size: 11px;
+          line-height: 1.4;
         }
         
         .items-table {
           width: 100%;
           border-collapse: collapse;
-          margin-bottom: 40px;
+          margin-bottom: 30px;
+          font-size: 10px;
         }
         
         .items-table th {
-          background: #f9fafb;
-          padding: 12px;
-          text-align: left;
-          font-weight: 600;
-          color: #111827;
-          font-size: 14px;
-          border-bottom: 2px solid #e5e7eb;
-        }
-        
-        .items-table th:nth-child(2),
-        .items-table th:nth-child(3),
-        .items-table th:nth-child(4) {
-          text-align: right;
+          background: #f1f3f4;
+          padding: 8px 4px;
+          text-align: center;
+          font-weight: bold;
+          border: 1px solid #333;
+          font-size: 9px;
         }
         
         .items-table td {
-          padding: 16px 12px;
-          border-bottom: 1px solid #e5e7eb;
-          font-size: 14px;
+          padding: 8px 4px;
+          border: 1px solid #333;
+          text-align: center;
+          vertical-align: top;
         }
         
-        .items-table td:nth-child(2),
-        .items-table td:nth-child(3),
-        .items-table td:nth-child(4) {
+        .items-table .text-left {
+          text-align: left;
+        }
+        
+        .items-table .text-right {
           text-align: right;
-        }
-        
-        .item-description {
-          font-weight: 500;
-          color: #111827;
         }
         
         .totals {
           display: flex;
           justify-content: flex-end;
-          margin-bottom: 40px;
+          margin-bottom: 30px;
         }
         
         .totals-table {
-          width: 300px;
+          width: 250px;
+          border: 1px solid #333;
         }
         
         .totals-row {
           display: flex;
           justify-content: space-between;
-          padding: 8px 0;
-          font-size: 14px;
+          padding: 8px 12px;
+          font-size: 12px;
+          border-bottom: 1px solid #ddd;
         }
         
-        .totals-row.subtotal,
-        .totals-row.tax {
-          border-bottom: 1px solid #e5e7eb;
-          color: #6b7280;
-        }
-        
-        .totals-row.total {
-          border-top: 2px solid #e5e7eb;
-          padding-top: 16px;
-          font-size: 18px;
-          font-weight: 700;
-        }
-        
-        .totals-row.total .label {
-          color: #111827;
-        }
-        
-        .totals-row.total .amount {
-          color: #1e3a8a;
+        .totals-row:last-child {
+          border-bottom: none;
+          font-weight: bold;
+          background: #f8f9fa;
         }
         
         .notes-section {
-          margin-top: 40px;
-          padding-top: 24px;
-          border-top: 1px solid #e5e7eb;
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid #ddd;
         }
         
         .notes-section h4 {
-          font-size: 16px;
-          font-weight: 600;
-          color: #111827;
+          font-size: 13px;
+          font-weight: bold;
           margin-bottom: 8px;
         }
         
         .notes-section p {
-          font-size: 14px;
-          color: #6b7280;
-          line-height: 1.6;
+          font-size: 11px;
+          line-height: 1.5;
+          margin-bottom: 10px;
         }
         
         @media print {
@@ -258,9 +217,8 @@ function generatePDFHTML(invoice: any): string {
             print-color-adjust: exact;
             -webkit-print-color-adjust: exact;
           }
-          
           .invoice-container {
-            padding: 20px;
+            padding: 10px;
           }
         }
       </style>
@@ -270,14 +228,17 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
-            <div class="logo">
-              <img src="/attached_assets/tektoro-logo.png" alt="Company Logo" class="logo-img">
-              <div>
-                <p class="company-tagline">Professional Services</p>
-              </div>
+            <div class="logo-section">
+              ${company.logo ? `<img src="${company.logo}" alt="Company Logo" class="logo-img">` : ''}
             </div>
             <div class="company-details">
-              <div>Professional Services</div>
+              <div class="company-name">${company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
+              <div>${company.address || '103 South Church St.'}</div>
+              <div>${company.city || 'George Town'}, ${company.state || ''} ${company.zipCode || 'PO Box 472'}</div>
+              <div>${company.country || 'Cayman Islands'}</div>
+              <div>Phone: ${company.phone || '5872275305'}</div>
+              <div>Email: ${company.email || 'al.doucet@tektoro.com'}</div>
+              ${company.website ? `<div>Web: ${company.website}</div>` : ''}
             </div>
           </div>
           <div class="invoice-info">
@@ -294,68 +255,93 @@ function generatePDFHTML(invoice: any): string {
         <div class="bill-to">
           <h3>Bill To:</h3>
           <div class="client-info">
-            <div class="client-name">${invoice.client?.name || 'Unknown Client'}</div>
-            ${invoice.client?.address ? `<div>${invoice.client.address}</div>` : ''}
-            ${invoice.client?.city ? `<div>${invoice.client.city}, ${invoice.client.state || ''} ${invoice.client.zipCode || ''}</div>` : ''}
+            <div style="font-weight: bold;">${invoice.client?.name || company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
+            ${invoice.client?.address || company.address ? `<div>${invoice.client?.address || company.address}</div>` : ''}
+            ${invoice.client?.city || company.city ? `<div>${invoice.client?.city || company.city}, ${invoice.client?.state || company.state || ''} ${invoice.client?.zipCode || company.zipCode || ''}</div>` : ''}
             ${invoice.client?.contactPerson ? `<div>Contact: ${invoice.client.contactPerson}</div>` : ''}
-            ${invoice.client?.email ? `<div>${invoice.client.email}</div>` : ''}
+            ${invoice.client?.email || company.email ? `<div>${invoice.client?.email || company.email}</div>` : ''}
           </div>
         </div>
         
-        <!-- Items -->
+        <!-- Items Table -->
         <table class="items-table">
           <thead>
             <tr>
-              <th>Description</th>
-              <th>Quantity</th>
-              <th>Rate</th>
-              <th>Amount</th>
+              <th style="width: 10%">Service Point</th>
+              <th style="width: 8%">AFE/LOE</th>
+              <th style="width: 12%">AFE # (if applicable)</th>
+              <th style="width: 12%">Well Name</th>
+              <th style="width: 8%">Well #</th>
+              <th style="width: 20%">Service/Purchased Item</th>
+              <th style="width: 10%">Rate/Item Cost</th>
+              <th style="width: 6%">Hrs</th>
+              <th style="width: 6%">Qty</th>
+              <th style="width: 8%">Extended</th>
             </tr>
           </thead>
           <tbody>
-            ${invoice.items?.map((item: any) => `
-              <tr>
-                <td>
-                  <div class="item-description">${item.description}</div>
-                </td>
-                <td>${parseFloat(item.quantity).toFixed(1)}</td>
-                <td>$${parseFloat(item.rate).toFixed(2)}</td>
-                <td>$${parseFloat(item.amount).toFixed(2)}</td>
-              </tr>
-            `).join('') || '<tr><td colspan="4">No items</td></tr>'}
+            ${invoice.items?.map((item: any) => {
+              const rate = parseFloat(item.rate || '0');
+              const hrs = parseFloat(item.hrs || '0');
+              const qty = parseFloat(item.qty || '0');
+              const extended = rate * (hrs + qty);
+              
+              return `
+                <tr>
+                  <td class="text-left">${item.servicePoint || ''}</td>
+                  <td class="text-left">${item.afeLoe || ''}</td>
+                  <td class="text-left">${item.afeNumber || ''}</td>
+                  <td class="text-left">${item.wellName || ''}</td>
+                  <td class="text-left">${item.wellNumber || ''}</td>
+                  <td class="text-left">${item.service || ''}</td>
+                  <td class="text-right">$${rate.toFixed(2)}</td>
+                  <td class="text-right">${hrs.toFixed(1)}</td>
+                  <td class="text-right">${qty.toFixed(1)}</td>
+                  <td class="text-right">$${extended.toFixed(2)}</td>
+                </tr>
+              `;
+            }).join('') || '<tr><td colspan="10">No items</td></tr>'}
           </tbody>
         </table>
         
         <!-- Totals -->
         <div class="totals">
           <div class="totals-table">
-            <div class="totals-row subtotal">
-              <span class="label">Subtotal:</span>
-              <span class="amount">$${subtotal.toFixed(2)}</span>
+            <div class="totals-row">
+              <span>Subtotal:</span>
+              <span>$${subtotal.toFixed(2)}</span>
             </div>
             ${taxAmount > 0 ? `
-              <div class="totals-row tax">
-                <span class="label">Tax (${taxRate.toFixed(1)}%):</span>
-                <span class="amount">$${taxAmount.toFixed(2)}</span>
+              <div class="totals-row">
+                <span>Tax (${taxRate.toFixed(1)}%):</span>
+                <span>$${taxAmount.toFixed(2)}</span>
               </div>
             ` : ''}
-            <div class="totals-row total">
-              <span class="label">Total:</span>
-              <span class="amount">$${total.toFixed(2)}</span>
+            <div class="totals-row">
+              <span>Total:</span>
+              <span>$${total.toFixed(2)}</span>
             </div>
           </div>
         </div>
         
-        <!-- Notes -->
+        <!-- Notes Section -->
         ${invoice.notes ? `
           <div class="notes-section">
-            <h4>Notes</h4>
+            <h4>Notes:</h4>
             <p>${invoice.notes}</p>
           </div>
         ` : ''}
         
+        <!-- Equipment Purchased Description -->
+        ${invoice.equipmentPurchasedDescription ? `
+          <div class="notes-section">
+            <h4>Equipment Purchased Description:</h4>
+            <p>${invoice.equipmentPurchasedDescription}</p>
+          </div>
+        ` : ''}
+        
         <div class="notes-section">
-          <h4>Payment Terms</h4>
+          <h4>Payment Terms:</h4>
           <p>Payment is due within 30 days of invoice date. Late payments may be subject to a 1.5% monthly service charge.</p>
         </div>
       </div>

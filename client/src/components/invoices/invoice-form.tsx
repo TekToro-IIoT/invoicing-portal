@@ -69,7 +69,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   const mutation = useMutation({
     mutationFn: async (data: any) => {
       // Calculate totals
-      const subtotal = data.items.reduce((sum: number, item: any) => sum + (item.quantity * item.rate), 0);
+      const subtotal = data.items.reduce((sum: number, item: any) => sum + (item.rate * (item.hrs + item.qty)), 0);
       const taxAmount = (subtotal * data.taxRate) / 100;
       const total = subtotal + taxAmount;
 
