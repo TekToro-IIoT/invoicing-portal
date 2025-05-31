@@ -359,11 +359,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
-      const invoiceData = insertInvoiceSchema.partial().parse(req.body);
+      const { items, ...invoiceFields } = req.body;
+      const invoiceData = insertInvoiceSchema.partial().parse(invoiceFields);
       const invoice = await storage.updateInvoice(id, invoiceData, userId);
       if (!invoice) {
         return res.status(404).json({ message: "Invoice not found" });
       }
+      
+      // Delete existing items and create new ones
+      const existingItems = await storage.getInvoiceItems(id);
+      for (const item of existingItems) {
+        await storage.deleteInvoiceItem(item.id);
+      }
+      
+      // Create new items
+      if (items && items.length > 0) {
+        for (const item of items) {
+          await storage.createInvoiceItem({
+            ...item,
+            invoiceId: id
+          });
+        }
+      }
+      
       res.json(invoice);
     } catch (error) {
       console.error("Error updating invoice:", error);
