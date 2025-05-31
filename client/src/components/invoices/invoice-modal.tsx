@@ -14,13 +14,13 @@ interface InvoiceModalProps {
 export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalProps) {
   const { toast } = useToast();
 
-  const { data: fullInvoice } = useQuery({
+  const { data: fullInvoice, isLoading: invoiceLoading } = useQuery({
     queryKey: ["/api/invoices", invoice.id],
     enabled: isOpen && !!invoice.id,
     retry: false,
   });
 
-  const { data: defaultCompany } = useQuery({
+  const { data: defaultCompany, isLoading: companyLoading } = useQuery({
     queryKey: ["/api/companies/default"],
     enabled: isOpen,
     retry: false,
@@ -74,6 +74,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   };
 
   const invoiceData = fullInvoice || invoice;
+  const isLoading = invoiceLoading || companyLoading;
 
   // Debug log to see what data we have
   console.log('Invoice data:', invoiceData);
@@ -91,21 +92,32 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
           <DialogTitle className="flex items-center justify-between">
             <span>Invoice Preview</span>
             <div className="flex items-center space-x-3">
-              <Button onClick={handleDownloadPDF} className="bg-blue-500 hover:bg-blue-600">
+              <Button onClick={handleDownloadPDF} className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
                 <i className="fas fa-download mr-2"></i>Download PDF
               </Button>
-              <Button onClick={handlePrint} className="bg-gray-500 hover:bg-gray-600">
+              <Button onClick={handlePrint} className="bg-gray-500 hover:bg-gray-600" disabled={isLoading}>
                 <i className="fas fa-print mr-2"></i>Print
               </Button>
-              <Button onClick={handleEmail} className="bg-green-500 hover:bg-green-600">
+              <Button onClick={handleEmail} className="bg-green-500 hover:bg-green-600" disabled={isLoading}>
                 <i className="fas fa-envelope mr-2"></i>Email
               </Button>
             </div>
           </DialogTitle>
         </DialogHeader>
         
-        {/* Invoice Template */}
-        <div id="invoice-template" className="p-8 bg-white">
+        {isLoading ? (
+          <div className="p-8 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <i className="fas fa-file-invoice text-gray-400 text-xl"></i>
+              </div>
+              <p className="text-gray-500">Loading invoice details...</p>
+            </div>
+          </div>
+        )}
+        
+        {!isLoading && (
+          <div id="invoice-template" className="p-8 bg-white">
           <div className="max-w-3xl mx-auto">
             {/* Invoice Header */}
             <div className="flex justify-between items-start mb-8">
@@ -227,7 +239,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               </p>
             </div>
           </div>
-        </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
