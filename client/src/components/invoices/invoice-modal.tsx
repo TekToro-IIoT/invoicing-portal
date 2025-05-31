@@ -110,7 +110,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
           </DialogTitle>
         </DialogHeader>
         
-        {isLoading ? (
+        {(isLoading || !invoiceData) ? (
           <div className="p-8 flex items-center justify-center">
             <div className="text-center">
               <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4 animate-pulse">
@@ -136,20 +136,35 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     />
                     <div>
                       <h1 className="text-xl font-bold text-gray-900">
-                        {defaultCompany?.name || 'Professional Services'}
+                        {defaultCompany?.name || 'TekToro Professional Services'}
                       </h1>
-                      <p className="text-sm text-gray-600">
-                        {defaultCompany ? 'Loading company information...' : 'Loading company information...'}
-                      </p>
+                      <div className="text-sm text-gray-700">
+                        {defaultCompany ? (
+                          <>
+                            {defaultCompany.address && <p>{defaultCompany.address}</p>}
+                            {defaultCompany.city && (
+                              <p>{defaultCompany.city}, {defaultCompany.state} {defaultCompany.zipCode}</p>
+                            )}
+                            {defaultCompany.phone && <p>Phone: {defaultCompany.phone}</p>}
+                            {defaultCompany.email && <p>Email: {defaultCompany.email}</p>}
+                          </>
+                        ) : (
+                          <>
+                            <p>Industrial Automation & Controls</p>
+                            <p>Phone: (555) 123-4567</p>
+                            <p>Email: info@tektoro.com</p>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
-                  <div className="text-sm text-gray-600">
-                    <p><strong>Invoice #:</strong> {invoiceData?.invoiceNumber || 'N/A'}</p>
-                    <p><strong>Date:</strong> {invoiceData?.issueDate ? new Date(invoiceData.issueDate).toLocaleDateString() : 'N/A'}</p>
-                    <p><strong>Due Date:</strong> {invoiceData?.dueDate ? new Date(invoiceData.dueDate).toLocaleDateString() : 'N/A'}</p>
+                  <div className="text-sm text-gray-800">
+                    <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber}</p>
+                    <p><strong>Date:</strong> {new Date(invoiceData.issueDate).toLocaleDateString()}</p>
+                    <p><strong>Due Date:</strong> {new Date(invoiceData.dueDate).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>
@@ -158,17 +173,20 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Bill To:</h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-medium text-gray-900">{invoiceData.client?.name}</p>
-                  {invoiceData.client?.address && <p className="text-gray-600">{invoiceData.client.address}</p>}
-                  {invoiceData.client?.city && (
+                  <p className="font-medium text-gray-900">{invoiceData.client.name}</p>
+                  {invoiceData.client.address && <p className="text-gray-600">{invoiceData.client.address}</p>}
+                  {invoiceData.client.city && (
                     <p className="text-gray-600">
                       {invoiceData.client.city}, {invoiceData.client.state} {invoiceData.client.zipCode}
                     </p>
                   )}
-                  {invoiceData.client?.contactPerson && (
+                  {invoiceData.client.country && (
+                    <p className="text-gray-600">{invoiceData.client.country}</p>
+                  )}
+                  {invoiceData.client.contactPerson && (
                     <p className="text-gray-600">Contact: {invoiceData.client.contactPerson}</p>
                   )}
-                  {invoiceData.client?.email && (
+                  {invoiceData.client.email && (
                     <p className="text-gray-600">{invoiceData.client.email}</p>
                   )}
                 </div>
@@ -205,17 +223,17 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <div className="w-64">
                   <div className="flex justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">Subtotal:</span>
-                    <span className="font-medium">${parseFloat(invoiceData.subtotal || '0').toFixed(2)}</span>
+                    <span className="font-medium">${parseFloat(invoiceData.subtotal).toFixed(2)}</span>
                   </div>
-                  {parseFloat(invoiceData.taxAmount || '0') > 0 && (
+                  {parseFloat(invoiceData.taxAmount) > 0 && (
                     <div className="flex justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Tax ({parseFloat(invoiceData.taxRate || '0').toFixed(1)}%):</span>
-                      <span className="font-medium">${parseFloat(invoiceData.taxAmount || '0').toFixed(2)}</span>
+                      <span className="text-gray-600">Tax ({parseFloat(invoiceData.taxRate).toFixed(1)}%):</span>
+                      <span className="font-medium">${parseFloat(invoiceData.taxAmount).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between py-3 border-t-2 border-gray-300">
                     <span className="text-lg font-semibold text-gray-900">Total:</span>
-                    <span className="text-lg font-bold text-tektoro-blue">${parseFloat(invoiceData.total || '0').toFixed(2)}</span>
+                    <span className="text-lg font-bold text-tektoro-blue">${parseFloat(invoiceData.total).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
