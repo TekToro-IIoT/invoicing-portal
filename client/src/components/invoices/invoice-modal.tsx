@@ -109,19 +109,18 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
-                  <div className="w-20 h-20 flex-shrink-0 bg-white border border-gray-300 rounded-lg overflow-hidden flex items-center justify-center">
+                  <div className="w-20 h-20 flex-shrink-0 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden flex items-center justify-center">
                     {defaultCompany?.logo ? (
                       <img 
                         src={defaultCompany.logo} 
                         alt="Company Logo" 
-                        className="w-full h-full object-contain p-1"
-                        style={{ filter: 'contrast(1.2) brightness(1.1)' }}
+                        className="w-full h-full object-contain p-2"
                       />
                     ) : (
                       <img 
                         src="attached_assets/tektoro-logo.png" 
                         alt="TekToro Logo" 
-                        className="w-full h-full object-contain p-1"
+                        className="w-full h-full object-contain p-2"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
