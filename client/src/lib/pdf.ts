@@ -272,7 +272,9 @@ function generatePDFHTML(invoice: any): string {
           <div class="company-info">
             ${company.logo ? `
             <div class="logo-section">
-              <img src="${company.logo}" alt="Company Logo" class="company-logo" />
+              <div class="company-logo-box">
+                <img src="${company.logo}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: contain;" />
+              </div>
             </div>` : ''}
             <div class="company-details">
               <div class="company-name">${company.name || 'Company Name'}</div>

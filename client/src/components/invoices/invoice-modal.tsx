@@ -113,11 +113,11 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
                   {defaultCompany?.logo && (
-                    <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center">
+                    <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center bg-slate-800 border border-slate-600">
                       <img 
                         src={defaultCompany.logo}
                         alt="Company Logo" 
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain p-1"
                         style={{ maxWidth: '80px', maxHeight: '80px' }}
                       />
                     </div>
