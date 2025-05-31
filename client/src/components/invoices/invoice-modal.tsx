@@ -119,9 +119,13 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                         alt="Company Logo" 
                         className="w-full h-full object-contain"
                         style={{ maxWidth: '80px', maxHeight: '80px' }}
+                        onError={(e) => console.error('Logo failed to load:', defaultCompany.logo)}
+                        onLoad={() => console.log('Logo loaded successfully:', defaultCompany.logo)}
                       />
                     </div>
                   )}
+                  {/* Debug info - remove this later */}
+                  {console.log('Company data:', defaultCompany)}
                   
                   {/* Company Information */}
                   <div>
