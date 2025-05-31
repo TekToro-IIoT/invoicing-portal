@@ -21,17 +21,15 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-tektoro-dark text-white fixed h-full z-10">
       <div className="p-6">
-        <div className="flex items-center space-x-3 mb-8">
-          <div className="w-16 h-16 flex items-center justify-center">
+        <div className="mb-8 text-center">
+          <div className="flex justify-center mb-3">
             <img 
               src={tektoroLogo} 
               alt="TekToro Logo" 
-              className="w-14 h-14 object-contain"
+              className="w-16 h-16 object-contain"
             />
           </div>
-          <div>
-            <p className="text-sm text-gray-400">Invoice & Time Tracking</p>
-          </div>
+          <p className="text-sm text-gray-400">Invoice & Time Tracking</p>
         </div>
         
         {/* Navigation Menu */}
