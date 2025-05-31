@@ -273,7 +273,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
             <div className="space-y-4">
               {formData.items.map((item: any, index: number) => (
                 <Card key={index} className="p-4 bg-gray-800 border-gray-600">
-                  <div className="grid grid-cols-1 md:grid-cols-10 gap-4 items-end">
+                  <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-end">
                     <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-white mb-2">Service Point</label>
                       <Input
@@ -366,7 +366,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                     </div>
                     <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-white mb-2">Extended</label>
-                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center">
+                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
                         ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
                       </div>
                     </div>
