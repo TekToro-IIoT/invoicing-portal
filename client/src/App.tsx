@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
+import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import Invoices from "@/pages/invoices";
 
@@ -31,19 +32,19 @@ function Router() {
     );
   }
 
-  if (!isAuthenticated) {
-    // Redirect to login if not authenticated
-    window.location.href = '/api/login';
-    return null;
-  }
-
   return (
     <Switch>
-      <Route path="/" component={DashboardLayout} />
-      <Route path="/invoices" component={InvoicesLayout} />
-      <Route path="/user-profiles" component={UserProfilesLayout} />
-      <Route path="/companies" component={CompaniesLayout} />
-      <Route path="/company-profile" component={CompanyProfileLayout} />
+      {!isAuthenticated ? (
+        <Route path="/" component={Landing} />
+      ) : (
+        <>
+          <Route path="/" component={DashboardLayout} />
+          <Route path="/invoices" component={InvoicesLayout} />
+          <Route path="/user-profiles" component={UserProfilesLayout} />
+          <Route path="/companies" component={CompaniesLayout} />
+          <Route path="/company-profile" component={CompanyProfileLayout} />
+        </>
+      )}
       <Route component={NotFound} />
     </Switch>
   );
