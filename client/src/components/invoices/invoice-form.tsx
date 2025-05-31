@@ -24,6 +24,7 @@ const invoiceSchema = z.object({
   dueDate: z.string(),
   taxRate: z.string(),
   notes: z.string().optional(),
+  equipmentPurchasedDescription: z.string().optional(),
   items: z.array(z.object({
     servicePoint: z.string().optional(),
     afeLoe: z.string().optional(),
@@ -147,10 +148,14 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     e.preventDefault();
     
     try {
+      console.log('Form data before validation:', formData);
+      console.log('Equipment Description in form:', formData.equipmentPurchasedDescription);
+      
       const validatedData = invoiceSchema.parse({
         ...formData,
         clientId: parseInt(formData.clientId),
         taxRate: formData.taxRate.toString(),
+        equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
           ...item,
           rate: parseFloat(item.rate?.toString() || '0'),
@@ -159,6 +164,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         })),
       });
       
+      console.log('Validated data being sent:', validatedData);
       mutation.mutate(validatedData);
     } catch (error) {
       if (error instanceof z.ZodError) {
