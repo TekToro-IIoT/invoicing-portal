@@ -235,7 +235,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                 </div>
 
                 <div>
-                  <Label className="text-white">Due Date</Label>
+                  <Label className="text-white">Service Date</Label>
                   <Input
                     type="date"
                     value={formData.dueDate}

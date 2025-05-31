@@ -246,7 +246,8 @@ function generatePDFHTML(invoice: any): string {
             <div class="invoice-details">
               <div><strong>Invoice #:</strong> ${invoice.invoiceNumber}</div>
               <div><strong>Date:</strong> ${new Date(invoice.issueDate).toLocaleDateString()}</div>
-              <div><strong>Due Date:</strong> ${new Date(invoice.dueDate).toLocaleDateString()}</div>
+              <div><strong>Service Date:</strong> ${new Date(invoice.dueDate).toLocaleDateString()}</div>
+              <div><strong>Payment Due:</strong> ${new Date(new Date(invoice.issueDate).getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()} (Net 30)</div>
             </div>
           </div>
         </div>
