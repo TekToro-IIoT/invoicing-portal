@@ -21,13 +21,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin-only user management routes
   const isAdmin = async (req: any, res: any, next: any) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const user = await storage.getUser(userId);
       if (!user || user.role !== 'admin') {
         return res.status(403).json({ message: "Admin access required" });
       }
       next();
     } catch (error) {
+      console.error("Admin check error:", error);
       res.status(500).json({ message: "Error checking admin status" });
     }
   };
@@ -108,7 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard stats
   app.get('/api/dashboard/stats', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const stats = await storage.getDashboardStats(userId);
       res.json(stats);
     } catch (error) {
@@ -120,7 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Company routes
   app.get('/api/companies', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const companies = await storage.getCompanies(userId);
       res.json(companies);
     } catch (error) {
@@ -131,7 +132,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/companies/default', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const company = await storage.getDefaultCompany(userId);
       res.json(company);
     } catch (error) {
@@ -142,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/companies', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const companyData = { ...req.body, userId };
       
       const company = await storage.createCompany(companyData);
@@ -156,7 +157,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/companies/:id', isAuthenticated, async (req: any, res) => {
     try {
       const companyId = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       
       const company = await storage.updateCompany(companyId, req.body, userId);
       if (!company) {
@@ -173,7 +174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/companies/:id', isAuthenticated, async (req: any, res) => {
     try {
       const companyId = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       
       const success = await storage.deleteCompany(companyId, userId);
       if (!success) {
@@ -190,7 +191,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/companies/:id/default', isAuthenticated, async (req: any, res) => {
     try {
       const companyId = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       
       const company = await storage.setDefaultCompany(companyId, userId);
       if (!company) {
@@ -207,7 +208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Client routes
   app.get('/api/clients', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const clients = await storage.getClients(userId);
       res.json(clients);
     } catch (error) {
@@ -218,7 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/clients/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const client = await storage.getClient(id, userId);
       if (!client) {
@@ -233,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/clients', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const clientData = insertClientSchema.parse({ ...req.body, userId });
       const client = await storage.createClient(clientData);
       res.status(201).json(client);
@@ -248,7 +249,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/clients/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const clientData = insertClientSchema.partial().parse(req.body);
       const client = await storage.updateClient(id, clientData, userId);
@@ -267,7 +268,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/clients/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const success = await storage.deleteClient(id, userId);
       if (!success) {
@@ -285,7 +286,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Invoice routes
   app.get('/api/invoices', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const invoices = await storage.getInvoices(userId);
       res.json(invoices);
     } catch (error) {
@@ -296,7 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/invoices/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const invoice = await storage.getInvoice(id, userId);
       if (!invoice) {
@@ -311,7 +312,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/invoices', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const invoiceNumber = await storage.generateInvoiceNumber();
       
       // Get the company and find or create corresponding client
@@ -380,7 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/invoices/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const { items, ...invoiceFields } = req.body;
       const invoiceData = insertInvoiceSchema.partial().parse(invoiceFields);
@@ -424,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/invoices/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const success = await storage.deleteInvoice(id, userId);
       if (!success) {
@@ -456,7 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Email invoice route (placeholder - would integrate with actual email service)
   app.post('/api/invoices/:id/email', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const { recipientEmail } = req.body;
       
