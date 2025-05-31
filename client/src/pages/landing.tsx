@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import logoPath from "@assets/Untitled design (89).png";
 
 export default function Landing() {
   return (
@@ -8,7 +9,7 @@ export default function Landing() {
         <div className="flex items-center justify-center mb-8">
           <div className="w-64 h-16 flex items-center justify-center">
             <img 
-              src="attached_assets/Untitled design (89).png" 
+              src={logoPath} 
               alt="TekToro Digital IIoT Solutions Logo" 
               className="w-full h-full object-contain"
             />
