@@ -103,6 +103,26 @@ export const invoices = pgTable("invoices", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Companies table
+export const companies = pgTable("companies", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  address: text("address"),
+  city: varchar("city"),
+  state: varchar("state"),
+  zipCode: varchar("zip_code"),
+  country: varchar("country").default("USA"),
+  phone: varchar("phone"),
+  email: varchar("email"),
+  website: varchar("website"),
+  taxId: varchar("tax_id"),
+  logo: varchar("logo"), // URL to company logo
+  userId: varchar("user_id").notNull().references(() => users.id),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Invoice items table
 export const invoiceItems = pgTable("invoice_items", {
   id: serial("id").primaryKey(),
@@ -150,6 +170,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   timeEntries: many(timeEntries),
   invoices: many(invoices),
   timeTickets: many(timeTickets),
+  companies: many(companies),
 }));
 
 export const clientsRelations = relations(clients, ({ one, many }) => ({
@@ -208,6 +229,13 @@ export const invoiceItemsRelations = relations(invoiceItems, ({ one }) => ({
   }),
 }));
 
+export const companiesRelations = relations(companies, ({ one }) => ({
+  user: one(users, {
+    fields: [companies.userId],
+    references: [users.id],
+  }),
+}));
+
 export const timeTicketsRelations = relations(timeTickets, ({ one }) => ({
   user: one(users, {
     fields: [timeTickets.userId],
@@ -250,6 +278,12 @@ export const insertInvoiceItemSchema = createInsertSchema(invoiceItems).omit({
   createdAt: true,
 });
 
+export const insertCompanySchema = createInsertSchema(companies).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const insertTimeTicketSchema = createInsertSchema(timeTickets).omit({
   id: true,
   createdAt: true,
@@ -269,6 +303,9 @@ export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;
 export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoiceItem = z.infer<typeof insertInvoiceItemSchema>;
 export type InvoiceItem = typeof invoiceItems.$inferSelect;
+
+export type InsertCompany = z.infer<typeof insertCompanySchema>;
+export type Company = typeof companies.$inferSelect;
 
 export type InsertTimeTicket = z.infer<typeof insertTimeTicketSchema>;
 export type TimeTicket = typeof timeTickets.$inferSelect;
