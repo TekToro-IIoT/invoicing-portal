@@ -75,8 +75,8 @@ export default function CompanyProfile() {
         isDefault: true
       };
 
-      if (company?.id) {
-        return await apiRequest(`/api/companies/${company.id}`, "PUT", payload);
+      if ((company as any)?.id) {
+        return await apiRequest(`/api/companies/${(company as any).id}`, "PUT", payload);
       } else {
         return await apiRequest("/api/companies", "POST", payload);
       }
