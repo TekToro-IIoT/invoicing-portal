@@ -12,15 +12,19 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-tektoro-blue text-white fixed h-full z-10">
+    <div className="w-64 bg-tektoro-dark text-white fixed h-full z-10">
       <div className="p-6">
         <div className="flex items-center space-x-3 mb-8">
-          <div className="w-10 h-10 bg-tektoro-orange rounded-lg flex items-center justify-center">
-            <i className="fas fa-bolt text-white text-xl"></i>
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img 
+              src="/attached_assets/tektoro-logo.png" 
+              alt="TekToro Logo" 
+              className="w-8 h-8 object-contain"
+            />
           </div>
           <div>
-            <h1 className="text-xl font-bold">TekToro</h1>
-            <p className="text-xs text-blue-200">Invoice & Time Tracking</p>
+            <h1 className="text-xl font-bold text-tektoro-primary">TekToro</h1>
+            <p className="text-xs text-gray-400">Invoice & Time Tracking</p>
           </div>
         </div>
         
@@ -30,14 +34,14 @@ export default function Sidebar() {
             const isActive = location === item.path;
             return (
               <Link key={item.path} href={item.path}>
-                <a className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
                   isActive 
-                    ? 'bg-blue-700 text-white' 
-                    : 'hover:bg-blue-700 text-blue-100 hover:text-white'
+                    ? 'bg-tektoro-primary text-white' 
+                    : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
                 }`}>
                   <i className={`${item.icon} w-5`}></i>
                   <span>{item.label}</span>
-                </a>
+                </div>
               </Link>
             );
           })}
@@ -45,7 +49,7 @@ export default function Sidebar() {
       </div>
       
       {/* User Profile */}
-      <div className="absolute bottom-0 w-full p-6 border-t border-blue-600">
+      <div className="absolute bottom-0 w-full p-6 border-t border-gray-600">
         <div className="flex items-center space-x-3">
           {user?.profileImageUrl ? (
             <img 
@@ -54,21 +58,21 @@ export default function Sidebar() {
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
-              <i className="fas fa-user text-blue-200"></i>
+            <div className="w-10 h-10 bg-tektoro-primary rounded-full flex items-center justify-center">
+              <i className="fas fa-user text-white"></i>
             </div>
           )}
           <div className="flex-1">
-            <p className="text-sm font-medium">
+            <p className="text-sm font-medium text-white">
               {user?.firstName && user?.lastName 
                 ? `${user.firstName} ${user.lastName}`
                 : user?.email || 'User'
               }
             </p>
-            <p className="text-xs text-blue-200 capitalize">{user?.role || 'User'}</p>
+            <p className="text-xs text-gray-400 capitalize">{user?.role || 'User'}</p>
           </div>
           <button 
-            className="text-blue-200 hover:text-white"
+            className="text-gray-400 hover:text-white"
             onClick={() => window.location.href = '/api/logout'}
           >
             <i className="fas fa-sign-out-alt"></i>

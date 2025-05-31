@@ -6,32 +6,32 @@
 @tailwind utilities;
 
 :root {
-  --background: 210 11% 98%; /* #F8FAFC */
-  --foreground: 215 13% 34%; /* #374151 */
-  --muted: 210 40% 96%; /* #F1F5F9 */
-  --muted-foreground: 215 16% 47%; /* #64748B */
-  --popover: 0 0% 100%; /* #FFFFFF */
-  --popover-foreground: 215 13% 34%; /* #374151 */
-  --card: 0 0% 100%; /* #FFFFFF */
-  --card-foreground: 215 13% 34%; /* #374151 */
-  --border: 220 13% 91%; /* #E2E8F0 */
-  --input: 220 13% 91%; /* #E2E8F0 */
-  --primary: 217 90% 61%; /* #1E3A8A */
+  --background: 217 19% 27%; /* #3A4A5C */
+  --foreground: 210 40% 92%; /* #E2E8F0 */
+  --muted: 217 19% 22%; /* #2D3748 */
+  --muted-foreground: 210 20% 70%; /* #94A3B8 */
+  --popover: 217 19% 18%; /* #1E293B */
+  --popover-foreground: 210 40% 92%; /* #E2E8F0 */
+  --card: 217 19% 18%; /* #1E293B */
+  --card-foreground: 210 40% 92%; /* #E2E8F0 */
+  --border: 217 19% 35%; /* #475569 */
+  --input: 217 19% 22%; /* #2D3748 */
+  --primary: 145 63% 49%; /* #22C55E */
   --primary-foreground: 0 0% 100%; /* #FFFFFF */
-  --secondary: 210 40% 96%; /* #F1F5F9 */
-  --secondary-foreground: 215 25% 27%; /* #334155 */
-  --accent: 210 40% 96%; /* #F1F5F9 */
-  --accent-foreground: 215 25% 27%; /* #334155 */
+  --secondary: 217 19% 22%; /* #2D3748 */
+  --secondary-foreground: 210 40% 92%; /* #E2E8F0 */
+  --accent: 217 19% 22%; /* #2D3748 */
+  --accent-foreground: 210 40% 92%; /* #E2E8F0 */
   --destructive: 0 84% 60%; /* #EF4444 */
   --destructive-foreground: 0 0% 100%; /* #FFFFFF */
-  --ring: 217 90% 61%; /* #1E3A8A */
+  --ring: 145 63% 49%; /* #22C55E */
   --radius: 0.5rem;
   
   /* TekToro brand colors */
-  --tektoro-blue: 217 90% 61%; /* #1E3A8A */
-  --tektoro-orange: 24 95% 53%; /* #F97316 */
-  --tektoro-gray: 215 13% 34%; /* #374151 */
-  --tektoro-light: 210 11% 98%; /* #F8FAFC */
+  --tektoro-primary: 145 63% 49%; /* #22C55E - Green */
+  --tektoro-dark: 217 19% 18%; /* #1E293B - Dark Navy */
+  --tektoro-bg: 217 19% 27%; /* #3A4A5C - Background */
+  --tektoro-text: 210 40% 92%; /* #E2E8F0 - Light text */
 }
 
 .dark {
@@ -71,20 +71,41 @@
     font-family: 'Inter', sans-serif;
   }
   
+  .tektoro-primary {
+    color: hsl(var(--tektoro-primary));
+  }
+  
+  .bg-tektoro-primary {
+    background-color: hsl(var(--tektoro-primary));
+  }
+  
+  .tektoro-dark {
+    color: hsl(var(--tektoro-dark));
+  }
+  
+  .bg-tektoro-dark {
+    background-color: hsl(var(--tektoro-dark));
+  }
+  
+  .tektoro-text {
+    color: hsl(var(--tektoro-text));
+  }
+  
+  /* Legacy support */
   .tektoro-blue {
-    color: hsl(var(--tektoro-blue));
+    color: hsl(var(--tektoro-dark));
   }
   
   .bg-tektoro-blue {
-    background-color: hsl(var(--tektoro-blue));
+    background-color: hsl(var(--tektoro-dark));
   }
   
   .tektoro-orange {
-    color: hsl(var(--tektoro-orange));
+    color: hsl(var(--tektoro-primary));
   }
   
   .bg-tektoro-orange {
-    background-color: hsl(var(--tektoro-orange));
+    background-color: hsl(var(--tektoro-primary));
   }
   
   .invoice-shadow {
