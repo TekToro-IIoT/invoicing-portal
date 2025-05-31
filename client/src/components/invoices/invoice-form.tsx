@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,13 +42,13 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   const isEditing = !!invoice;
 
   const [formData, setFormData] = useState({
-    clientId: invoice?.clientId || "",
+    clientId: invoice?.client?.companyId?.toString() || invoice?.clientId?.toString() || "",
     issueDate: invoice?.issueDate || new Date().toISOString().split('T')[0],
     dueDate: invoice?.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     taxRate: invoice?.taxRate || 0,
     notes: invoice?.notes || "",
     equipmentPurchasedDescription: invoice?.equipmentPurchasedDescription || "",
-    items: invoice?.items || [{ 
+    items: invoice?.items?.length > 0 ? invoice.items : [{ 
       servicePoint: "", 
       afeLoe: "", 
       afeNumber: "", 
@@ -65,6 +65,31 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     queryKey: ["/api/companies"],
     retry: false,
   });
+
+  // Reset form data when invoice prop changes
+  useEffect(() => {
+    if (invoice) {
+      setFormData({
+        clientId: invoice.client?.companyId?.toString() || invoice.clientId?.toString() || "",
+        issueDate: invoice.issueDate || new Date().toISOString().split('T')[0],
+        dueDate: invoice.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        taxRate: invoice.taxRate || 0,
+        notes: invoice.notes || "",
+        equipmentPurchasedDescription: invoice.equipmentPurchasedDescription || "",
+        items: invoice.items?.length > 0 ? invoice.items : [{ 
+          servicePoint: "", 
+          afeLoe: "", 
+          afeNumber: "", 
+          wellName: "", 
+          wellNumber: "", 
+          service: "", 
+          rate: 0, 
+          hrs: 0, 
+          qty: 0 
+        }],
+      });
+    }
+  }, [invoice]);
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {

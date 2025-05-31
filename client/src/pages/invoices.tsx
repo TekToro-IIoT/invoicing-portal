@@ -98,9 +98,22 @@ export default function Invoices() {
     setSelectedInvoice(invoice);
   };
 
-  const handleEditInvoice = (invoice: any) => {
-    setEditingInvoice(invoice);
-    setShowInvoiceForm(true);
+  const handleEditInvoice = async (invoice: any) => {
+    try {
+      // Fetch full invoice details including items using the existing query client
+      const fullInvoiceData = await queryClient.fetchQuery({
+        queryKey: [`/api/invoices/${invoice.id}`],
+      });
+      setEditingInvoice(fullInvoiceData);
+      setShowInvoiceForm(true);
+    } catch (error) {
+      console.error('Error fetching invoice details:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load invoice details",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDeleteInvoice = (id: number) => {
