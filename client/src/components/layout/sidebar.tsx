@@ -26,7 +26,7 @@ export default function Sidebar() {
             <img 
               src={tektoroLogo} 
               alt="TekToro Logo" 
-              className="w-16 h-16 object-contain"
+              className="h-12 w-auto object-contain"
             />
           </div>
           <p className="text-sm text-gray-400">Invoice & Time Tracking</p>
