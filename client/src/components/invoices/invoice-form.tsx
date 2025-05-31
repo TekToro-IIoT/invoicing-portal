@@ -25,9 +25,15 @@ const invoiceSchema = z.object({
   taxRate: z.number().min(0).max(100),
   notes: z.string().optional(),
   items: z.array(z.object({
-    description: z.string().min(1),
-    quantity: z.number().min(0.1),
+    servicePoint: z.string().min(1),
+    afeLoe: z.string(),
+    afeNumber: z.string(),
+    wellName: z.string(),
+    wellNumber: z.string(),
+    service: z.string().min(1),
     rate: z.number().min(0),
+    hrs: z.number().min(0).optional(),
+    qty: z.number().min(0).optional(),
   })).min(1),
 });
 
@@ -41,7 +47,17 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     dueDate: invoice?.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     taxRate: invoice?.taxRate || 0,
     notes: invoice?.notes || "",
-    items: invoice?.items || [{ description: "", quantity: 1, rate: 0 }],
+    items: invoice?.items || [{ 
+      servicePoint: "", 
+      afeLoe: "", 
+      afeNumber: "", 
+      wellName: "", 
+      wellNumber: "", 
+      service: "", 
+      rate: 0, 
+      hrs: 0, 
+      qty: 0 
+    }],
   });
 
   const { data: clients } = useQuery({
@@ -108,10 +124,11 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         ...formData,
         clientId: parseInt(formData.clientId),
         taxRate: parseFloat(formData.taxRate.toString()),
-        items: formData.items.map(item => ({
+        items: formData.items.map((item: any) => ({
           ...item,
-          quantity: parseFloat(item.quantity.toString()),
-          rate: parseFloat(item.rate.toString()),
+          rate: parseFloat(item.rate?.toString() || '0'),
+          hrs: parseFloat(item.hrs?.toString() || '0'),
+          qty: parseFloat(item.qty?.toString() || '0'),
         })),
       });
       
@@ -130,7 +147,17 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   const addItem = () => {
     setFormData({
       ...formData,
-      items: [...formData.items, { description: "", quantity: 1, rate: 0 }],
+      items: [...formData.items, { 
+        servicePoint: "", 
+        afeLoe: "", 
+        afeNumber: "", 
+        wellName: "", 
+        wellNumber: "", 
+        service: "", 
+        rate: 0, 
+        hrs: 0, 
+        qty: 0 
+      }],
     });
   };
 
@@ -147,7 +174,14 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     setFormData({ ...formData, items: updatedItems });
   };
 
-  const subtotal = formData.items.reduce((sum, item) => sum + (parseFloat(item.quantity.toString()) * parseFloat(item.rate.toString())), 0);
+  const subtotal = formData.items.reduce((sum: number, item: any) => {
+    const rate = parseFloat(item.rate?.toString() || '0');
+    const hrs = parseFloat(item.hrs?.toString() || '0');
+    const qty = parseFloat(item.qty?.toString() || '0');
+    // Calculate extended amount: rate * (hrs + qty)
+    const extended = rate * (hrs + qty);
+    return sum + extended;
+  }, 0);
   const taxAmount = (subtotal * parseFloat(formData.taxRate.toString())) / 100;
   const total = subtotal + taxAmount;
 
@@ -231,19 +265,66 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
             </div>
 
             <div className="space-y-4">
-              {formData.items.map((item, index) => (
-                <Card key={index} className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-                    <div className="md:col-span-5">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                      <Textarea
-                        value={item.description}
-                        onChange={(e) => updateItem(index, 'description', e.target.value)}
-                        placeholder="Item description"
+              {formData.items.map((item: any, index: number) => (
+                <Card key={index} className="p-4 bg-gray-800 border-gray-600">
+                  <div className="grid grid-cols-1 md:grid-cols-10 gap-4 items-end">
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Service Point</label>
+                      <Input
+                        value={item.servicePoint}
+                        onChange={(e) => updateItem(index, 'servicePoint', e.target.value)}
+                        placeholder="JGK E-72"
+                        className="bg-gray-700 border-gray-600 text-white"
                         required
                       />
                     </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">AFE/LOE</label>
+                      <Input
+                        value={item.afeLoe}
+                        onChange={(e) => updateItem(index, 'afeLoe', e.target.value)}
+                        placeholder="AFE"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">AFE # (if applicable)</label>
+                      <Input
+                        value={item.afeNumber}
+                        onChange={(e) => updateItem(index, 'afeNumber', e.target.value)}
+                        placeholder="20250112"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Well Name</label>
+                      <Input
+                        value={item.wellName}
+                        onChange={(e) => updateItem(index, 'wellName', e.target.value)}
+                        placeholder="Visnaga 2314"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Well #</label>
+                      <Input
+                        value={item.wellNumber}
+                        onChange={(e) => updateItem(index, 'wellNumber', e.target.value)}
+                        placeholder="2314"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
                     <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-white mb-2">Service</label>
+                      <Input
+                        value={item.service}
+                        onChange={(e) => updateItem(index, 'service', e.target.value)}
+                        placeholder="Sr. Programmer Rate"
+                        className="bg-gray-700 border-gray-600 text-white"
+                        required
+                      />
+                    </div>
+                    <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
                       <Input
                         type="number"
