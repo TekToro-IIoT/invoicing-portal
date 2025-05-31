@@ -1,0 +1,12 @@
+Lines to remove from storage.ts:
+- All async getProject methods
+- All async createProject methods  
+- All async updateProject methods
+- All async deleteProject methods
+- All async getTimeEntries methods
+- All async getTimeEntry methods
+- All async getRunningTimeEntry methods
+- All async createTimeEntry methods
+- All async updateTimeEntry methods
+- All async deleteTimeEntry methods
+- All async stopTimeEntry methods

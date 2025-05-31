@@ -194,15 +194,7 @@ export class DatabaseStorage implements IStorage {
     return result.rowCount > 0;
   }
 
-  // Project operations
-  async getProjects(userId: string): Promise<ProjectWithClient[]> {
-    return await db
-      .select()
-      .from(projects)
-      .leftJoin(clients, eq(projects.clientId, clients.id))
-      .where(eq(projects.userId, userId))
-      .orderBy(desc(projects.createdAt));
-  }
+
 
   async getProject(id: number, userId: string): Promise<ProjectWithClient | undefined> {
     const [result] = await db
