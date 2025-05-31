@@ -98,6 +98,7 @@ export const invoices = pgTable("invoices", {
   total: decimal("total", { precision: 10, scale: 2 }).notNull(),
   status: varchar("status", { length: 50 }).notNull().default("draft"), // 'draft', 'sent', 'paid', 'overdue'
   notes: text("notes"),
+  equipmentPurchasedDescription: text("equipment_purchased_description"),
   userId: varchar("user_id").references(() => users.id).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

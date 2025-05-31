@@ -47,6 +47,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     dueDate: invoice?.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     taxRate: invoice?.taxRate || 0,
     notes: invoice?.notes || "",
+    equipmentPurchasedDescription: invoice?.equipmentPurchasedDescription || "",
     items: invoice?.items || [{ 
       servicePoint: "", 
       afeLoe: "", 
@@ -315,7 +316,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-white mb-2">Service</label>
+                      <label className="block text-sm font-medium text-white mb-2">Service/Purchased Item</label>
                       <Input
                         value={item.service}
                         onChange={(e) => updateItem(index, 'service', e.target.value)}
@@ -411,6 +412,17 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="Additional notes or payment terms"
+              rows={3}
+            />
+          </div>
+
+          {/* Equipment Purchased Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Equipment Purchased Description</label>
+            <Textarea
+              value={formData.equipmentPurchasedDescription}
+              onChange={(e) => setFormData({ ...formData, equipmentPurchasedDescription: e.target.value })}
+              placeholder="Detailed description of equipment purchased"
               rows={3}
             />
           </div>
