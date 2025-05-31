@@ -275,9 +275,9 @@ function generatePDFHTML(invoice: any): string {
               <img src="${company.logo}" alt="Company Logo" class="company-logo" />
             </div>` : ''}
             <div class="company-details">
-              ${company.name ? `<div class="company-name">${company.name}</div>` : ''}
+              <div class="company-name">${company.name || 'Company Name'}</div>
               ${company.address ? `<div>${company.address}</div>` : ''}
-              ${company.city ? `<div>${company.city}${company.state ? `, ${company.state}` : ''}${company.zipCode ? ` ${company.zipCode}` : ''}</div>` : ''}
+              ${company.city || company.state || company.zipCode ? `<div>${company.city || ''}${company.state ? `, ${company.state}` : ''}${company.zipCode ? ` ${company.zipCode}` : ''}</div>` : ''}
               ${company.country ? `<div>${company.country}</div>` : ''}
               ${company.phone ? `<div>Phone: ${company.phone}</div>` : ''}
               ${company.email ? `<div>Email: ${company.email}</div>` : ''}

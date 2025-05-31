@@ -126,26 +126,15 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                   {/* Company Information */}
                   <div>
                     <h1 className="text-xl font-bold text-gray-900">
-                      {defaultCompany?.name || 'TekToro Digital IIoT Solutions Inc'}
+                      {defaultCompany?.name || 'Company Name'}
                     </h1>
                     <div className="text-sm text-gray-700">
-                      {defaultCompany ? (
-                        <>
-                          {defaultCompany.address && <p>{defaultCompany.address}</p>}
-                          {defaultCompany.city && (
-                            <p>{defaultCompany.city}, {defaultCompany.state} {defaultCompany.zipCode}</p>
-                          )}
-                          {defaultCompany.phone && <p>Phone: {defaultCompany.phone}</p>}
-                          {defaultCompany.email && <p>Email: {defaultCompany.email}</p>}
-                        </>
-                      ) : (
-                        <>
-                          <p>123 Industrial Drive, Suite 400</p>
-                          <p>Denver, CO 80202</p>
-                          <p>Phone: (555) 123-4567</p>
-                          <p>Email: info@tektoro.com</p>
-                        </>
+                      {defaultCompany?.address && <p>{defaultCompany.address}</p>}
+                      {defaultCompany?.city && (
+                        <p>{defaultCompany.city}{defaultCompany.state ? `, ${defaultCompany.state}` : ''} {defaultCompany.zipCode}</p>
                       )}
+                      {defaultCompany?.phone && <p>Phone: {defaultCompany.phone}</p>}
+                      {defaultCompany?.email && <p>Email: {defaultCompany.email}</p>}
                     </div>
                   </div>
                 </div>
