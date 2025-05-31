@@ -326,13 +326,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
+      const { items, ...invoiceFields } = req.body;
       const invoiceData = insertInvoiceSchema.parse({ 
-        ...req.body, 
+        ...invoiceFields, 
         clientId: client.id,
         userId,
         invoiceNumber 
       });
       const invoice = await storage.createInvoice(invoiceData);
+      
+      // Create invoice items
+      if (items && items.length > 0) {
+        for (const item of items) {
+          await storage.createInvoiceItem({
+            ...item,
+            invoiceId: invoice.id
+          });
+        }
+      }
+      
       res.status(201).json(invoice);
     } catch (error) {
       console.error("Error creating invoice:", error);

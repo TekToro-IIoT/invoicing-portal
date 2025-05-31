@@ -242,6 +242,14 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 </div>
               )}
               
+              {/* Equipment Purchased Description */}
+              {invoiceData.equipmentPurchasedDescription && (
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-2">Equipment Purchased Description</h4>
+                  <p className="text-sm text-gray-600">{invoiceData.equipmentPurchasedDescription}</p>
+                </div>
+              )}
+              
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-2">Payment Terms</h4>
                 <p className="text-sm text-gray-600">
