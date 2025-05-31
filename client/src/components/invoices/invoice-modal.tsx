@@ -174,20 +174,20 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Bill To:</h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="font-medium text-gray-900">{invoiceData.client.name}</p>
-                  {invoiceData.client.address && <p className="text-gray-600">{invoiceData.client.address}</p>}
+                  {invoiceData.client.address && <p className="text-gray-700">{invoiceData.client.address}</p>}
                   {invoiceData.client.city && (
-                    <p className="text-gray-600">
+                    <p className="text-gray-700">
                       {invoiceData.client.city}, {invoiceData.client.state} {invoiceData.client.zipCode}
                     </p>
                   )}
                   {invoiceData.client.country && (
-                    <p className="text-gray-600">{invoiceData.client.country}</p>
+                    <p className="text-gray-700">{invoiceData.client.country}</p>
                   )}
                   {invoiceData.client.contactPerson && (
-                    <p className="text-gray-600">Contact: {invoiceData.client.contactPerson}</p>
+                    <p className="text-gray-700">Contact: {invoiceData.client.contactPerson}</p>
                   )}
                   {invoiceData.client.email && (
-                    <p className="text-gray-600">{invoiceData.client.email}</p>
+                    <p className="text-gray-700">{invoiceData.client.email}</p>
                   )}
                 </div>
               </div>
@@ -207,11 +207,11 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     {invoiceData.items?.map((item: any) => (
                       <tr key={item.id} className="border-b border-gray-200">
                         <td className="py-3">
-                          <p className="font-medium">{item.description}</p>
+                          <p className="font-medium text-gray-800">{item.description}</p>
                         </td>
-                        <td className="text-center py-3">{parseFloat(item.quantity).toFixed(1)}</td>
-                        <td className="text-right py-3">${parseFloat(item.rate).toFixed(2)}</td>
-                        <td className="text-right py-3">${parseFloat(item.amount).toFixed(2)}</td>
+                        <td className="text-center py-3 text-gray-800">{parseFloat(item.quantity).toFixed(1)}</td>
+                        <td className="text-right py-3 text-gray-800">${parseFloat(item.rate).toFixed(2)}</td>
+                        <td className="text-right py-3 text-gray-800">${parseFloat(item.amount).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -222,18 +222,18 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="flex justify-end">
                 <div className="w-64">
                   <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Subtotal:</span>
-                    <span className="font-medium">${parseFloat(invoiceData.subtotal).toFixed(2)}</span>
+                    <span className="text-gray-700">Subtotal:</span>
+                    <span className="font-medium text-gray-800">${parseFloat(invoiceData.subtotal).toFixed(2)}</span>
                   </div>
                   {parseFloat(invoiceData.taxAmount) > 0 && (
                     <div className="flex justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Tax ({parseFloat(invoiceData.taxRate).toFixed(1)}%):</span>
-                      <span className="font-medium">${parseFloat(invoiceData.taxAmount).toFixed(2)}</span>
+                      <span className="text-gray-700">Tax ({parseFloat(invoiceData.taxRate).toFixed(1)}%):</span>
+                      <span className="font-medium text-gray-800">${parseFloat(invoiceData.taxAmount).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between py-3 border-t-2 border-gray-300">
                     <span className="text-lg font-semibold text-gray-900">Total:</span>
-                    <span className="text-lg font-bold text-tektoro-blue">${parseFloat(invoiceData.total).toFixed(2)}</span>
+                    <span className="text-lg font-bold text-green-600">${parseFloat(invoiceData.total).toFixed(2)}</span>
                   </div>
                 </div>
               </div>

@@ -97,7 +97,7 @@ export default function Sidebar() {
                 : user?.email || 'User'
               }
             </p>
-            <p className="text-xs text-gray-400 capitalize">{user?.role || 'User'}</p>
+            <p className="text-xs text-gray-300 capitalize">{user?.role || 'User'}</p>
           </div>
           <button 
             className="text-gray-400 hover:text-white"
