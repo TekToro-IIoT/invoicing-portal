@@ -196,6 +196,7 @@ export default function InvoiceTable({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      console.log('New Invoice button clicked');
                       onNewInvoice();
                     }}
                     className="text-tektoro-orange hover:text-orange-600 p-1 ml-2"

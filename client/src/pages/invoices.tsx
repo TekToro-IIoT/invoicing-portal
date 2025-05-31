@@ -211,6 +211,7 @@ export default function Invoices() {
           onEmail={handleEmailInvoice}
           onStatusChange={handleStatusChange}
           onNewInvoice={() => {
+            console.log('Setting invoice form to open');
             setEditingInvoice(null);
             setShowInvoiceForm(true);
           }}
