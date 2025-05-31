@@ -8,6 +8,7 @@ interface InvoiceTableProps {
   onDelete: (id: number) => void;
   onEmail: (invoice: any) => void;
   onStatusChange: (id: number, status: string) => void;
+  onNewInvoice: () => void;
   isDeleting: boolean;
   isEmailing: boolean;
 }
@@ -19,6 +20,7 @@ export default function InvoiceTable({
   onDelete, 
   onEmail, 
   onStatusChange,
+  onNewInvoice,
   isDeleting, 
   isEmailing 
 }: InvoiceTableProps) {
@@ -190,6 +192,16 @@ export default function InvoiceTable({
                     disabled={isDeleting}
                   >
                     <i className="fas fa-trash"></i>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onNewInvoice();
+                    }}
+                    className="text-tektoro-orange hover:text-orange-600 p-1 ml-2"
+                    title="New Invoice"
+                  >
+                    <i className="fas fa-plus"></i>
                   </button>
                 </div>
               </td>

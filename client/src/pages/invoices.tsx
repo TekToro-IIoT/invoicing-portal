@@ -199,16 +199,6 @@ export default function Invoices() {
                   <SelectItem value="overdue">Overdue</SelectItem>
                 </SelectContent>
               </Select>
-              <Button 
-                className="bg-tektoro-orange hover:bg-orange-600"
-                onClick={() => {
-                  setEditingInvoice(null);
-                  setShowInvoiceForm(true);
-                }}
-              >
-                <i className="fas fa-plus mr-2"></i>
-                New Invoice
-              </Button>
             </div>
           </div>
         </div>
@@ -220,6 +210,10 @@ export default function Invoices() {
           onDelete={handleDeleteInvoice}
           onEmail={handleEmailInvoice}
           onStatusChange={handleStatusChange}
+          onNewInvoice={() => {
+            setEditingInvoice(null);
+            setShowInvoiceForm(true);
+          }}
           isDeleting={deleteInvoiceMutation.isPending}
           isEmailing={emailInvoiceMutation.isPending}
         />
