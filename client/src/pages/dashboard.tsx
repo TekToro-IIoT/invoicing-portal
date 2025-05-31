@@ -153,10 +153,9 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Recent Activity & Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Invoices */}
-        <div className="lg:col-span-2">
+      {/* Recent Invoices */}
+      <div className="w-full">
+        <div>
           <Card className="invoice-shadow scada-border">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
@@ -219,49 +218,7 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
-        <div>
-          <Card className="invoice-shadow scada-border">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
-            </div>
-            <CardContent className="p-6 space-y-4">
-              <Link href="/invoices">
-                <button className="w-full flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-tektoro-orange hover:bg-orange-50 transition-colors group">
-                  <div className="w-10 h-10 bg-tektoro-orange rounded-lg flex items-center justify-center group-hover:bg-orange-600">
-                    <i className="fas fa-plus text-white"></i>
-                  </div>
-                  <div className="text-left">
-                    <p className="font-medium text-gray-900">Create Invoice</p>
-                    <p className="text-sm text-gray-500">Generate a new invoice</p>
-                  </div>
-                </button>
-              </Link>
 
-              <Link href="/time-tracking">
-                <button className="w-full flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors group">
-                  <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center group-hover:bg-blue-600">
-                    <i className="fas fa-play text-white"></i>
-                  </div>
-                  <div className="text-left">
-                    <p className="font-medium text-gray-900">Start Timer</p>
-                    <p className="text-sm text-gray-500">Track time for project</p>
-                  </div>
-                </button>
-              </Link>
-
-              <button className="w-full flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors group">
-                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center group-hover:bg-green-600">
-                  <i className="fas fa-download text-white"></i>
-                </div>
-                <div className="text-left">
-                  <p className="font-medium text-gray-900">Export Report</p>
-                  <p className="text-sm text-gray-500">Download monthly report</p>
-                </div>
-              </button>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </main>
   );
