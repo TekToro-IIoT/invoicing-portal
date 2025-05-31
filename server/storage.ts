@@ -459,23 +459,22 @@ export class DatabaseStorage implements IStorage {
 
   async generateInvoiceNumber(): Promise<string> {
     const year = new Date().getFullYear();
-    const result = await db
-      .select()
-      .from(invoices)
-      .where(eq(invoices.invoiceNumber, `INV-${year}-001`));
-    
-    // Find the highest invoice number for this year
     const yearPrefix = `INV-${year}-`;
-    const existingInvoices = await db
+    
+    // Find all invoices and filter for this year in JavaScript
+    const allInvoices = await db
       .select({ invoiceNumber: invoices.invoiceNumber })
-      .from(invoices)
-      .where(eq(invoices.invoiceNumber, yearPrefix));
+      .from(invoices);
+    
+    const yearInvoices = allInvoices.filter(inv => 
+      inv.invoiceNumber.startsWith(yearPrefix)
+    );
     
     let maxNumber = 0;
-    existingInvoices.forEach(inv => {
+    yearInvoices.forEach(inv => {
       const numberPart = inv.invoiceNumber.replace(yearPrefix, '');
       const num = parseInt(numberPart, 10);
-      if (num > maxNumber) {
+      if (!isNaN(num) && num > maxNumber) {
         maxNumber = num;
       }
     });
