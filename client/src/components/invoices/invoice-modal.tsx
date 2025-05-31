@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { generatePDF } from "@/lib/pdf";
 import { printInvoice } from "@/lib/print";
 
@@ -12,79 +12,54 @@ interface InvoiceModalProps {
 }
 
 export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalProps) {
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { data: fullInvoice, isLoading: invoiceLoading } = useQuery({
-    queryKey: ["/api/invoices", invoice.id],
-    enabled: isOpen && !!invoice.id,
-    retry: false,
-  });
-
-  const { data: defaultCompany, isLoading: companyLoading } = useQuery({
-    queryKey: ["/api/companies/default"],
+  const { data: defaultCompany } = useQuery({
+    queryKey: ['/api/companies/default'],
     enabled: isOpen,
-    retry: false,
   });
 
   const handleDownloadPDF = async () => {
+    if (!invoiceData) return;
+    setIsLoading(true);
     try {
-      const invoiceWithCompany = {
-        ...invoiceData,
-        company: defaultCompany
-      };
-      await generatePDF(invoiceWithCompany);
-      toast({
-        title: "Success",
-        description: "Invoice PDF downloaded successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Error", 
-        description: "Failed to generate PDF",
-        variant: "destructive",
-      });
+      await generatePDF(invoiceData);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handlePrint = () => {
-    try {
-      const invoiceWithCompany = {
-        ...invoiceData,
-        company: defaultCompany
-      };
-      printInvoice(invoiceWithCompany);
-      toast({
-        title: "Success",
-        description: "Invoice sent to printer",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to print invoice",
-        variant: "destructive",
-      });
-    }
+    if (!invoiceData) return;
+    printInvoice(invoiceData);
   };
 
   const handleEmail = () => {
-    const email = prompt("Enter recipient email:", fullInvoice?.client?.email || invoice.client?.email || "");
-    if (email) {
-      // This would trigger the email mutation from the parent component
-      toast({
-        title: "Info",
-        description: "Email functionality would be triggered here",
-      });
-    }
+    if (!invoiceData) return;
+    // Email functionality would be implemented here
+    console.log("Email invoice:", invoiceData);
   };
 
-  // Use the invoice passed from the table (which already has all the data) or fall back to fullInvoice
-  const invoiceData = invoice || fullInvoice;
-  const isLoading = invoiceLoading || companyLoading;
+  if (!invoice) {
+    return null;
+  }
 
-  // Debug log to see what data we have
-  console.log('Invoice data:', invoiceData);
-  console.log('Full invoice:', fullInvoice);
-  console.log('Default company:', defaultCompany);
+  // Transform invoice data for display
+  const invoiceData = {
+    ...invoice,
+    client: invoice.client || {
+      name: 'Client Name',
+      email: 'client@example.com',
+      address: '123 Client Street',
+      city: 'Client City',
+      state: 'State',
+      zipCode: '12345'
+    },
+    items: invoice.items || [],
+    subtotal: invoice.items?.reduce((sum: number, item: any) => sum + (parseFloat(item.total) || 0), 0) || 0,
+    tax: 0,
+    total: invoice.items?.reduce((sum: number, item: any) => sum + (parseFloat(item.total) || 0), 0) || 0
+  };
 
   if (!invoiceData) {
     return null;
@@ -124,13 +99,14 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
             <div className="max-w-3xl mx-auto">
               {/* Invoice Header */}
               <div className="flex justify-between items-start mb-8">
-                <div>
-                  <div className="flex items-center space-x-3 mb-4">
+                <div className="flex items-center space-x-4">
+                  {/* Company Logo with Perfect Sizing */}
+                  <div className="w-20 h-20 flex-shrink-0 bg-white border border-gray-300 rounded-lg overflow-hidden">
                     {defaultCompany?.logo ? (
                       <img 
                         src={defaultCompany.logo} 
                         alt="Company Logo" 
-                        className="w-12 h-12 object-contain"
+                        className="w-full h-full object-contain p-2"
                         onError={(e) => {
                           (e.target as HTMLImageElement).style.display = 'none';
                         }}
@@ -138,38 +114,43 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     ) : (
                       <img 
                         src="/attached_assets/tektoro-logo.png" 
-                        alt="Company Logo" 
-                        className="w-12 h-12 object-contain"
+                        alt="TekToro Logo" 
+                        className="w-full h-full object-contain p-2"
                         onError={(e) => {
                           (e.target as HTMLImageElement).style.display = 'none';
                         }}
                       />
                     )}
-                    <div>
-                      <h1 className="text-xl font-bold text-gray-900">
-                        {defaultCompany?.name || 'TekToro Professional Services'}
-                      </h1>
-                      <div className="text-sm text-gray-700">
-                        {defaultCompany ? (
-                          <>
-                            {defaultCompany.address && <p>{defaultCompany.address}</p>}
-                            {defaultCompany.city && (
-                              <p>{defaultCompany.city}, {defaultCompany.state} {defaultCompany.zipCode}</p>
-                            )}
-                            {defaultCompany.phone && <p>Phone: {defaultCompany.phone}</p>}
-                            {defaultCompany.email && <p>Email: {defaultCompany.email}</p>}
-                          </>
-                        ) : (
-                          <>
-                            <p>Industrial Automation & Controls</p>
-                            <p>Phone: (555) 123-4567</p>
-                            <p>Email: info@tektoro.com</p>
-                          </>
-                        )}
-                      </div>
+                  </div>
+                  
+                  {/* Company Information */}
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900">
+                      {defaultCompany?.name || 'TekToro Digital IIoT Solutions Inc'}
+                    </h1>
+                    <div className="text-sm text-gray-700">
+                      {defaultCompany ? (
+                        <>
+                          {defaultCompany.address && <p>{defaultCompany.address}</p>}
+                          {defaultCompany.city && (
+                            <p>{defaultCompany.city}, {defaultCompany.state} {defaultCompany.zipCode}</p>
+                          )}
+                          {defaultCompany.phone && <p>Phone: {defaultCompany.phone}</p>}
+                          {defaultCompany.email && <p>Email: {defaultCompany.email}</p>}
+                        </>
+                      ) : (
+                        <>
+                          <p>123 Industrial Drive, Suite 400</p>
+                          <p>Denver, CO 80202</p>
+                          <p>Phone: (555) 123-4567</p>
+                          <p>Email: info@tektoro.com</p>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
+                
+                {/* Invoice Details */}
                 <div className="text-right">
                   <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
                   <div className="text-sm text-gray-800">
@@ -183,68 +164,54 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               {/* Bill To */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Bill To:</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-medium text-gray-900">{invoiceData.client.name}</p>
-                  {invoiceData.client.address && <p className="text-gray-700">{invoiceData.client.address}</p>}
+                <div className="text-sm text-gray-700">
+                  <p className="font-medium">{invoiceData.client.name}</p>
+                  {invoiceData.client.address && <p>{invoiceData.client.address}</p>}
                   {invoiceData.client.city && (
-                    <p className="text-gray-700">
-                      {invoiceData.client.city}, {invoiceData.client.state} {invoiceData.client.zipCode}
-                    </p>
+                    <p>{invoiceData.client.city}, {invoiceData.client.state} {invoiceData.client.zipCode}</p>
                   )}
-                  {invoiceData.client.country && (
-                    <p className="text-gray-700">{invoiceData.client.country}</p>
-                  )}
-                  {invoiceData.client.contactPerson && (
-                    <p className="text-gray-700">Contact: {invoiceData.client.contactPerson}</p>
-                  )}
-                  {invoiceData.client.email && (
-                    <p className="text-gray-700">{invoiceData.client.email}</p>
-                  )}
+                  {invoiceData.client.email && <p>Email: {invoiceData.client.email}</p>}
                 </div>
               </div>
-              
+
               {/* Invoice Items */}
               <div className="mb-8">
-                <table className="w-full">
+                <table className="w-full border-collapse border border-gray-300">
                   <thead>
-                    <tr className="border-b-2 border-gray-300">
-                      <th className="text-left py-3 text-gray-900 font-semibold">Description</th>
-                      <th className="text-center py-3 text-gray-900 font-semibold">Quantity</th>
-                      <th className="text-right py-3 text-gray-900 font-semibold">Rate</th>
-                      <th className="text-right py-3 text-gray-900 font-semibold">Amount</th>
+                    <tr className="bg-gray-50">
+                      <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900">Description</th>
+                      <th className="border border-gray-300 px-4 py-2 text-center text-sm font-medium text-gray-900">Qty</th>
+                      <th className="border border-gray-300 px-4 py-2 text-right text-sm font-medium text-gray-900">Rate</th>
+                      <th className="border border-gray-300 px-4 py-2 text-right text-sm font-medium text-gray-900">Total</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {invoiceData.items?.map((item: any) => (
-                      <tr key={item.id} className="border-b border-gray-200">
-                        <td className="py-3">
-                          <p className="font-medium text-gray-800">{item.description}</p>
-                        </td>
-                        <td className="text-center py-3 text-gray-800">{parseFloat(item.quantity).toFixed(1)}</td>
-                        <td className="text-right py-3 text-gray-800">${parseFloat(item.rate).toFixed(2)}</td>
-                        <td className="text-right py-3 text-gray-800">${parseFloat(item.amount).toFixed(2)}</td>
+                    {invoiceData.items.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">{item.description}</td>
+                        <td className="border border-gray-300 px-4 py-2 text-center text-sm text-gray-700">{item.quantity}</td>
+                        <td className="border border-gray-300 px-4 py-2 text-right text-sm text-gray-700">${parseFloat(item.rate).toFixed(2)}</td>
+                        <td className="border border-gray-300 px-4 py-2 text-right text-sm text-gray-700">${parseFloat(item.total).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              
+
               {/* Totals */}
-              <div className="flex justify-end">
+              <div className="flex justify-end mb-8">
                 <div className="w-64">
                   <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-700">Subtotal:</span>
-                    <span className="font-medium text-gray-800">${parseFloat(invoiceData.subtotal).toFixed(2)}</span>
+                    <span className="text-sm font-medium text-gray-900">Subtotal:</span>
+                    <span className="text-sm text-gray-900">${invoiceData.subtotal.toFixed(2)}</span>
                   </div>
-                  {parseFloat(invoiceData.taxAmount) > 0 && (
-                    <div className="flex justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-700">Tax ({parseFloat(invoiceData.taxRate).toFixed(1)}%):</span>
-                      <span className="font-medium text-gray-800">${parseFloat(invoiceData.taxAmount).toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between py-3 border-t-2 border-gray-300">
-                    <span className="text-lg font-semibold text-gray-900">Total:</span>
-                    <span className="text-lg font-bold text-green-600">${parseFloat(invoiceData.total).toFixed(2)}</span>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-900">Tax:</span>
+                    <span className="text-sm text-gray-900">${invoiceData.tax.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-t-2 border-gray-400">
+                    <span className="text-lg font-bold text-gray-900">Total:</span>
+                    <span className="text-lg font-bold text-gray-900">${invoiceData.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
