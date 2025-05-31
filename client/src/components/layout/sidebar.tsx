@@ -12,6 +12,10 @@ export default function Sidebar() {
     { path: "/time-tracking", label: "Time Tracking", icon: "fas fa-clock" },
   ];
 
+  const adminNavItems = [
+    { path: "/user-profiles", label: "User Profiles", icon: "fas fa-users" },
+  ];
+
   return (
     <div className="w-64 bg-tektoro-dark text-white fixed h-full z-10">
       <div className="p-6">

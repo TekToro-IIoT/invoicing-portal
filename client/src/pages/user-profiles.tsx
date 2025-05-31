@@ -17,17 +17,13 @@ export default function UserProfiles() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
   });
 
   const updateRatesMutation = useMutation({
     mutationFn: async ({ userId, regularRate, overtimeRate }: { userId: string, regularRate: string, overtimeRate: string }) => {
-      await apiRequest(`/api/admin/users/${userId}/rates`, {
-        method: 'PUT',
-        body: JSON.stringify({ regularRate, overtimeRate }),
-        headers: { 'Content-Type': 'application/json' }
-      });
+      await apiRequest(`/api/admin/users/${userId}/rates`, 'PUT', { regularRate, overtimeRate });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -48,11 +44,7 @@ export default function UserProfiles() {
 
   const updateRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string, role: string }) => {
-      await apiRequest(`/api/admin/users/${userId}/role`, {
-        method: 'PUT',
-        body: JSON.stringify({ role }),
-        headers: { 'Content-Type': 'application/json' }
-      });
+      await apiRequest(`/api/admin/users/${userId}/role`, 'PUT', { role });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -210,7 +202,7 @@ export default function UserProfiles() {
                 name="regularRate"
                 type="number"
                 step="0.01"
-                defaultValue={editingUser?.regularRate}
+                defaultValue={editingUser?.regularRate || ''}
                 className="bg-gray-700 border-gray-600 text-white"
                 required
               />
@@ -223,7 +215,7 @@ export default function UserProfiles() {
                 name="overtimeRate"
                 type="number"
                 step="0.01"
-                defaultValue={editingUser?.overtimeRate}
+                defaultValue={editingUser?.overtimeRate || ''}
                 className="bg-gray-700 border-gray-600 text-white"
                 required
               />

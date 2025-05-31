@@ -10,6 +10,7 @@ import Dashboard from "@/pages/dashboard";
 import Invoices from "@/pages/invoices";
 import TimeTracking from "@/pages/time-tracking";
 import TimeTickets from "@/pages/time-tickets";
+import UserProfiles from "@/pages/user-profiles";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 
@@ -39,6 +40,7 @@ function Router() {
           <Route path="/time-tickets" component={TimeTicketsLayout} />
           <Route path="/invoices" component={InvoicesLayout} />
           <Route path="/time-tracking" component={TimeTrackingLayout} />
+          <Route path="/user-profiles" component={UserProfilesLayout} />
         </>
       )}
       <Route component={NotFound} />
@@ -90,6 +92,20 @@ function TimeTrackingLayout() {
       <div className="flex-1 ml-64">
         <Header title="Time Tracking" subtitle="Track time for projects and generate billable hours" />
         <TimeTracking />
+      </div>
+    </div>
+  );
+}
+
+function UserProfilesLayout() {
+  return (
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <Header title="User Profiles" subtitle="Manage user billing rates and permissions" />
+        <main className="p-6">
+          <UserProfiles />
+        </main>
       </div>
     </div>
   );
