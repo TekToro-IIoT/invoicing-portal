@@ -1,28 +1,51 @@
 // PDF generation utility for invoices
 // This creates a professional PDF document matching the TekToro design
 
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
 export async function generatePDF(invoice: any) {
   try {
-    // Create a new window with the invoice content for PDF generation
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      throw new Error('Could not open print window. Please check your popup blocker.');
+    // Get the invoice template element from the DOM
+    const element = document.getElementById('invoice-template');
+    if (!element) {
+      throw new Error('Invoice template not found');
     }
 
-    const pdfContent = generatePDFHTML(invoice);
+    // Use html2canvas to capture the exact visual appearance
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: element.scrollWidth,
+      height: element.scrollHeight
+    });
+
+    const imgData = canvas.toDataURL('image/png');
     
-    printWindow.document.write(pdfContent);
-    printWindow.document.close();
-    
-    // Wait for content to load then trigger print dialog
-    printWindow.onload = () => {
-      printWindow.print();
-      
-      // Close the window after printing (optional)
-      printWindow.onafterprint = () => {
-        printWindow.close();
-      };
-    };
+    // Create PDF with the captured image
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 210;
+    const pageHeight = 295;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    // Download the PDF
+    pdf.save(`invoice-${invoice.invoiceNumber}.pdf`);
     
   } catch (error) {
     console.error('PDF generation error:', error);
