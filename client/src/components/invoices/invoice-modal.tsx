@@ -111,22 +111,13 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
-                  <div className="w-20 h-20 flex-shrink-0 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden flex items-center justify-center">
-                    {defaultCompany?.logo ? (
-                      <img 
-                        src={defaultCompany.logo} 
-                        alt="Company Logo" 
-                        className="w-full h-full object-contain p-1"
-                        style={{ maxWidth: '76px', maxHeight: '76px' }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <svg width="48" height="48" viewBox="0 0 100 100" className="text-green-400">
-                          <path d="M20 30 L50 60 L80 30 L50 45 Z" fill="currentColor" />
-                          <path d="M35 45 L50 60 L65 45 L50 55 Z" fill="currentColor" opacity="0.7" />
-                        </svg>
-                      </div>
-                    )}
+                  <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center">
+                    <img 
+                      src="/attached_assets/Untitled design (89).png"
+                      alt="TekToro Digital IIoT Solutions Logo" 
+                      className="w-full h-full object-contain"
+                      style={{ maxWidth: '80px', maxHeight: '80px' }}
+                    />
                   </div>
                   
                   {/* Company Information */}

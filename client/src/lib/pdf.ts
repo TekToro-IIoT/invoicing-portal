@@ -271,18 +271,7 @@ function generatePDFHTML(invoice: any): string {
         <div class="header">
           <div class="company-info">
             <div class="logo-section">
-              <div class="company-logo-box">
-                <div class="logo-content">
-                  <div class="logo-icon">
-                    <svg width="24" height="24" viewBox="0 0 100 100" style="color: #22c55e;">
-                      <path d="M20 30 L50 60 L80 30 L50 45 Z" fill="#22c55e" />
-                      <path d="M35 45 L50 60 L65 45 L50 55 Z" fill="#22c55e" style="opacity: 0.7;" />
-                    </svg>
-                  </div>
-                  <div class="logo-text">TekToro</div>
-                  <div class="logo-subtitle">IoT Solutions</div>
-                </div>
-              </div>
+              <img src="/attached_assets/Untitled design (89).png" alt="TekToro Digital IIoT Solutions Logo" class="company-logo" />
             </div>
             <div class="company-details">
               <div class="company-name">${company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
