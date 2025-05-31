@@ -109,6 +109,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         total: total.toFixed(2),
         status: 'draft',
         equipmentPurchasedDescription: data.equipmentPurchasedDescription || '',
+        items: data.items || [],
       };
 
       if (isEditing) {
