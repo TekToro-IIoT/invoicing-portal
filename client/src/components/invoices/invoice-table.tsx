@@ -46,10 +46,7 @@ export default function InvoiceTable({
           <i className="fas fa-file-invoice text-gray-400 text-2xl"></i>
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">No invoices found</h3>
-        <p className="text-gray-500 mb-4">Get started by creating your first invoice</p>
-        <Button className="bg-tektoro-orange hover:bg-orange-600">
-          <i className="fas fa-plus mr-2"></i>Create Invoice
-        </Button>
+        <p className="text-gray-500">Get started by creating your first invoice using the button above</p>
       </div>
     );
   }
