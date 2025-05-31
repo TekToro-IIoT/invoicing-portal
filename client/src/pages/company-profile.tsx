@@ -191,9 +191,30 @@ export default function CompanyProfile() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => {
+                      onClick={async () => {
                         setLogoPreview(null);
                         setLogoFile(null);
+                        
+                        // Immediately save the logo removal to the database
+                        if ((company as any)?.id) {
+                          try {
+                            await apiRequest("PUT", `/api/companies/${(company as any).id}`, {
+                              ...formData,
+                              logo: null
+                            });
+                            queryClient.invalidateQueries({ queryKey: ["/api/companies/default"] });
+                            toast({
+                              title: "Success",
+                              description: "Logo removed successfully",
+                            });
+                          } catch (error: any) {
+                            toast({
+                              title: "Error",
+                              description: "Failed to remove logo",
+                              variant: "destructive",
+                            });
+                          }
+                        }
                       }}
                       className="px-4 py-2 text-red-600 border-red-600 hover:bg-red-50"
                     >
