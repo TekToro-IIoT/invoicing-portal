@@ -118,8 +118,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                         style={{ maxWidth: '72px', maxHeight: '72px' }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">T</span>
+                      <div className="w-full h-full bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center">
+                        <span className="text-white font-bold text-2xl drop-shadow-lg">T</span>
                       </div>
                     )}
                   </div>
