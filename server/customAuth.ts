@@ -2,28 +2,9 @@ import bcrypt from 'bcrypt';
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import connectPg from "connect-pg-simple";
-
-// Default admin credentials - in production this should be in env vars
-const DEFAULT_USERS = [
-  {
-    id: "admin",
-    username: "admin",
-    password: "$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
-    email: "admin@tektoro.com",
-    firstName: "TekToro",
-    lastName: "Admin",
-    role: "admin"
-  },
-  {
-    id: "user1",
-    username: "tektoro",
-    password: "$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
-    email: "user@tektoro.com", 
-    firstName: "TekToro",
-    lastName: "User",
-    role: "user"
-  }
-];
+import { db } from "./db";
+import { users } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
@@ -60,9 +41,14 @@ export async function setupAuth(app: Express) {
         return res.status(400).json({ message: "Username and password required" });
       }
 
-      // Find user
-      const user = DEFAULT_USERS.find(u => u.username === username);
-      if (!user) {
+      // Find user in database
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.username, username))
+        .limit(1);
+
+      if (!user || !user.password) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 

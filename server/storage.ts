@@ -42,6 +42,7 @@ export interface IStorage {
   getAllUsers(): Promise<User[]>;
   updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
   updateUserRole(id: string, role: string): Promise<User | undefined>;
+  updateUserCredentials(id: string, email?: string, password?: string): Promise<User | undefined>;
 
   // Client operations
   getClients(userId: string): Promise<ClientWithCompany[]>;
@@ -143,6 +144,26 @@ export class DatabaseStorage implements IStorage {
         role, 
         updatedAt: new Date() 
       })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+
+  async updateUserCredentials(id: string, email?: string, password?: string): Promise<User | undefined> {
+    const updates: any = { updatedAt: new Date() };
+    
+    if (email) {
+      updates.email = email;
+    }
+    
+    if (password) {
+      const bcrypt = require('bcrypt');
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    const [updatedUser] = await db
+      .update(users)
+      .set(updates)
       .where(eq(users.id, id))
       .returning();
     return updatedUser;
