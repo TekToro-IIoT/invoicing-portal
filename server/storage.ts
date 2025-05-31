@@ -30,7 +30,7 @@ import {
   type InvoiceWithDetails,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, asc } from "drizzle-orm";
+import { eq, and, or, desc, asc } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (required for Replit Auth)
@@ -528,11 +528,14 @@ export class DatabaseStorage implements IStorage {
     
     const totalRevenue = revenueResult.reduce((sum, invoice) => sum + parseFloat(invoice.total || '0'), 0);
 
-    // Get active invoices count
+    // Get active invoices count (draft and sent)
     const activeInvoicesResult = await db
       .select()
       .from(invoices)
-      .where(and(eq(invoices.userId, userId), eq(invoices.status, 'sent')));
+      .where(and(
+        eq(invoices.userId, userId), 
+        or(eq(invoices.status, 'sent'), eq(invoices.status, 'draft'))
+      ));
     
     const activeInvoices = activeInvoicesResult.length;
 
