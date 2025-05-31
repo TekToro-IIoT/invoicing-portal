@@ -313,16 +313,17 @@ function generatePDFHTML(invoice: any): string {
         <table class="items-table">
           <thead>
             <tr>
+              <th style="width: 8%">Job Code#</th>
               <th style="width: 10%">Service Point</th>
               <th style="width: 8%">AFE/LOE</th>
-              <th style="width: 12%">AFE # (if applicable)</th>
-              <th style="width: 12%">Well Name</th>
+              <th style="width: 10%">AFE # (if applicable)</th>
+              <th style="width: 10%">Well Name</th>
               <th style="width: 8%">Well #</th>
-              <th style="width: 20%">Service/Purchased Item</th>
+              <th style="width: 18%">Service/Purchased Item</th>
               <th style="width: 10%">Rate/Item Cost</th>
               <th style="width: 6%">Hrs</th>
               <th style="width: 6%">Qty</th>
-              <th style="width: 8%">Extended</th>
+              <th style="width: 6%">Extended</th>
             </tr>
           </thead>
           <tbody>
@@ -334,6 +335,7 @@ function generatePDFHTML(invoice: any): string {
               
               return `
                 <tr>
+                  <td class="text-left">${item.jobCode || ''}</td>
                   <td class="text-left">${item.servicePoint || ''}</td>
                   <td class="text-left">${item.afeLoe || ''}</td>
                   <td class="text-left">${item.afeNumber || ''}</td>
@@ -346,7 +348,7 @@ function generatePDFHTML(invoice: any): string {
                   <td class="text-right">$${extended.toFixed(2)}</td>
                 </tr>
               `;
-            }).join('') || '<tr><td colspan="10">No items</td></tr>'}
+            }).join('') || '<tr><td colspan="11">No items</td></tr>'}
           </tbody>
         </table>
         
