@@ -517,6 +517,7 @@ export class DatabaseStorage implements IStorage {
   async getDashboardStats(userId: string): Promise<{
     totalRevenue: number;
     activeInvoices: number;
+    outstandingInvoices: number;
     hoursTracked: number;
     totalClients: number;
   }> {
@@ -539,14 +540,32 @@ export class DatabaseStorage implements IStorage {
     
     const activeInvoices = activeInvoicesResult.length;
 
-    // Get total hours tracked
+    // Get outstanding invoices count (draft only)
+    const outstandingInvoicesResult = await db
+      .select()
+      .from(invoices)
+      .where(and(eq(invoices.userId, userId), eq(invoices.status, 'draft')));
+    
+    const outstandingInvoices = outstandingInvoicesResult.length;
+
+    // Get total hours tracked from time entries
     const timeEntriesResult = await db
       .select()
       .from(timeEntries)
       .where(eq(timeEntries.userId, userId));
     
     const totalMinutes = timeEntriesResult.reduce((sum, entry) => sum + (entry.duration || 0), 0);
-    const hoursTracked = Math.round((totalMinutes / 60) * 10) / 10;
+    const timeEntriesHours = totalMinutes / 60;
+
+    // Get total hours tracked from time tickets
+    const timeTicketsResult = await db
+      .select()
+      .from(timeTickets)
+      .where(eq(timeTickets.userId, userId));
+    
+    const timeTicketsHours = timeTicketsResult.reduce((sum, ticket) => sum + parseFloat(ticket.totalHours || '0'), 0);
+    
+    const hoursTracked = Math.round((timeEntriesHours + timeTicketsHours) * 10) / 10;
 
     // Get total clients count
     const clientsResult = await db
@@ -559,6 +578,7 @@ export class DatabaseStorage implements IStorage {
     return {
       totalRevenue,
       activeInvoices,
+      outstandingInvoices,
       hoursTracked,
       totalClients,
     };

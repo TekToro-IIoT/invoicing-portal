@@ -39,8 +39,8 @@ export default function Dashboard() {
   if (statsLoading) {
     return (
       <main className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {Array.from({ length: 5 }).map((_, i) => (
             <Card key={i} className="invoice-shadow scada-border animate-pulse">
               <CardContent className="p-6">
                 <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
@@ -59,7 +59,7 @@ export default function Dashboard() {
   return (
     <main className="p-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <Card className="invoice-shadow scada-border">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -94,6 +94,24 @@ export default function Dashboard() {
             <div className="mt-4">
               <span className="text-blue-600 text-sm font-medium">Sent invoices</span>
               <span className="text-gray-500 text-sm ml-2">awaiting payment</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="invoice-shadow scada-border">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Outstanding Invoices</p>
+                <p className="text-3xl font-bold text-gray-900">{stats?.outstandingInvoices || 0}</p>
+              </div>
+              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <i className="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+              </div>
+            </div>
+            <div className="mt-4">
+              <span className="text-red-600 text-sm font-medium">Draft invoices</span>
+              <span className="text-gray-500 text-sm ml-2">ready to send</span>
             </div>
           </CardContent>
         </Card>
