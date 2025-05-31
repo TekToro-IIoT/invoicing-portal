@@ -19,25 +19,34 @@ import Header from "@/components/layout/header";
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
-  // Show landing page while loading or when not authenticated
-  if (isLoading || !isAuthenticated) {
+  if (isLoading) {
     return (
-      <Switch>
-        <Route path="/" component={Landing} />
-        <Route component={Landing} />
-      </Switch>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 bg-tektoro-orange rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i className="fas fa-bolt text-white text-xl"></i>
+          </div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
     );
   }
 
   return (
     <Switch>
-      <Route path="/" component={DashboardLayout} />
-      <Route path="/time-tickets" component={TimeTicketsLayout} />
-      <Route path="/invoices" component={InvoicesLayout} />
-      <Route path="/time-tracking" component={TimeTrackingLayout} />
-      <Route path="/user-profiles" component={UserProfilesLayout} />
-      <Route path="/companies" component={CompaniesLayout} />
-      <Route path="/company-profile" component={CompanyProfileLayout} />
+      {!isAuthenticated ? (
+        <Route path="/" component={Landing} />
+      ) : (
+        <>
+          <Route path="/" component={DashboardLayout} />
+          <Route path="/time-tickets" component={TimeTicketsLayout} />
+          <Route path="/invoices" component={InvoicesLayout} />
+          <Route path="/time-tracking" component={TimeTrackingLayout} />
+          <Route path="/user-profiles" component={UserProfilesLayout} />
+          <Route path="/companies" component={CompaniesLayout} />
+          <Route path="/company-profile" component={CompanyProfileLayout} />
+        </>
+      )}
       <Route component={NotFound} />
     </Switch>
   );

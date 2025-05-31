@@ -1,12 +1,5 @@
-function AppWrapper() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <App />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-}
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<AppWrapper />);
+createRoot(document.getElementById("root")!).render(<App />);

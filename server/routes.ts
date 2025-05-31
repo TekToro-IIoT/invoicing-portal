@@ -12,22 +12,6 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Simple test route to verify server is working
-  app.get('/test', (req, res) => {
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head><title>Test Page</title></head>
-      <body style="font-family: Arial; padding: 2rem; background: #0f172a; color: white;">
-        <h1>Server is Working</h1>
-        <p>TekToro Invoice System - Test Page</p>
-        <p>Time: ${new Date().toISOString()}</p>
-        <a href="/api/login" style="color: #16a34a;">Login</a>
-      </body>
-      </html>
-    `);
-  });
-
   // Auth middleware
   await setupAuth(app);
 
