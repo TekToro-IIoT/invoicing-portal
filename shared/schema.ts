@@ -135,7 +135,7 @@ export const invoiceItems = pgTable("invoice_items", {
   afeNumber: varchar("afe_number"),
   wellName: varchar("well_name"),
   wellNumber: varchar("well_number"),
-  service: text("service").notNull(),
+  service: text("service"),
   rate: decimal("rate", { precision: 10, scale: 2 }).notNull(),
   hrs: decimal("hrs", { precision: 10, scale: 2 }).default("0"),
   qty: decimal("qty", { precision: 10, scale: 2 }).default("0"),
