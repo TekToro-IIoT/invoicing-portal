@@ -57,15 +57,17 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     },
     items: invoice.items || [],
     subtotal: invoice.items?.reduce((sum: number, item: any) => {
-      const quantity = parseFloat(item.quantity || '0');
-      const rate = parseFloat(item.rate || item.hourlyRate || '0');
-      return sum + (quantity * rate);
+      const rate = parseFloat(item.rate || '0');
+      const hrs = parseFloat(item.hrs || '0');
+      const qty = parseFloat(item.qty || '0');
+      return sum + (rate * (hrs + qty));
     }, 0) || 0,
     tax: 0,
     total: invoice.items?.reduce((sum: number, item: any) => {
-      const quantity = parseFloat(item.quantity || '0');
-      const rate = parseFloat(item.rate || item.hourlyRate || '0');
-      return sum + (quantity * rate);
+      const rate = parseFloat(item.rate || '0');
+      const hrs = parseFloat(item.hrs || '0');
+      const qty = parseFloat(item.qty || '0');
+      return sum + (rate * (hrs + qty));
     }, 0) || 0
   };
 
