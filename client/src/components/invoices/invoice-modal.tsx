@@ -109,19 +109,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center space-x-4">
                   {/* Company Logo with Perfect Sizing */}
-                  <div className="w-20 h-20 flex-shrink-0 bg-gray-50 border border-gray-300 rounded-lg overflow-hidden flex items-center justify-center">
-                    {defaultCompany?.logo ? (
-                      <img 
-                        src={defaultCompany.logo} 
-                        alt="Company Logo" 
-                        className="max-w-full max-h-full object-contain p-2"
-                        style={{ maxWidth: '72px', maxHeight: '72px' }}
-                      />
-                    ) : (
+                  <div className="w-20 h-20 flex-shrink-0 bg-white border border-gray-300 rounded-lg overflow-hidden flex items-center justify-center">
                       <div className="w-full h-full bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center">
                         <span className="text-white font-bold text-2xl drop-shadow-lg">T</span>
                       </div>
-                    )}
                   </div>
                   
                   {/* Company Information */}
