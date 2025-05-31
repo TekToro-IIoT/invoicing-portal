@@ -28,14 +28,18 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   const handleDownloadPDF = async () => {
     try {
-      await generatePDF(fullInvoice || invoice);
+      const invoiceWithCompany = {
+        ...invoiceData,
+        company: defaultCompany
+      };
+      await generatePDF(invoiceWithCompany);
       toast({
         title: "Success",
         description: "Invoice PDF downloaded successfully",
       });
     } catch (error) {
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Failed to generate PDF",
         variant: "destructive",
       });
@@ -44,11 +48,15 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   const handlePrint = () => {
     try {
-      printInvoice(fullInvoice || invoice);
+      const invoiceWithCompany = {
+        ...invoiceData,
+        company: defaultCompany
+      };
+      printInvoice(invoiceWithCompany);
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to print invoice",
+        description: "Failed to print invoice", 
         variant: "destructive",
       });
     }
@@ -66,6 +74,11 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   };
 
   const invoiceData = fullInvoice || invoice;
+
+  // Debug log to see what data we have
+  console.log('Invoice data:', invoiceData);
+  console.log('Full invoice:', fullInvoice);
+  console.log('Default company:', defaultCompany);
 
   if (!invoiceData) {
     return null;
@@ -102,6 +115,9 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     src="/attached_assets/tektoro-logo.png" 
                     alt="Company Logo" 
                     className="w-12 h-12 object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
                   />
                   <div>
                     <p className="text-sm text-gray-600">Professional Services</p>
@@ -123,9 +139,9 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="text-right">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
                 <div className="text-sm text-gray-600">
-                  <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber}</p>
-                  <p><strong>Date:</strong> {new Date(invoiceData.issueDate).toLocaleDateString()}</p>
-                  <p><strong>Due Date:</strong> {new Date(invoiceData.dueDate).toLocaleDateString()}</p>
+                  <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber || 'N/A'}</p>
+                  <p><strong>Date:</strong> {invoiceData.issueDate ? new Date(invoiceData.issueDate).toLocaleDateString() : 'N/A'}</p>
+                  <p><strong>Due Date:</strong> {invoiceData.dueDate ? new Date(invoiceData.dueDate).toLocaleDateString() : 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -181,17 +197,17 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="w-64">
                 <div className="flex justify-between py-2 border-b border-gray-200">
                   <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-medium">${parseFloat(invoiceData.subtotal).toFixed(2)}</span>
+                  <span className="font-medium">${parseFloat(invoiceData.subtotal || '0').toFixed(2)}</span>
                 </div>
-                {parseFloat(invoiceData.taxAmount) > 0 && (
+                {parseFloat(invoiceData.taxAmount || '0') > 0 && (
                   <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Tax ({parseFloat(invoiceData.taxRate).toFixed(1)}%):</span>
-                    <span className="font-medium">${parseFloat(invoiceData.taxAmount).toFixed(2)}</span>
+                    <span className="text-gray-600">Tax ({parseFloat(invoiceData.taxRate || '0').toFixed(1)}%):</span>
+                    <span className="font-medium">${parseFloat(invoiceData.taxAmount || '0').toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between py-3 border-t-2 border-gray-300">
                   <span className="text-lg font-semibold text-gray-900">Total:</span>
-                  <span className="text-lg font-bold text-tektoro-blue">${parseFloat(invoiceData.total).toFixed(2)}</span>
+                  <span className="text-lg font-bold text-tektoro-blue">${parseFloat(invoiceData.total || '0').toFixed(2)}</span>
                 </div>
               </div>
             </div>
