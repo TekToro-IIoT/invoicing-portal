@@ -463,7 +463,10 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
             <label className="block text-sm font-medium text-gray-700 mb-2">Equipment Purchased Description</label>
             <Textarea
               value={formData.equipmentPurchasedDescription}
-              onChange={(e) => setFormData({ ...formData, equipmentPurchasedDescription: e.target.value })}
+              onChange={(e) => {
+                console.log('Equipment Description field changed to:', e.target.value);
+                setFormData({ ...formData, equipmentPurchasedDescription: e.target.value });
+              }}
               placeholder="Detailed description of equipment purchased"
               rows={3}
             />
