@@ -289,6 +289,8 @@ export const insertInvoiceSchema = createInsertSchema(invoices).omit({
 export const insertInvoiceItemSchema = createInsertSchema(invoiceItems).omit({
   id: true,
   createdAt: true,
+}).extend({
+  servicePoint: z.string().optional(),
 });
 
 export const insertCompanySchema = createInsertSchema(companies).omit({
