@@ -459,7 +459,7 @@ export class DatabaseStorage implements IStorage {
 
   async generateInvoiceNumber(): Promise<string> {
     const year = new Date().getFullYear();
-    const yearPrefix = `INV-${year}-`;
+    const yearPrefix = `INV-TDS-${year}-`;
     
     // Find all invoices and filter for this year in JavaScript
     const allInvoices = await db
@@ -480,7 +480,7 @@ export class DatabaseStorage implements IStorage {
     });
 
     const nextNumber = maxNumber + 1;
-    return `INV-${year}-${nextNumber.toString().padStart(3, '0')}`;
+    return `INV-TDS-${year}-${nextNumber.toString().padStart(3, '0')}`;
   }
 
   // Invoice item operations
