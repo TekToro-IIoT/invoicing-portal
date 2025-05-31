@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
@@ -45,6 +46,11 @@ export default function TimeTickets() {
   // Fetch time tickets
   const { data: timeTickets = [], isLoading } = useQuery({
     queryKey: ['/api/time-tickets'],
+  });
+
+  // Fetch companies for dropdown
+  const { data: companies = [] } = useQuery({
+    queryKey: ['/api/companies'],
   });
 
   // Create time ticket mutation
@@ -240,12 +246,25 @@ export default function TimeTickets() {
             {/* Client, Project, Area */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div>
-                <Input
-                  placeholder="Select client"
+                <Select
                   value={formData.client}
-                  onChange={(e) => handleInputChange('client', e.target.value)}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
+                  onValueChange={(value) => handleInputChange('client', value)}
+                >
+                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                    <SelectValue placeholder="Select client" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-700 border-gray-600">
+                    {(companies as any[]).map((company: any) => (
+                      <SelectItem 
+                        key={company.id} 
+                        value={company.name}
+                        className="text-white hover:bg-gray-600"
+                      >
+                        {company.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               
               <div>
