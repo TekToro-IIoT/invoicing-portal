@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import {
   users,
   clients,
@@ -165,7 +166,7 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (password) {
-      const bcrypt = require('bcrypt');
+      // bcrypt imported at top
       updates.password = await bcrypt.hash(password, 10);
     }
 
@@ -195,7 +196,7 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     if (!user || !user.password) return false;
 
-    const bcrypt = require('bcrypt');
+    // bcrypt imported at top
     const isValidPassword = await bcrypt.compare(currentPassword, user.password);
     if (!isValidPassword) return false;
 
