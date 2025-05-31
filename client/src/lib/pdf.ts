@@ -89,24 +89,28 @@ function generatePDFHTML(invoice: any): string {
         .company-logo-box {
           width: 80px;
           height: 80px;
-          background-color: #1e293b;
+          background-color: #334155;
           border: 1px solid #475569;
           border-radius: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
+          padding: 8px;
         }
         
         .tektoro-logo {
           text-align: center;
+          width: 100%;
         }
         
         .logo-text {
-          color: #22c55e;
-          font-weight: bold;
-          font-size: 12px;
-          letter-spacing: 1px;
+          color: #10b981;
+          font-weight: 700;
+          font-size: 11px;
+          letter-spacing: 0.5px;
+          font-family: Arial, sans-serif;
+          text-transform: uppercase;
         }
         
         .logo-img {
