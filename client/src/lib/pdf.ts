@@ -228,9 +228,13 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
-            <div class="company-profile">
-              ${company.taxId ? `<div><strong>Tax ID:</strong> ${company.taxId}</div>` : ''}
-              <div><strong>Registration:</strong> Cayman Islands Business License</div>
+            <div class="logo-section">
+              <div class="w-20 h-20 flex-shrink-0 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden flex items-center justify-center">
+                <svg width="48" height="48" viewBox="0 0 100 100" class="text-green-400">
+                  <path d="M20 30 L50 60 L80 30 L50 45 Z" fill="currentColor" />
+                  <path d="M35 45 L50 60 L65 45 L50 55 Z" fill="currentColor" opacity="0.7" />
+                </svg>
+              </div>
             </div>
             <div class="company-details">
               <div class="company-name">${company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
