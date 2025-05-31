@@ -77,7 +77,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     }
   };
 
-  const invoiceData = fullInvoice || invoice;
+  // Use the invoice passed from the table (which already has all the data) or fall back to fullInvoice
+  const invoiceData = invoice || fullInvoice;
   const isLoading = invoiceLoading || companyLoading;
 
   // Debug log to see what data we have
@@ -146,9 +147,9 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <div className="text-right">
                   <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
                   <div className="text-sm text-gray-600">
-                    <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber || 'N/A'}</p>
-                    <p><strong>Date:</strong> {invoiceData.issueDate ? new Date(invoiceData.issueDate).toLocaleDateString() : 'N/A'}</p>
-                    <p><strong>Due Date:</strong> {invoiceData.dueDate ? new Date(invoiceData.dueDate).toLocaleDateString() : 'N/A'}</p>
+                    <p><strong>Invoice #:</strong> {invoiceData?.invoiceNumber || 'N/A'}</p>
+                    <p><strong>Date:</strong> {invoiceData?.issueDate ? new Date(invoiceData.issueDate).toLocaleDateString() : 'N/A'}</p>
+                    <p><strong>Due Date:</strong> {invoiceData?.dueDate ? new Date(invoiceData.dueDate).toLocaleDateString() : 'N/A'}</p>
                   </div>
                 </div>
               </div>
