@@ -352,6 +352,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const timeTicketData = { ...req.body, userId };
       
       const timeTicket = await storage.createTimeTicket(timeTicketData);
+      
+      // Auto-generate invoice if time ticket is submitted and has billable hours
+      if (timeTicket.status === 'submitted' && parseFloat(timeTicket.totalHours || '0') > 0) {
+        try {
+          // Check if client exists, create if not
+          let client = await storage.getClientByName(timeTicket.client, userId);
+          if (!client) {
+            client = await storage.createClient({
+              name: timeTicket.client,
+              email: null,
+              phone: null,
+              address: null,
+              city: null,
+              state: null,
+              zipCode: null,
+              country: null,
+              contactPerson: null,
+              userId: userId
+            });
+          }
+
+          // Generate invoice number
+          const invoiceNumber = await storage.generateInvoiceNumber();
+          
+          // Calculate amounts (using $100/hour regular, $150/hour overtime as default rates)
+          const regularRate = 100;
+          const overtimeRate = 150;
+          const regularAmount = parseFloat(timeTicket.regularTimeHours || '0') * regularRate;
+          const overtimeAmount = parseFloat(timeTicket.overtimeHours || '0') * overtimeRate;
+          const subtotal = regularAmount + overtimeAmount;
+          const taxRate = 0; // No tax by default
+          const total = subtotal;
+
+          // Create invoice
+          const invoice = await storage.createInvoice({
+            invoiceNumber,
+            clientId: client.id,
+            issueDate: timeTicket.serviceDate,
+            dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
+            subtotal: subtotal.toString(),
+            taxRate: taxRate.toString(),
+            taxAmount: '0',
+            total: total.toString(),
+            status: 'draft',
+            notes: `Generated from time ticket for ${timeTicket.project} - ${timeTicket.detailedServiceDescription}`,
+            userId: userId
+          });
+
+          // Add invoice items
+          if (regularAmount > 0) {
+            await storage.createInvoiceItem({
+              invoiceId: invoice.id,
+              description: `Regular Hours - ${timeTicket.project} (${timeTicket.detailedServiceDescription})`,
+              quantity: timeTicket.regularTimeHours || '0',
+              rate: regularRate.toString(),
+              amount: regularAmount.toString()
+            });
+          }
+
+          if (overtimeAmount > 0) {
+            await storage.createInvoiceItem({
+              invoiceId: invoice.id,
+              description: `Overtime Hours - ${timeTicket.project} (${timeTicket.detailedServiceDescription})`,
+              quantity: timeTicket.overtimeHours || '0',
+              rate: overtimeRate.toString(),
+              amount: overtimeAmount.toString()
+            });
+          }
+
+          console.log(`Auto-generated invoice ${invoiceNumber} from time ticket ${timeTicket.id}`);
+        } catch (invoiceError) {
+          console.error("Error auto-generating invoice:", invoiceError);
+          // Don't fail the time ticket creation if invoice generation fails
+        }
+      }
+      
       res.status(201).json(timeTicket);
     } catch (error) {
       console.error("Error creating time ticket:", error);
