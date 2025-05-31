@@ -6,9 +6,9 @@ export default function Landing() {
     <div className="min-h-screen bg-tektoro-bg flex items-center justify-center p-4">
       <div className="max-w-4xl mx-auto text-center">
         <div className="flex items-center justify-center mb-8">
-          <div className="w-32 h-16 flex items-center justify-center">
+          <div className="w-64 h-16 flex items-center justify-center">
             <img 
-              src="/attached_assets/Untitled design (89).png" 
+              src="attached_assets/Untitled design (89).png" 
               alt="TekToro Digital IIoT Solutions Logo" 
               className="w-full h-full object-contain"
             />
@@ -21,33 +21,17 @@ export default function Landing() {
               Professional Invoice Management
             </h2>
             <p className="text-xl text-gray-300 mb-8">
-              Streamline your billing process with our comprehensive invoice and time-tracking solution. 
+              Streamline your billing process with our professional invoice management solution. 
               Built with SCADA-inspired design for professional reliability.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 gap-6 mb-8">
               <div className="text-center">
                 <div className="w-12 h-12 bg-tektoro-primary rounded-lg flex items-center justify-center mx-auto mb-3">
                   <i className="fas fa-file-invoice text-white text-xl"></i>
                 </div>
                 <h3 className="font-semibold text-white mb-2">Invoice Management</h3>
                 <p className="text-sm text-gray-400">Create, send, and track professional invoices with PDF generation</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-tektoro-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <i className="fas fa-clock text-white text-xl"></i>
-                </div>
-                <h3 className="font-semibold text-white mb-2">Time Tracking</h3>
-                <p className="text-sm text-gray-400">Track billable hours with precision timing and project management</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-tektoro-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <i className="fas fa-chart-bar text-white text-xl"></i>
-                </div>
-                <h3 className="font-semibold text-white mb-2">Analytics</h3>
-                <p className="text-sm text-gray-400">Comprehensive reporting and insights for your business</p>
               </div>
             </div>
 
