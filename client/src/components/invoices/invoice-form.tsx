@@ -118,6 +118,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
+      if (isEditing && invoice) {
+        queryClient.invalidateQueries({ queryKey: ["/api/invoices", invoice.id] });
+      }
       toast({
         title: "Success",
         description: `Invoice ${isEditing ? 'updated' : 'created'} successfully`,
