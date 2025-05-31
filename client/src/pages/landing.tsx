@@ -5,17 +5,13 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-tektoro-bg flex items-center justify-center p-4">
       <div className="max-w-4xl mx-auto text-center">
-        <div className="flex items-center justify-center space-x-4 mb-8">
+        <div className="flex items-center justify-center mb-8">
           <div className="w-16 h-16 flex items-center justify-center">
             <img 
               src="/attached_assets/tektoro-logo.png" 
-              alt="TekToro Logo" 
-              className="w-12 h-12 object-contain"
+              alt="Company Logo" 
+              className="w-16 h-16 object-contain"
             />
-          </div>
-          <div>
-            <h1 className="text-4xl font-bold text-tektoro-primary">TekToro</h1>
-            <p className="text-lg text-gray-300">Invoice & Time Tracking</p>
           </div>
         </div>
 

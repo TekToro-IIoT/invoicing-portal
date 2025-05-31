@@ -20,6 +20,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     retry: false,
   });
 
+  const { data: defaultCompany } = useQuery({
+    queryKey: ["/api/companies/default"],
+    enabled: isOpen,
+    retry: false,
+  });
+
   const handleDownloadPDF = async () => {
     try {
       await generatePDF(fullInvoice || invoice);
@@ -102,10 +108,16 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                   </div>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <p>123 Technology Drive</p>
-                  <p>San Francisco, CA 94105</p>
-                  <p>Phone: (555) 123-4567</p>
-                  <p>Email: billing@tektoro.com</p>
+                  {defaultCompany ? (
+                    <>
+                      <p>{defaultCompany.address}</p>
+                      <p>{defaultCompany.city}, {defaultCompany.state} {defaultCompany.zipCode}</p>
+                      <p>Phone: {defaultCompany.phone}</p>
+                      <p>Email: {defaultCompany.email}</p>
+                    </>
+                  ) : (
+                    <p>Loading company information...</p>
+                  )}
                 </div>
               </div>
               <div className="text-right">

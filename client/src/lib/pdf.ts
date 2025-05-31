@@ -277,10 +277,7 @@ function generatePDFHTML(invoice: any): string {
               </div>
             </div>
             <div class="company-details">
-              <div>123 Technology Drive</div>
-              <div>San Francisco, CA 94105</div>
-              <div>Phone: (555) 123-4567</div>
-              <div>Email: billing@tektoro.com</div>
+              <div>Professional Services</div>
             </div>
           </div>
           <div class="invoice-info">
