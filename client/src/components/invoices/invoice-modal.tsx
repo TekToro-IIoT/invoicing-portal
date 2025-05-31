@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { generatePDF } from "@/lib/pdf";
-import { printInvoice } from "@/lib/print";
+
 
 interface InvoiceModalProps {
   invoice: any;
@@ -29,10 +29,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     }
   };
 
-  const handlePrint = () => {
-    if (!invoiceData) return;
-    printInvoice(invoiceData);
-  };
+
 
 
 
@@ -82,9 +79,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <Button onClick={handleDownloadPDF} className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
                 <i className="fas fa-download mr-2"></i>Download PDF
               </Button>
-              <Button onClick={handlePrint} className="bg-gray-500 hover:bg-gray-600" disabled={isLoading}>
-                <i className="fas fa-print mr-2"></i>Print
-              </Button>
+
 
             </div>
           </DialogTitle>
