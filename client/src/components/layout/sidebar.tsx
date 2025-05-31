@@ -22,16 +22,15 @@ export default function Sidebar() {
     <div className="w-64 bg-tektoro-dark text-white fixed h-full z-10">
       <div className="p-6">
         <div className="flex items-center space-x-3 mb-8">
-          <div className="w-12 h-12 flex items-center justify-center">
+          <div className="w-16 h-16 flex items-center justify-center">
             <img 
               src={tektoroLogo} 
               alt="TekToro Logo" 
-              className="w-10 h-10 object-contain"
+              className="w-14 h-14 object-contain"
             />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-tektoro-primary">TekToro</h1>
-            <p className="text-xs text-gray-400">Invoice & Time Tracking</p>
+            <p className="text-sm text-gray-400">Invoice & Time Tracking</p>
           </div>
         </div>
         
