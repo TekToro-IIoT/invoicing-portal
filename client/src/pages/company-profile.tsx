@@ -76,9 +76,9 @@ export default function CompanyProfile() {
       };
 
       if ((company as any)?.id) {
-        return await apiRequest(`/api/companies/${(company as any).id}`, "PUT", payload);
+        return await apiRequest("PUT", `/api/companies/${(company as any).id}`, payload);
       } else {
-        return await apiRequest("/api/companies", "POST", payload);
+        return await apiRequest("POST", "/api/companies", payload);
       }
     },
     onSuccess: () => {
