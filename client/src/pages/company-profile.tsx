@@ -51,6 +51,11 @@ export default function CompanyProfile() {
         taxId: (company as any).taxId || "",
         isDefault: true,
       });
+      
+      // Set logo preview if company has a logo
+      if ((company as any).logo) {
+        setLogoPreview((company as any).logo);
+      }
     }
   }, [company]);
 
@@ -69,20 +74,27 @@ export default function CompanyProfile() {
   const updateCompanyMutation = useMutation({
     mutationFn: async (data: any) => {
       // Convert logo file to base64 if present
-      let logoData = null;
+      let logoData = undefined;
       if (logoFile) {
         logoData = await new Promise<string>((resolve) => {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result as string);
           reader.readAsDataURL(logoFile);
         });
+      } else if (logoPreview === null) {
+        // User explicitly removed the logo
+        logoData = null;
       }
 
       const payload = {
         ...data,
-        logo: logoData,
         isDefault: true
       };
+
+      // Only include logo in payload if it was changed
+      if (logoData !== undefined) {
+        payload.logo = logoData;
+      }
 
       if ((company as any)?.id) {
         return await apiRequest("PUT", `/api/companies/${(company as any).id}`, payload);
@@ -155,9 +167,9 @@ export default function CompanyProfile() {
                     alt="Logo Preview" 
                     className="w-full h-full object-contain rounded-lg"
                   />
-                ) : company?.logoUrl ? (
+                ) : (company as any)?.logo ? (
                   <img 
-                    src={company.logoUrl} 
+                    src={(company as any).logo} 
                     alt="Current Logo" 
                     className="w-full h-full object-contain rounded-lg"
                   />
@@ -169,11 +181,26 @@ export default function CompanyProfile() {
                 )}
               </div>
               <div className="flex flex-col items-center space-y-2">
-                <Label htmlFor="logo-upload" className="cursor-pointer">
-                  <div className="px-4 py-2 bg-tektoro-primary text-white rounded-md hover:bg-tektoro-primary/80 transition-colors">
-                    Choose Logo
-                  </div>
-                </Label>
+                <div className="flex space-x-2">
+                  <Label htmlFor="logo-upload" className="cursor-pointer">
+                    <div className="px-4 py-2 bg-tektoro-primary text-white rounded-md hover:bg-tektoro-primary/80 transition-colors">
+                      {logoPreview || (company as any)?.logo ? 'Change Logo' : 'Choose Logo'}
+                    </div>
+                  </Label>
+                  {(logoPreview || (company as any)?.logo) && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setLogoPreview(null);
+                        setLogoFile(null);
+                      }}
+                      className="px-4 py-2 text-red-600 border-red-600 hover:bg-red-50"
+                    >
+                      Remove Logo
+                    </Button>
+                  )}
+                </div>
                 <Input
                   id="logo-upload"
                   type="file"
