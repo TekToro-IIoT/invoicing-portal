@@ -84,6 +84,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put('/api/admin/users/:id/credentials', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.params.id;
+      const { email, password } = req.body;
+      
+      if (!email && !password) {
+        return res.status(400).json({ message: "Email or password must be provided" });
+      }
+
+      const updatedUser = await storage.updateUserCredentials(userId, email, password);
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user credentials:", error);
+      res.status(500).json({ message: "Failed to update user credentials" });
+    }
+  });
+
   // Dashboard stats
   app.get('/api/dashboard/stats', isAuthenticated, async (req: any, res) => {
     try {
