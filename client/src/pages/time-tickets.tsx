@@ -62,7 +62,7 @@ export default function TimeTickets() {
       setFormData({
         todaysDate: new Date().toISOString().split('T')[0],
         serviceDate: new Date().toISOString().split('T')[0],
-        submittedBy: user?.email || '',
+        submittedBy: (user as any)?.email || '',
         client: '',
         project: '',
         area: '',
@@ -92,11 +92,7 @@ export default function TimeTickets() {
   // Submit time ticket mutation
   const submitMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await apiRequest('/api/time-tickets', {
-        method: 'POST',
-        body: JSON.stringify({ ...data, status: 'submitted' }),
-      });
-      return response;
+      return apiRequest('/api/time-tickets', 'POST', { ...data, status: 'submitted' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/time-tickets'] });
@@ -108,7 +104,7 @@ export default function TimeTickets() {
       setFormData({
         todaysDate: new Date().toISOString().split('T')[0],
         serviceDate: new Date().toISOString().split('T')[0],
-        submittedBy: user?.email || '',
+        submittedBy: (user as any)?.email || '',
         client: '',
         project: '',
         area: '',
@@ -442,14 +438,14 @@ export default function TimeTickets() {
         </Card>
 
         {/* Time Tickets List */}
-        {timeTickets.length > 0 && (
+        {(timeTickets as any[]).length > 0 && (
           <Card className="mt-6 bg-tektoro-dark border-gray-600">
             <CardHeader>
               <CardTitle className="text-white">Recent Time Tickets</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {timeTickets.map((ticket: any) => (
+                {(timeTickets as any[]).map((ticket: any) => (
                   <div
                     key={ticket.id}
                     className="flex items-center justify-between p-4 bg-gray-700 rounded-lg"
