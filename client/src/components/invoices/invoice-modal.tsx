@@ -179,23 +179,35 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               </div>
 
               {/* Invoice Items */}
-              <div className="mb-8">
-                <table className="w-full border-collapse border border-gray-300">
+              <div className="mb-8 overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 text-xs">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-900">Description</th>
-                      <th className="border border-gray-300 px-4 py-2 text-center text-sm font-medium text-gray-900">Qty</th>
-                      <th className="border border-gray-300 px-4 py-2 text-right text-sm font-medium text-gray-900">Rate</th>
-                      <th className="border border-gray-300 px-4 py-2 text-right text-sm font-medium text-gray-900">Total</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service Point</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE/LOE</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE #</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well Name</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well #</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service/Purchased Item</th>
+                      <th className="border border-gray-300 px-2 py-2 text-right font-medium text-gray-900">Rate/Item Cost</th>
+                      <th className="border border-gray-300 px-2 py-2 text-center font-medium text-gray-900">Hrs</th>
+                      <th className="border border-gray-300 px-2 py-2 text-center font-medium text-gray-900">Qty</th>
+                      <th className="border border-gray-300 px-2 py-2 text-right font-medium text-gray-900">Extended</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoiceData.items.map((item: any, index: number) => (
                       <tr key={index}>
-                        <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">{item.description}</td>
-                        <td className="border border-gray-300 px-4 py-2 text-center text-sm text-gray-700">{item.quantity}</td>
-                        <td className="border border-gray-300 px-4 py-2 text-right text-sm text-gray-700">${parseFloat(item.rate || item.hourlyRate || '0').toFixed(2)}</td>
-                        <td className="border border-gray-300 px-4 py-2 text-right text-sm text-gray-700">${(parseFloat(item.quantity || '0') * parseFloat(item.rate || item.hourlyRate || '0')).toFixed(2)}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.servicePoint || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeLoe || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeNumber || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellName || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellNumber || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || item.description || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${parseFloat(item.rate || '0').toFixed(2)}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{item.hrs || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{item.qty || '-'}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${(parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
