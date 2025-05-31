@@ -203,6 +203,20 @@ export default function Invoices() {
           </div>
         </div>
 
+        {/* Add New Invoice Button Above Table */}
+        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+          <Button 
+            className="bg-tektoro-orange hover:bg-orange-600 text-white"
+            onClick={() => {
+              setEditingInvoice(null);
+              setShowInvoiceForm(true);
+            }}
+          >
+            <i className="fas fa-plus mr-2"></i>
+            Create New Invoice
+          </Button>
+        </div>
+
         <InvoiceTable
           invoices={filteredInvoices}
           onView={handleViewInvoice}
@@ -211,7 +225,6 @@ export default function Invoices() {
           onEmail={handleEmailInvoice}
           onStatusChange={handleStatusChange}
           onNewInvoice={() => {
-            console.log('Setting invoice form to open');
             setEditingInvoice(null);
             setShowInvoiceForm(true);
           }}
