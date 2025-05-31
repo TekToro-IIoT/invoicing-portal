@@ -331,7 +331,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       />
                     </div>
                     <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-white mb-2">Rate</label>
+                      <label className="block text-sm font-medium text-white mb-2">Rate/Item Cost</label>
                       <Input
                         type="number"
                         step="0.01"
