@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import tektoroLogo from "@assets/tektoro-logo.png";
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -21,11 +22,11 @@ export default function Sidebar() {
     <div className="w-64 bg-tektoro-dark text-white fixed h-full z-10">
       <div className="p-6">
         <div className="flex items-center space-x-3 mb-8">
-          <div className="w-10 h-10 flex items-center justify-center">
+          <div className="w-12 h-12 flex items-center justify-center">
             <img 
-              src="/attached_assets/tektoro-logo.png" 
+              src={tektoroLogo} 
               alt="TekToro Logo" 
-              className="w-8 h-8 object-contain"
+              className="w-10 h-10 object-contain"
             />
           </div>
           <div>
