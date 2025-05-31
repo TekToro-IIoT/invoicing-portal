@@ -52,6 +52,7 @@ export const clients = pgTable("clients", {
   zipCode: varchar("zip_code", { length: 20 }),
   country: varchar("country", { length: 100 }).default("United States"),
   contactPerson: varchar("contact_person", { length: 255 }),
+  companyId: integer("company_id").references(() => companies.id),
   userId: varchar("user_id").references(() => users.id).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -185,6 +186,10 @@ export const clientsRelations = relations(clients, ({ one, many }) => ({
     fields: [clients.userId],
     references: [users.id],
   }),
+  company: one(companies, {
+    fields: [clients.companyId],
+    references: [companies.id],
+  }),
   projects: many(projects),
   invoices: many(invoices),
 }));
@@ -236,11 +241,12 @@ export const invoiceItemsRelations = relations(invoiceItems, ({ one }) => ({
   }),
 }));
 
-export const companiesRelations = relations(companies, ({ one }) => ({
+export const companiesRelations = relations(companies, ({ one, many }) => ({
   user: one(users, {
     fields: [companies.userId],
     references: [users.id],
   }),
+  clients: many(clients),
 }));
 
 export const timeTicketsRelations = relations(timeTickets, ({ one }) => ({

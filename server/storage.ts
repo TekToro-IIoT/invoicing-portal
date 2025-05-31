@@ -153,6 +153,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(clients)
+      .leftJoin(companies, eq(clients.companyId, companies.id))
       .where(eq(clients.userId, userId))
       .orderBy(asc(clients.name));
   }
@@ -338,6 +339,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(invoices)
       .leftJoin(clients, eq(invoices.clientId, clients.id))
+      .leftJoin(companies, eq(clients.companyId, companies.id))
       .leftJoin(invoiceItems, eq(invoices.id, invoiceItems.invoiceId))
       .where(eq(invoices.userId, userId))
       .orderBy(desc(invoices.createdAt));
