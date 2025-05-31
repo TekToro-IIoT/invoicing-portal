@@ -130,7 +130,7 @@ export const invoiceItems = pgTable("invoice_items", {
   id: serial("id").primaryKey(),
   invoiceId: integer("invoice_id").references(() => invoices.id).notNull(),
   timeEntryId: integer("time_entry_id").references(() => timeEntries.id),
-  servicePoint: varchar("service_point").notNull(),
+  servicePoint: varchar("service_point"),
   afeLoe: varchar("afe_loe"),
   afeNumber: varchar("afe_number"),
   wellName: varchar("well_name"),
