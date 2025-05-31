@@ -79,7 +79,7 @@ export default function InvoiceTable({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {invoices.map((invoice) => (
-            <tr key={invoice.id} className="hover:bg-gray-50">
+            <tr key={invoice.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => onView(invoice)}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="font-medium text-gray-900">{invoice.invoiceNumber}</div>
               </td>
@@ -127,31 +127,43 @@ export default function InvoiceTable({
                   </SelectContent>
                 </Select>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => onView(invoice)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onView(invoice);
+                    }}
                     className="text-blue-600 hover:text-blue-800 p-1"
                     title="View"
                   >
                     <i className="fas fa-eye"></i>
                   </button>
                   <button
-                    onClick={() => {}} // Download PDF functionality would go here
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Download PDF functionality would go here
+                    }}
                     className="text-tektoro-orange hover:text-orange-600 p-1"
                     title="Download PDF"
                   >
                     <i className="fas fa-download"></i>
                   </button>
                   <button
-                    onClick={() => {}} // Print functionality would go here
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Print functionality would go here
+                    }}
                     className="text-gray-600 hover:text-gray-800 p-1"
                     title="Print"
                   >
                     <i className="fas fa-print"></i>
                   </button>
                   <button
-                    onClick={() => onEmail(invoice)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEmail(invoice);
+                    }}
                     className="text-green-600 hover:text-green-800 p-1"
                     title="Email"
                     disabled={isEmailing}
@@ -159,14 +171,20 @@ export default function InvoiceTable({
                     <i className="fas fa-envelope"></i>
                   </button>
                   <button
-                    onClick={() => onEdit(invoice)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(invoice);
+                    }}
                     className="text-blue-600 hover:text-blue-800 p-1"
                     title="Edit"
                   >
                     <i className="fas fa-edit"></i>
                   </button>
                   <button
-                    onClick={() => onDelete(invoice.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(invoice.id);
+                    }}
                     className="text-red-600 hover:text-red-800 p-1"
                     title="Delete"
                     disabled={isDeleting}
