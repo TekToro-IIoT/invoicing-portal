@@ -343,8 +343,8 @@ function generatePDFHTML(invoice: any): string {
                   <td class="text-left">${item.wellNumber || ''}</td>
                   <td class="text-left">${item.service || ''}</td>
                   <td class="text-right">$${rate.toFixed(2)}</td>
-                  <td class="text-right">${hrs.toFixed(1)}</td>
-                  <td class="text-right">${qty.toFixed(1)}</td>
+                  <td class="text-right">${hrs > 0 ? hrs.toFixed(1) : ''}</td>
+                  <td class="text-right">${qty > 0 ? qty.toFixed(1) : ''}</td>
                   <td class="text-right">$${extended.toFixed(2)}</td>
                 </tr>
               `;
