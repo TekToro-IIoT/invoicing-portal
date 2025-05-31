@@ -34,6 +34,8 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   role: varchar("role").notNull().default("user"), // 'admin' or 'user'
+  regularRate: varchar("regular_rate").default("100"), // hourly rate for regular time
+  overtimeRate: varchar("overtime_rate").default("150"), // hourly rate for overtime
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

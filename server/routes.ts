@@ -27,6 +27,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin-only user management routes
+  const isAdmin = async (req: any, res: any, next: any) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+      next();
+    } catch (error) {
+      res.status(500).json({ message: "Error checking admin status" });
+    }
+  };
+
+  app.get('/api/admin/users', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.put('/api/admin/users/:id/rates', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.params.id;
+      const { regularRate, overtimeRate } = req.body;
+      
+      if (!regularRate || !overtimeRate) {
+        return res.status(400).json({ message: "Regular rate and overtime rate are required" });
+      }
+
+      const updatedUser = await storage.updateUserRates(userId, regularRate, overtimeRate);
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user rates:", error);
+      res.status(500).json({ message: "Failed to update user rates" });
+    }
+  });
+
+  app.put('/api/admin/users/:id/role', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.params.id;
+      const { role } = req.body;
+      
+      if (!role || !['admin', 'user'].includes(role)) {
+        return res.status(400).json({ message: "Valid role is required (admin or user)" });
+      }
+
+      const updatedUser = await storage.updateUserRole(userId, role);
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
+  });
+
   // Dashboard stats
   app.get('/api/dashboard/stats', isAuthenticated, async (req: any, res) => {
     try {
@@ -376,9 +442,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Generate invoice number
           const invoiceNumber = await storage.generateInvoiceNumber();
           
-          // Calculate amounts (using $100/hour regular, $150/hour overtime as default rates)
-          const regularRate = 100;
-          const overtimeRate = 150;
+          // Get user's billing rates
+          const currentUser = await storage.getUser(userId);
+          const regularRate = parseFloat(currentUser?.regularRate || '100');
+          const overtimeRate = parseFloat(currentUser?.overtimeRate || '150');
           const regularAmount = parseFloat(timeTicket.regularTimeHours || '0') * regularRate;
           const overtimeAmount = parseFloat(timeTicket.overtimeHours || '0') * overtimeRate;
           const subtotal = regularAmount + overtimeAmount;

@@ -33,6 +33,11 @@ export interface IStorage {
   // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  
+  // User management operations (for admin)
+  getAllUsers(): Promise<User[]>;
+  updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
+  updateUserRole(id: string, role: string): Promise<User | undefined>;
 
   // Client operations
   getClients(userId: string): Promise<Client[]>;
@@ -110,6 +115,39 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  // User management operations (for admin)
+  async getAllUsers(): Promise<User[]> {
+    return await db
+      .select()
+      .from(users)
+      .orderBy(asc(users.firstName), asc(users.lastName));
+  }
+
+  async updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({ 
+        regularRate, 
+        overtimeRate, 
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+
+  async updateUserRole(id: string, role: string): Promise<User | undefined> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({ 
+        role, 
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
   }
 
   // Client operations
