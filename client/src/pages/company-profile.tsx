@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ export default function CompanyProfile() {
   // Get the default company (user's company profile)
   const { data: company, isLoading } = useQuery({
     queryKey: ["/api/companies/default"],
+    retry: false,
   });
 
   const [formData, setFormData] = useState({
@@ -35,23 +36,23 @@ export default function CompanyProfile() {
   });
 
   // Update form data when company loads
-  useState(() => {
-    if (company) {
+  React.useEffect(() => {
+    if (company && typeof company === 'object') {
       setFormData({
-        name: company.name || "",
-        address: company.address || "",
-        city: company.city || "",
-        state: company.state || "",
-        zipCode: company.zipCode || "",
-        country: company.country || "United States",
-        phone: company.phone || "",
-        email: company.email || "",
-        website: company.website || "",
-        taxId: company.taxId || "",
+        name: (company as any).name || "",
+        address: (company as any).address || "",
+        city: (company as any).city || "",
+        state: (company as any).state || "",
+        zipCode: (company as any).zipCode || "",
+        country: (company as any).country || "United States",
+        phone: (company as any).phone || "",
+        email: (company as any).email || "",
+        website: (company as any).website || "",
+        taxId: (company as any).taxId || "",
         isDefault: true,
       });
     }
-  });
+  }, [company]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
