@@ -12,6 +12,7 @@ import TimeTracking from "@/pages/time-tracking";
 import TimeTickets from "@/pages/time-tickets";
 import UserProfiles from "@/pages/user-profiles";
 import Companies from "@/pages/companies";
+import CompanyProfile from "@/pages/company-profile";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 
@@ -43,6 +44,7 @@ function Router() {
           <Route path="/time-tracking" component={TimeTrackingLayout} />
           <Route path="/user-profiles" component={UserProfilesLayout} />
           <Route path="/companies" component={CompaniesLayout} />
+          <Route path="/company-profile" component={CompanyProfileLayout} />
         </>
       )}
       <Route component={NotFound} />
@@ -121,6 +123,20 @@ function CompaniesLayout() {
         <Header title="Company Management" subtitle="Manage company information for billing and invoices" />
         <main className="p-6">
           <Companies />
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function CompanyProfileLayout() {
+  return (
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <Header title="Company Profile" subtitle="Manage your company logo and information for invoices" />
+        <main className="p-6">
+          <CompanyProfile />
         </main>
       </div>
     </div>
