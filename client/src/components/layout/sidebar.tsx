@@ -14,6 +14,7 @@ export default function Sidebar() {
 
   const adminNavItems = [
     { path: "/user-profiles", label: "User Profiles", icon: "fas fa-users" },
+    { path: "/companies", label: "Companies", icon: "fas fa-building" },
   ];
 
   return (

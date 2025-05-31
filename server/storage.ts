@@ -89,6 +89,15 @@ export interface IStorage {
     totalClients: number;
   }>;
 
+  // Company operations
+  getCompanies(userId: string): Promise<Company[]>;
+  getCompany(id: number, userId: string): Promise<Company | undefined>;
+  getDefaultCompany(userId: string): Promise<Company | undefined>;
+  createCompany(company: InsertCompany): Promise<Company>;
+  updateCompany(id: number, company: Partial<InsertCompany>, userId: string): Promise<Company | undefined>;
+  deleteCompany(id: number, userId: string): Promise<boolean>;
+  setDefaultCompany(id: number, userId: string): Promise<Company | undefined>;
+
   // Time ticket operations
   getTimeTickets(userId: string): Promise<TimeTicket[]>;
   getTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined>;
@@ -550,6 +559,84 @@ export class DatabaseStorage implements IStorage {
       hoursTracked,
       totalClients,
     };
+  }
+
+  // Company operations
+  async getCompanies(userId: string): Promise<Company[]> {
+    return await db
+      .select()
+      .from(companies)
+      .where(eq(companies.userId, userId))
+      .orderBy(desc(companies.isDefault), asc(companies.name));
+  }
+
+  async getCompany(id: number, userId: string): Promise<Company | undefined> {
+    const [company] = await db
+      .select()
+      .from(companies)
+      .where(and(eq(companies.id, id), eq(companies.userId, userId)));
+    return company;
+  }
+
+  async getDefaultCompany(userId: string): Promise<Company | undefined> {
+    const [company] = await db
+      .select()
+      .from(companies)
+      .where(and(eq(companies.userId, userId), eq(companies.isDefault, true)));
+    return company;
+  }
+
+  async createCompany(company: InsertCompany): Promise<Company> {
+    // If this is set as default, unset all other defaults for this user
+    if (company.isDefault) {
+      await db
+        .update(companies)
+        .set({ isDefault: false })
+        .where(eq(companies.userId, company.userId));
+    }
+
+    const [newCompany] = await db.insert(companies).values(company).returning();
+    return newCompany;
+  }
+
+  async updateCompany(id: number, company: Partial<InsertCompany>, userId: string): Promise<Company | undefined> {
+    // If this is set as default, unset all other defaults for this user
+    if (company.isDefault) {
+      await db
+        .update(companies)
+        .set({ isDefault: false })
+        .where(eq(companies.userId, userId));
+    }
+
+    const [updatedCompany] = await db
+      .update(companies)
+      .set({ ...company, updatedAt: new Date() })
+      .where(and(eq(companies.id, id), eq(companies.userId, userId)))
+      .returning();
+    return updatedCompany;
+  }
+
+  async deleteCompany(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(companies)
+      .where(and(eq(companies.id, id), eq(companies.userId, userId)));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async setDefaultCompany(id: number, userId: string): Promise<Company | undefined> {
+    // First, unset all defaults for this user
+    await db
+      .update(companies)
+      .set({ isDefault: false })
+      .where(eq(companies.userId, userId));
+
+    // Then set the specified company as default
+    const [updatedCompany] = await db
+      .update(companies)
+      .set({ isDefault: true, updatedAt: new Date() })
+      .where(and(eq(companies.id, id), eq(companies.userId, userId)))
+      .returning();
+    return updatedCompany;
   }
 
   // Time ticket operations

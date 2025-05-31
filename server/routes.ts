@@ -105,6 +105,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Company routes
+  app.get('/api/companies', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const companies = await storage.getCompanies(userId);
+      res.json(companies);
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+      res.status(500).json({ message: "Failed to fetch companies" });
+    }
+  });
+
+  app.get('/api/companies/default', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const company = await storage.getDefaultCompany(userId);
+      res.json(company);
+    } catch (error) {
+      console.error("Error fetching default company:", error);
+      res.status(500).json({ message: "Failed to fetch default company" });
+    }
+  });
+
+  app.post('/api/companies', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const companyData = { ...req.body, userId };
+      
+      const company = await storage.createCompany(companyData);
+      res.status(201).json(company);
+    } catch (error) {
+      console.error("Error creating company:", error);
+      res.status(500).json({ message: "Failed to create company" });
+    }
+  });
+
+  app.put('/api/companies/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const companyId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const company = await storage.updateCompany(companyId, req.body, userId);
+      if (!company) {
+        return res.status(404).json({ message: "Company not found" });
+      }
+      
+      res.json(company);
+    } catch (error) {
+      console.error("Error updating company:", error);
+      res.status(500).json({ message: "Failed to update company" });
+    }
+  });
+
+  app.delete('/api/companies/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const companyId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deleteCompany(companyId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Company not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting company:", error);
+      res.status(500).json({ message: "Failed to delete company" });
+    }
+  });
+
+  app.put('/api/companies/:id/default', isAuthenticated, async (req: any, res) => {
+    try {
+      const companyId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const company = await storage.setDefaultCompany(companyId, userId);
+      if (!company) {
+        return res.status(404).json({ message: "Company not found" });
+      }
+      
+      res.json(company);
+    } catch (error) {
+      console.error("Error setting default company:", error);
+      res.status(500).json({ message: "Failed to set default company" });
+    }
+  });
+
   // Client routes
   app.get('/api/clients', isAuthenticated, async (req: any, res) => {
     try {
