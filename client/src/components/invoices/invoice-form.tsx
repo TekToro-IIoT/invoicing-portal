@@ -72,9 +72,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   // Reset form data when invoice prop changes
   useEffect(() => {
     if (invoice) {
-      console.log('Setting form data from invoice:', invoice);
-      console.log('Invoice client:', invoice.client);
-      console.log('Invoice clientId:', invoice.clientId);
+      // Set form data from existing invoice
       setFormData({
         clientId: invoice.client?.id?.toString() || invoice.clientId?.toString() || "",
         issueDate: invoice.issueDate || new Date().toISOString().split('T')[0],
@@ -158,8 +156,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     e.preventDefault();
     
     try {
-      console.log('Form data before validation:', formData);
-      console.log('Equipment Description in form:', formData.equipmentPurchasedDescription);
+      // Validate form data before submission
       
       // Only include clientId if it's not empty and not editing
       const dataToValidate: any = {
@@ -187,7 +184,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       
       const validatedData = invoiceSchema.parse(dataToValidate);
       
-      console.log('Validated data being sent:', validatedData);
+
       mutation.mutate(validatedData);
     } catch (error) {
       if (error instanceof z.ZodError) {
