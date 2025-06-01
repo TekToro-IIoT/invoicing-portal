@@ -22,13 +22,6 @@ export default function Invoices() {
 
   const { data: invoices, isLoading } = useQuery({
     queryKey: ["/api/invoices"],
-    queryFn: async () => {
-      const response = await fetch("/api/invoices", {
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error('Failed to fetch invoices');
-      return response.json();
-    },
     retry: false,
   });
 
@@ -74,23 +67,13 @@ export default function Invoices() {
 
   const handleViewInvoice = async (invoice: any) => {
     try {
-      // Fetch full invoice details using direct API call
-      const response = await apiRequest(`/api/invoices/${invoice.id}`, "GET");
-      const fullInvoiceData = await response.json();
+      // Fetch full invoice details including items for viewing
+      const fullInvoiceData = await queryClient.fetchQuery({
+        queryKey: [`/api/invoices/${invoice.id}`],
+      });
       setSelectedInvoice(fullInvoiceData);
     } catch (error) {
       console.error('Error fetching invoice details for viewing:', error);
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Error",
         description: "Failed to load invoice details",
@@ -101,24 +84,19 @@ export default function Invoices() {
 
   const handleEditInvoice = async (invoice: any) => {
     try {
-      // Fetch full invoice details using apiRequest to bypass query client issues
-      const response = await apiRequest(`/api/invoices/${invoice.id}`, "GET");
-      const fullInvoiceData = await response.json();
+      // Fetch full invoice details including items using the existing query client
+      const fullInvoiceData = await queryClient.fetchQuery({
+        queryKey: [`/api/invoices/${invoice.id}`],
+        queryFn: async () => {
+          const response = await fetch(`/api/invoices/${invoice.id}`);
+          if (!response.ok) throw new Error('Failed to fetch invoice');
+          return response.json();
+        }
+      });
       setEditingInvoice(fullInvoiceData);
       setShowInvoiceForm(true);
     } catch (error) {
       console.error('Error fetching invoice details:', error);
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Error",
         description: "Failed to load invoice details",
@@ -142,8 +120,8 @@ export default function Invoices() {
       await apiRequest("PUT", `/api/invoices/${id}`, { status });
     },
     onSuccess: () => {
-      // Force refetch the queries by setting their data manually
-      queryClient.refetchQueries({ queryKey: ["/api/invoices"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
       toast({
         title: "Success",
         description: "Invoice status updated successfully",

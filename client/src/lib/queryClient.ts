@@ -31,19 +31,12 @@ export const getQueryFn: <T>(options: {
   async ({ queryKey }) => {
     // Handle both string and array query keys
     let url: string;
-    if (Array.isArray(queryKey)) {
-      // If the first element starts with /api, it's a complete URL
-      if (queryKey[0]?.toString().startsWith('/api')) {
-        url = queryKey[0] as string;
-      } else if (queryKey.length > 1) {
-        // If it's an array with multiple elements, join them appropriately
-        url = queryKey.join('/');
-      } else {
-        // Single element array
-        url = queryKey[0] as string;
-      }
+    if (Array.isArray(queryKey) && queryKey.length > 1) {
+      // If it's an array with multiple elements, join them appropriately
+      url = queryKey.join('/');
     } else {
-      url = queryKey as string;
+      // If it's a single string or array with one element
+      url = queryKey[0] as string;
     }
 
     const res = await fetch(url, {
@@ -61,6 +54,7 @@ export const getQueryFn: <T>(options: {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
