@@ -70,7 +70,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     subtotal: parseFloat(currentInvoice.subtotal || '0'),
     tax: parseFloat(currentInvoice.taxAmount || '0'),
     total: parseFloat(currentInvoice.total || '0'),
-    taxRate: parseFloat(currentInvoice.taxRate || '0')
+    taxRate: parseFloat(currentInvoice.taxRate || '0'),
+    issueDate: currentInvoice.issueDate,
+    dueDate: currentInvoice.dueDate,
+    invoiceNumber: currentInvoice.invoiceNumber
   };
 
   if (!invoiceData) {
