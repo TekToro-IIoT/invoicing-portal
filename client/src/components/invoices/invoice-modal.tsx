@@ -59,15 +59,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   // Transform invoice data for display
   const invoiceData = {
     ...currentInvoice,
-    company: defaultCompany, // Include company data with logo
-    client: currentInvoice.client || {
-      name: 'Headington Energy Partners',
-      email: 'billing@headingtonenergy.com',
-      address: '456 Energy Plaza',
-      city: 'Calgary',
-      state: 'AB',
-      zipCode: 'T2P 2M5'
-    },
+    company: defaultCompany,
+    client: currentInvoice.client,
     items: currentInvoice.items || [],
     subtotal: parseFloat(currentInvoice.subtotal || '0'),
     tax: parseFloat(currentInvoice.taxAmount || '0'),
