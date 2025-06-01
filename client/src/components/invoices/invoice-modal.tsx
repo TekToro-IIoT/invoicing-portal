@@ -26,7 +26,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   });
 
   // Use the latest invoice data if available, otherwise fall back to prop
-  const currentInvoice = latestInvoice || invoice;
+  const currentInvoice = Array.isArray(latestInvoice) ? latestInvoice[0] : (latestInvoice || invoice);
   
   // Debug: Log the actual invoice data
   console.log('Modal - Current invoice:', currentInvoice);
