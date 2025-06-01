@@ -352,15 +352,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       />
                     </div>
                     <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-white mb-2">Description</label>
-                      <Input
-                        value={item.description || ''}
-                        onChange={(e) => updateItem(index, 'description', e.target.value)}
-                        placeholder="Job description"
-                        className="bg-gray-700 border-gray-600 text-white"
-                      />
-                    </div>
-                    <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-white mb-2">Service Point</label>
                       <Input
                         value={item.servicePoint}
@@ -414,6 +405,23 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         className="bg-gray-700 border-gray-600 text-white"
                       />
                     </div>
+                  </div>
+                  
+                  {/* Second row with Description taking the full width */}
+                  <div className="grid grid-cols-1 gap-4 mt-4">
+                    <div>
+                      <label className="block text-sm font-medium text-white mb-2">Description</label>
+                      <Input
+                        value={item.description || ''}
+                        onChange={(e) => updateItem(index, 'description', e.target.value)}
+                        placeholder="Job description"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Third row with Rate, Hrs, Qty */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 items-end">
                     <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-white mb-2">Rate/Item Cost</label>
                       <Input
@@ -450,6 +458,17 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         className="bg-gray-700 border-gray-600 text-white"
                       />
                     </div>
+                  </div>
+                  
+                  {/* Fourth row with Extended amount and Delete button */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mt-4">
+                    <div className="md:col-span-2"></div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
+                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
+                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
+                      </div>
+                    </div>
                     <div className="md:col-span-1">
                       <Button 
                         type="button" 
@@ -460,15 +479,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       >
                         <i className="fas fa-trash"></i>
                       </Button>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-end mt-4">
-                    <div className="md:col-span-9"></div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
-                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
-                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
-                      </div>
                     </div>
                   </div>
                 </Card>
