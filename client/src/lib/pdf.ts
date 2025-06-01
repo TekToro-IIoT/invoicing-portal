@@ -298,8 +298,7 @@ function generatePDFHTML(invoice: any, companyData: any): string {
                         <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
                       </svg>
                     </div>
-                    <div class="logo-text">TekToro</div>
-                    <div style="color: #22c55e; font-size: 6px; font-weight: normal;">DIGITAL</div>
+                    <div class="logo-text">${company?.name || 'Company'}</div>
                   </div>
                 </div>
               </div>
