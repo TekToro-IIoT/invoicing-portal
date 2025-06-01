@@ -256,7 +256,7 @@ export default function UserProfiles() {
               Edit Billing Rates - {editingUser?.firstName} {editingUser?.lastName}
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Update billing rates for this user
+              Update hourly billing rates for this user
             </DialogDescription>
           </DialogHeader>
 

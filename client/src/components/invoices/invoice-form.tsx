@@ -238,11 +238,13 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-auto bg-tektoro-dark border-gray-600">
         <DialogHeader>
-          <DialogTitle className="text-white">{isEditing ? 'Edit Invoice' : 'Create New Invoice'}</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            {isEditing ? 'Update invoice details and items' : 'Fill in the details to create a new invoice'}
-          </DialogDescription>
-        </DialogHeader>
+          <DialogTitle className="text-white">
+          {isEditing ? 'Edit Invoice' : 'Create New Invoice'}
+        </DialogTitle>
+        <DialogDescription className="text-gray-400">
+          {isEditing ? 'Update invoice details and line items' : 'Create a new invoice for billing'}
+        </DialogDescription>
+      </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Invoice Header Information */}
