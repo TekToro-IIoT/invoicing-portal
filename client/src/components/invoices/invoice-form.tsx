@@ -52,6 +52,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     equipmentPurchasedDescription: invoice?.equipmentPurchasedDescription || "",
     items: invoice?.items?.length > 0 ? invoice.items : [{ 
       jobCode: "",
+      description: "",
       servicePoint: "", 
       afeLoe: "", 
       afeNumber: "", 
@@ -82,6 +83,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         equipmentPurchasedDescription: invoice.equipmentPurchasedDescription || "",
         items: invoice.items?.length > 0 ? invoice.items : [{ 
           jobCode: "",
+          description: "",
           servicePoint: "", 
           afeLoe: "", 
           afeNumber: "", 
