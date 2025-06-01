@@ -75,7 +75,8 @@ export default function Invoices() {
   const handleViewInvoice = async (invoice: any) => {
     try {
       // Fetch full invoice details using direct API call
-      const fullInvoiceData = await apiRequest("GET", `/api/invoices/${invoice.id}`);
+      const response = await apiRequest(`/api/invoices/${invoice.id}`, "GET");
+      const fullInvoiceData = await response.json();
       setSelectedInvoice(fullInvoiceData);
     } catch (error) {
       console.error('Error fetching invoice details for viewing:', error);
@@ -101,7 +102,8 @@ export default function Invoices() {
   const handleEditInvoice = async (invoice: any) => {
     try {
       // Fetch full invoice details using apiRequest to bypass query client issues
-      const fullInvoiceData = await apiRequest("GET", `/api/invoices/${invoice.id}`);
+      const response = await apiRequest(`/api/invoices/${invoice.id}`, "GET");
+      const fullInvoiceData = await response.json();
       setEditingInvoice(fullInvoiceData);
       setShowInvoiceForm(true);
     } catch (error) {
