@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import InvoiceModal from "@/components/invoices/invoice-modal";
 
 export default function Dashboard() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -148,17 +150,20 @@ export default function Dashboard() {
                   {recentInvoices.map((invoice: any) => (
                     <div key={invoice.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          invoice.status === 'paid' ? 'bg-green-100' :
-                          invoice.status === 'sent' ? 'bg-blue-100' :
-                          invoice.status === 'overdue' ? 'bg-red-100' : 'bg-gray-100'
-                        }`}>
+                        <button
+                          onClick={() => setSelectedInvoice(invoice)}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors hover:scale-105 ${
+                            invoice.status === 'paid' ? 'bg-green-100 hover:bg-green-200' :
+                            invoice.status === 'sent' ? 'bg-blue-100 hover:bg-blue-200' :
+                            invoice.status === 'overdue' ? 'bg-red-100 hover:bg-red-200' : 'bg-gray-100 hover:bg-gray-200'
+                          }`}
+                        >
                           <i className={`fas fa-file-invoice ${
                             invoice.status === 'paid' ? 'text-green-600' :
                             invoice.status === 'sent' ? 'text-blue-600' :
                             invoice.status === 'overdue' ? 'text-red-600' : 'text-gray-600'
                           }`}></i>
-                        </div>
+                        </button>
                         <div>
                           <p className="font-medium text-gray-900">{invoice.invoiceNumber}</p>
                           <p className="text-sm text-gray-500">{invoice.client?.name || 'Unknown Client'}</p>
@@ -185,6 +190,15 @@ export default function Dashboard() {
 
 
       </div>
+
+      {/* Invoice Preview Modal */}
+      {selectedInvoice && (
+        <InvoiceModal
+          invoice={selectedInvoice}
+          isOpen={true}
+          onClose={() => setSelectedInvoice(null)}
+        />
+      )}
     </main>
   );
 }
