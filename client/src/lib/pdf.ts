@@ -330,7 +330,7 @@ function generatePDFHTML(invoice: any): string {
             </tr>
           </thead>
           <tbody>
-            ${invoice.items?.map((item: any) => {
+            ${(invoice.items || invoice.invoiceItems || []).map((item: any) => {
               const rate = parseFloat(item.rate || '0');
               const hrs = parseFloat(item.hrs || '0');
               const qty = parseFloat(item.qty || '0');
@@ -344,14 +344,14 @@ function generatePDFHTML(invoice: any): string {
                   <td class="text-left">${item.afeNumber || ''}</td>
                   <td class="text-left">${item.wellName || ''}</td>
                   <td class="text-left">${item.wellNumber || ''}</td>
-                  <td class="text-left">${item.service || ''}</td>
+                  <td class="text-left">${item.service || item.description || ''}</td>
                   <td class="text-right">$${rate.toFixed(2)}</td>
                   <td class="text-right">${hrs > 0 ? hrs.toFixed(1) : ''}</td>
                   <td class="text-right">${qty > 0 ? qty.toFixed(1) : ''}</td>
                   <td class="text-right">$${extended.toFixed(2)}</td>
                 </tr>
               `;
-            }).join('') || '<tr><td colspan="11">No items</td></tr>'}
+            }).join('') || '<tr><td colspan="11" style="text-align: center; padding: 20px;">No items found for this invoice</td></tr>'}
           </tbody>
         </table>
         
