@@ -74,13 +74,22 @@ export default function Invoices() {
 
   const handleViewInvoice = async (invoice: any) => {
     try {
-      // Fetch full invoice details including items for viewing
-      const fullInvoiceData = await queryClient.fetchQuery({
-        queryKey: [`/api/invoices/${invoice.id}`],
-      });
+      // Fetch full invoice details using direct API call
+      const fullInvoiceData = await apiRequest("GET", `/api/invoices/${invoice.id}`);
       setSelectedInvoice(fullInvoiceData);
     } catch (error) {
       console.error('Error fetching invoice details for viewing:', error);
+      if (isUnauthorizedError(error as Error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
       toast({
         title: "Error",
         description: "Failed to load invoice details",
