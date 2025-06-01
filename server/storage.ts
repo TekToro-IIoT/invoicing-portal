@@ -546,13 +546,10 @@ export class DatabaseStorage implements IStorage {
 
   // Invoice item operations
   async getInvoiceItems(invoiceId: number): Promise<InvoiceItem[]> {
-    console.log('Fetching invoice items for invoice ID:', invoiceId);
-    const items = await db
+    return await db
       .select()
       .from(invoiceItems)
       .where(eq(invoiceItems.invoiceId, invoiceId));
-    console.log('Found invoice items:', items);
-    return items;
   }
 
   async createInvoiceItem(item: InsertInvoiceItem): Promise<InvoiceItem> {

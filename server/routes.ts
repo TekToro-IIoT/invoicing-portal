@@ -303,19 +303,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!invoice) {
         return res.status(404).json({ message: "Invoice not found" });
       }
-      
-      // Fetch items separately to ensure they're included
-      const items = await storage.getInvoiceItems(id);
-      console.log('Raw invoice items from storage:', items);
-      
-      const invoiceWithItems = {
-        ...invoice,
-        items: items || [],
-        invoiceItems: items || []
-      };
-      
-      console.log('Fetched invoice with items:', invoiceWithItems);
-      res.json(invoiceWithItems);
+      res.json(invoice);
     } catch (error) {
       console.error("Error fetching invoice:", error);
       res.status(500).json({ message: "Failed to fetch invoice" });
@@ -368,29 +356,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (items && items.length > 0) {
         for (const item of items) {
           try {
-            const hrs = parseFloat(item.hrs || '0');
-            const qty = parseFloat(item.qty || '0');
-            const rate = parseFloat(item.rate || '0');
-            
             const itemData = {
+              ...item,
               invoiceId: invoice.id,
-              jobCode: item.jobCode || '',
-              servicePoint: item.servicePoint || '',
-              afeLoe: item.afeLoe || '',
-              afeNumber: item.afeNumber || '',
-              wellName: item.wellName || '',
-              wellNumber: item.wellNumber || '',
-              service: item.service || '',
-              rate: rate.toString(),
-              hrs: hrs.toString(),
-              qty: qty.toString(),
-              amount: (rate * (hrs + qty)).toString()
+              amount: parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))
             };
-            console.log('Creating invoice item with proper structure:', itemData);
+            console.log('Creating invoice item:', itemData);
             await storage.createInvoiceItem(itemData);
           } catch (itemError) {
             console.error('Error creating invoice item:', itemError, 'Item data:', item);
-            // Don't throw here, continue creating other items
           }
         }
       }
@@ -426,29 +400,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (items && items.length > 0) {
         for (const item of items) {
           try {
-            const hrs = parseFloat(item.hrs || '0');
-            const qty = parseFloat(item.qty || '0');
-            const rate = parseFloat(item.rate || '0');
-            
             const itemData = {
+              ...item,
               invoiceId: id,
-              jobCode: item.jobCode || '',
-              servicePoint: item.servicePoint || '',
-              afeLoe: item.afeLoe || '',
-              afeNumber: item.afeNumber || '',
-              wellName: item.wellName || '',
-              wellNumber: item.wellNumber || '',
-              service: item.service || '',
-              rate: rate.toString(),
-              hrs: hrs.toString(),
-              qty: qty.toString(),
-              amount: (rate * (hrs + qty)).toString()
+              amount: parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))
             };
-            console.log('Creating updated invoice item with proper structure:', itemData);
+            console.log('Creating updated invoice item:', itemData);
             await storage.createInvoiceItem(itemData);
           } catch (itemError) {
             console.error('Error creating updated invoice item:', itemError, 'Item data:', item);
-            // Don't throw here, continue creating other items
           }
         }
       }
