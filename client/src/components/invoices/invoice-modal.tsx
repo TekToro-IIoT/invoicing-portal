@@ -21,7 +21,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   // Fetch the latest invoice data when modal is open
   const { data: latestInvoice } = useQuery({
-    queryKey: [`/api/invoices/${invoice?.id}`],
+    queryKey: [`invoice-${invoice?.id}`], // Use a unique key that doesn't start with /api
     queryFn: async () => {
       if (!invoice?.id) return null;
       const response = await fetch(`/api/invoices/${invoice.id}`, {
@@ -31,8 +31,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
       return response.json();
     },
     enabled: isOpen && !!invoice?.id,
-    refetchOnMount: true, // Refetch when component mounts
-    refetchOnWindowFocus: false, // Don't refetch on window focus
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 
   // Use the latest invoice data if available, otherwise fall back to prop
