@@ -27,6 +27,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = latestInvoice || invoice;
+  
+  // Debug logging to check what data we have
+  console.log('Current invoice data:', currentInvoice);
+  console.log('Client data:', currentInvoice?.client);
 
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
@@ -58,15 +62,15 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
       state: 'State',
       zipCode: '12345'
     },
-    items: invoice.items || [],
-    subtotal: invoice.items?.reduce((sum: number, item: any) => {
+    items: currentInvoice.items || [],
+    subtotal: currentInvoice.items?.reduce((sum: number, item: any) => {
       const rate = parseFloat(item.rate || '0');
       const hrs = parseFloat(item.hrs || '0');
       const qty = parseFloat(item.qty || '0');
       return sum + (rate * (hrs + qty));
     }, 0) || 0,
     tax: 0,
-    total: invoice.items?.reduce((sum: number, item: any) => {
+    total: currentInvoice.items?.reduce((sum: number, item: any) => {
       const rate = parseFloat(item.rate || '0');
       const hrs = parseFloat(item.hrs || '0');
       const qty = parseFloat(item.qty || '0');
