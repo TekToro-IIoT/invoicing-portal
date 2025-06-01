@@ -258,21 +258,27 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
               <h3 className="text-white text-lg font-semibold mb-4">Invoice Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
-                  <Label className="text-white">Company</Label>
-                  <Select 
-                    value={formData.clientId} 
-                    onValueChange={(value) => setFormData({ ...formData, clientId: value })}
-                    disabled={isEditing}
-                  >
-                    <SelectTrigger className={`border-gray-600 text-white ${isEditing ? 'bg-gray-600 cursor-not-allowed opacity-70' : 'bg-gray-700'}`}>
-                      <SelectValue>
-                        {formData.clientId ? 
-                          companies?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select company"
-                          : "Select company"
-                        }
-                      </SelectValue>
-                    </SelectTrigger>
-                    {!isEditing && (
+                  <Label className="text-white">Client</Label>
+                  {isEditing ? (
+                    <div>
+                      <div className="bg-gray-600 border border-gray-600 text-white px-3 py-2 rounded-md cursor-not-allowed opacity-70">
+                        {invoice?.client?.name || "Unknown Client"}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">Client cannot be changed when editing existing invoice</p>
+                    </div>
+                  ) : (
+                    <Select 
+                      value={formData.clientId} 
+                      onValueChange={(value) => setFormData({ ...formData, clientId: value })}
+                    >
+                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                        <SelectValue>
+                          {formData.clientId ? 
+                            companies?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select client"
+                            : "Select client"
+                          }
+                        </SelectValue>
+                      </SelectTrigger>
                       <SelectContent className="bg-gray-700 border-gray-600">
                         {companies?.map((company: any) => (
                           <SelectItem key={company.id} value={company.id.toString()} className="text-white hover:bg-gray-600">
@@ -280,10 +286,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    )}
-                  </Select>
-                  {isEditing && (
-                    <p className="text-xs text-gray-400 mt-1">Client cannot be changed when editing existing invoice</p>
+                    </Select>
                   )}
                 </div>
 
