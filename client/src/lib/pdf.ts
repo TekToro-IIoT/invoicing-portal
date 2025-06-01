@@ -94,10 +94,11 @@ function generatePDFHTML(invoice: any, companyData: any): string {
           flex: 1;
           display: flex;
           align-items: flex-start;
+          gap: 20px;
         }
         
         .logo-section {
-          margin-right: 20px;
+          flex-shrink: 0;
         }
         
         .company-logo-box {
