@@ -6,6 +6,7 @@ interface InvoiceTableProps {
   onView: (invoice: any) => void;
   onEdit: (invoice: any) => void;
   onDelete: (id: number) => void;
+  onStatusChange: (id: number, status: string) => void;
   onNewInvoice: () => void;
   isDeleting: boolean;
 }
@@ -15,6 +16,7 @@ export default function InvoiceTable({
   onView, 
   onEdit, 
   onDelete,
+  onStatusChange,
   onNewInvoice,
   isDeleting
 }: InvoiceTableProps) {
@@ -87,10 +89,38 @@ export default function InvoiceTable({
                   ${parseFloat(invoice.total).toLocaleString()}
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
-                  {invoice.status}
-                </span>
+              <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                <Select value={invoice.status} onValueChange={(value) => onStatusChange(invoice.id, value)}>
+                  <SelectTrigger className="w-32 h-8 text-xs">
+                    <SelectValue>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
+                        {invoice.status}
+                      </span>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="draft">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        draft
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="sent">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        sent
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="paid">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        paid
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="overdue">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        overdue
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center space-x-2">
