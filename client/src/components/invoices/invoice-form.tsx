@@ -52,7 +52,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     equipmentPurchasedDescription: invoice?.equipmentPurchasedDescription || "",
     items: invoice?.items?.length > 0 ? invoice.items : [{ 
       jobCode: "",
-      description: "",
       servicePoint: "", 
       afeLoe: "", 
       afeNumber: "", 
@@ -83,7 +82,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         equipmentPurchasedDescription: invoice.equipmentPurchasedDescription || "",
         items: invoice.items?.length > 0 ? invoice.items : [{ 
           jobCode: "",
-          description: "",
           servicePoint: "", 
           afeLoe: "", 
           afeNumber: "", 
@@ -166,14 +164,13 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         taxRate: formData.taxRate.toString(),
         equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
-          jobCode: item.jobCode?.trim() || '',
-          description: item.description?.trim() || '',
-          servicePoint: item.servicePoint?.trim() || '',
-          afeLoe: item.afeLoe?.trim() || '',
-          afeNumber: item.afeNumber?.trim() || '',
-          wellName: item.wellName?.trim() || '',
-          wellNumber: item.wellNumber?.trim() || '',
-          service: item.service?.trim() || '',
+          jobCode: item.jobCode || '',
+          servicePoint: item.servicePoint || '',
+          afeLoe: item.afeLoe || '',
+          afeNumber: item.afeNumber || '',
+          wellName: item.wellName || '',
+          wellNumber: item.wellNumber || '',
+          service: item.service || '',
           rate: parseFloat(item.rate?.toString() || '0'),
           hrs: parseFloat(item.hrs?.toString() || '0'),
           qty: parseFloat(item.qty?.toString() || '0'),
@@ -207,7 +204,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       ...formData,
       items: [...formData.items, { 
         jobCode: "",
-        description: "",
         servicePoint: "", 
         afeLoe: "", 
         afeNumber: "", 
@@ -230,9 +226,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
 
   const updateItem = (index: number, field: string, value: any) => {
     const updatedItems = [...formData.items];
-    // Ensure empty strings are stored as empty strings, not undefined or null
-    const cleanValue = typeof value === 'string' ? value.trim() : value;
-    updatedItems[index] = { ...updatedItems[index], [field]: cleanValue };
+    updatedItems[index] = { ...updatedItems[index], [field]: value };
     setFormData({ ...formData, items: updatedItems });
   };
 
@@ -455,19 +449,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       </Button>
                     </div>
                   </div>
-                  
-                  {/* Second row with Description and Extended */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-                    <div className="md:col-span-3">
-                      <label className="block text-sm font-medium text-white mb-2">Description</label>
-                      <Input
-                        value={item.description || ''}
-                        onChange={(e) => updateItem(index, 'description', e.target.value)}
-                        placeholder="Job description"
-                        className="bg-gray-700 border-gray-600 text-white"
-                      />
-                    </div>
-                    <div className="md:col-span-1">
+                  <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-end mt-4">
+                    <div className="md:col-span-9"></div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-white mb-2">Extended</label>
                       <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
                         ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}

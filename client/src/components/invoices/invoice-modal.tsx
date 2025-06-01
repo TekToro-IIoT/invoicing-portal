@@ -173,7 +173,6 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                   <thead>
                     <tr className="bg-gray-50">
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Job Code</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Description</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service Point</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE/LOE</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE # (if applicable)</th>
@@ -190,13 +189,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     {invoiceData.items.map((item: any, index: number) => (
                       <tr key={index}>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.jobCode || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.description || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.servicePoint || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeLoe || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeNumber || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellName || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellNumber || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || item.description || ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${parseFloat(item.rate || '0').toFixed(2)}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.hrs || '0') > 0 ? parseFloat(item.hrs || '0').toFixed(2) : ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.qty || '0') > 0 ? parseFloat(item.qty || '0').toFixed(2) : ''}</td>
