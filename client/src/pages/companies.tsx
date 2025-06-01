@@ -23,7 +23,7 @@ export default function Companies() {
 
   const createCompanyMutation = useMutation({
     mutationFn: async (companyData: any) => {
-      await apiRequest('POST', '/api/companies', companyData);
+      await apiRequest('/api/companies', 'POST', companyData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
@@ -45,7 +45,7 @@ export default function Companies() {
 
   const updateCompanyMutation = useMutation({
     mutationFn: async ({ id, ...companyData }: any) => {
-      await apiRequest('PUT', `/api/companies/${id}`, companyData);
+      await apiRequest(`/api/companies/${id}`, 'PUT', companyData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
