@@ -27,6 +27,14 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = latestInvoice || invoice;
+  
+  // Debug: Log the actual invoice data
+  console.log('Modal - Current invoice:', currentInvoice);
+  console.log('Modal - Issue date:', currentInvoice?.issueDate);
+  console.log('Modal - Due date:', currentInvoice?.dueDate);
+  console.log('Modal - Items:', currentInvoice?.items);
+  console.log('Modal - Subtotal:', currentInvoice?.subtotal);
+  console.log('Modal - Total:', currentInvoice?.total);
 
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
