@@ -22,6 +22,13 @@ export default function Invoices() {
 
   const { data: invoices, isLoading } = useQuery({
     queryKey: ["/api/invoices"],
+    queryFn: async () => {
+      const response = await fetch("/api/invoices", {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error('Failed to fetch invoices');
+      return response.json();
+    },
     retry: false,
   });
 
