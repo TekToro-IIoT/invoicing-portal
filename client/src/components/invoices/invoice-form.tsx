@@ -442,12 +442,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       />
                     </div>
                     <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
-                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
-                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
-                      </div>
-                    </div>
-                    <div className="md:col-span-1">
                       <Button 
                         type="button" 
                         variant="destructive" 
@@ -460,9 +454,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                     </div>
                   </div>
                   
-                  {/* Second row with Description taking the full width */}
-                  <div className="grid grid-cols-1 gap-4 mt-4">
-                    <div>
+                  {/* Second row with Description and Extended */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                    <div className="md:col-span-3">
                       <label className="block text-sm font-medium text-white mb-2">Description</label>
                       <Input
                         value={item.description || ''}
@@ -470,6 +464,12 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         placeholder="Job description"
                         className="bg-gray-700 border-gray-600 text-white"
                       />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Extended</label>
+                      <div className="text-lg font-semibold text-white bg-gray-700 border border-gray-600 rounded px-3 py-2 min-h-[40px] flex items-center justify-end">
+                        ${(parseFloat(item.rate?.toString() || '0') * (parseFloat(item.hrs?.toString() || '0') + parseFloat(item.qty?.toString() || '0'))).toFixed(2)}
+                      </div>
                     </div>
                   </div>
                 </Card>
