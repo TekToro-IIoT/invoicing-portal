@@ -72,8 +72,11 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   // Reset form data when invoice prop changes
   useEffect(() => {
     if (invoice) {
+      console.log('Setting form data from invoice:', invoice);
+      console.log('Invoice client:', invoice.client);
+      console.log('Invoice clientId:', invoice.clientId);
       setFormData({
-        clientId: invoice.clientId?.toString() || "",
+        clientId: invoice.client?.id?.toString() || invoice.clientId?.toString() || "",
         issueDate: invoice.issueDate || new Date().toISOString().split('T')[0],
         dueDate: invoice.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         taxRate: invoice.taxRate || 0,
@@ -158,9 +161,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       console.log('Form data before validation:', formData);
       console.log('Equipment Description in form:', formData.equipmentPurchasedDescription);
       
-      const validatedData = invoiceSchema.parse({
+      // Only include clientId if it's not empty and not editing
+      const dataToValidate: any = {
         ...formData,
-        clientId: parseInt(formData.clientId),
         taxRate: formData.taxRate.toString(),
         equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
@@ -175,7 +178,14 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
           hrs: parseFloat(item.hrs?.toString() || '0'),
           qty: parseFloat(item.qty?.toString() || '0'),
         })),
-      });
+      };
+
+      // Only include clientId for new invoices or if it has a valid value
+      if (formData.clientId && formData.clientId !== "") {
+        dataToValidate.clientId = parseInt(formData.clientId);
+      }
+      
+      const validatedData = invoiceSchema.parse(dataToValidate);
       
       console.log('Validated data being sent:', validatedData);
       mutation.mutate(validatedData);
