@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,99 +8,84 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Building2, Plus, Edit, Trash2, Star, StarOff } from "lucide-react";
-import type { Company } from "@shared/schema";
+import { Building2, Plus, Edit, Trash2, User } from "lucide-react";
+import type { Client, Company } from "@shared/schema";
 
 export default function Companies() {
   const { toast } = useToast();
-  const [editingCompany, setEditingCompany] = useState<Company | null>(null);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: companies = [], isLoading } = useQuery<Company[]>({
+  const { data: clients = [], isLoading } = useQuery<Client[]>({
+    queryKey: ['/api/clients'],
+  });
+
+  const { data: companies = [] } = useQuery<Company[]>({
     queryKey: ['/api/companies'],
   });
 
-  const createCompanyMutation = useMutation({
-    mutationFn: async (companyData: any) => {
-      await apiRequest('POST', '/api/companies', companyData);
+  const createClientMutation = useMutation({
+    mutationFn: async (clientData: any) => {
+      await apiRequest('POST', '/api/clients', clientData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       setIsDialogOpen(false);
-      setEditingCompany(null);
+      setEditingClient(null);
       toast({
         title: "Success",
-        description: "Company created successfully",
+        description: "Client created successfully",
       });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: "Failed to create company",
+        description: "Failed to create client",
         variant: "destructive",
       });
     },
   });
 
-  const updateCompanyMutation = useMutation({
-    mutationFn: async ({ id, ...companyData }: any) => {
-      await apiRequest('PUT', `/api/companies/${id}`, companyData);
+  const updateClientMutation = useMutation({
+    mutationFn: async ({ id, ...clientData }: any) => {
+      await apiRequest('PUT', `/api/clients/${id}`, clientData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       setIsDialogOpen(false);
-      setEditingCompany(null);
+      setEditingClient(null);
       toast({
         title: "Success",
-        description: "Company updated successfully",
+        description: "Client updated successfully",
       });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: "Failed to update company",
+        description: "Failed to update client",
         variant: "destructive",
       });
     },
   });
 
-  const deleteCompanyMutation = useMutation({
+  const deleteClientMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest('DELETE', `/api/companies/${id}`);
+      await apiRequest('DELETE', `/api/clients/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       toast({
         title: "Success",
-        description: "Company deleted successfully",
+        description: "Client deleted successfully",
       });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: "Failed to delete company",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const setDefaultMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest('PUT', `/api/companies/${id}/default`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/companies'] });
-      toast({
-        title: "Success",
-        description: "Default company updated",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to update default company",
+        description: "Failed to delete client",
         variant: "destructive",
       });
     },
@@ -109,51 +95,46 @@ export default function Companies() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
-    const companyData = {
+    const clientData = {
       name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
       address: formData.get('address') as string,
       city: formData.get('city') as string,
       state: formData.get('state') as string,
       zipCode: formData.get('zipCode') as string,
       country: formData.get('country') as string,
-      phone: formData.get('phone') as string,
-      email: formData.get('email') as string,
-      website: formData.get('website') as string,
-      taxId: formData.get('taxId') as string,
-      isDefault: formData.get('isDefault') === 'on',
+      contactPerson: formData.get('contactPerson') as string,
+      companyId: formData.get('companyId') ? parseInt(formData.get('companyId') as string) : null,
     };
 
-    if (editingCompany) {
-      updateCompanyMutation.mutate({ id: editingCompany.id, ...companyData });
+    if (editingClient) {
+      updateClientMutation.mutate({ id: editingClient.id, ...clientData });
     } else {
-      createCompanyMutation.mutate(companyData);
+      createClientMutation.mutate(clientData);
     }
   };
 
-  const handleEdit = (company: Company) => {
-    setEditingCompany(company);
+  const handleEdit = (client: Client) => {
+    setEditingClient(client);
     setIsDialogOpen(true);
   };
 
   const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this company?')) {
-      deleteCompanyMutation.mutate(id);
+    if (confirm('Are you sure you want to delete this client?')) {
+      deleteClientMutation.mutate(id);
     }
   };
 
-  const handleSetDefault = (id: number) => {
-    setDefaultMutation.mutate(id);
-  };
-
   if (isLoading) {
-    return <div className="flex justify-center items-center h-64">Loading companies...</div>;
+    return <div className="flex justify-center items-center h-64">Loading clients...</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Building2 className="h-8 w-8 text-green-400" />
+          <User className="h-8 w-8 text-green-400" />
           <div>
             <h1 className="text-2xl font-bold text-white">Client Management</h1>
             <p className="text-gray-400">Manage client information for billing and invoices</p>
@@ -163,7 +144,7 @@ export default function Companies() {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
-              onClick={() => setEditingCompany(null)}
+              onClick={() => setEditingClient(null)}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -173,32 +154,75 @@ export default function Companies() {
           <DialogContent className="bg-gray-800 border-gray-700 max-w-2xl">
             <DialogHeader>
               <DialogTitle className="text-white">
-                {editingCompany ? 'Edit Client' : 'Add New Client'}
+                {editingClient ? 'Edit Client' : 'Add New Client'}
               </DialogTitle>
             </DialogHeader>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="name" className="text-gray-400">Company Name *</Label>
+                  <Label htmlFor="name" className="text-gray-400">Client Name *</Label>
                   <Input
                     id="name"
                     name="name"
-                    defaultValue={editingCompany?.name || ''}
+                    defaultValue={editingClient?.name || ''}
                     className="bg-gray-700 border-gray-600 text-white"
                     required
                   />
                 </div>
+                <div>
+                  <Label htmlFor="contactPerson" className="text-gray-400">Contact Person</Label>
+                  <Input
+                    id="contactPerson"
+                    name="contactPerson"
+                    defaultValue={editingClient?.contactPerson || ''}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="email" className="text-gray-400">Email</Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    defaultValue={editingCompany?.email || ''}
+                    defaultValue={editingClient?.email || ''}
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
+                <div>
+                  <Label htmlFor="phone" className="text-gray-400">Phone</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    defaultValue={editingClient?.phone || ''}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="companyId" className="text-gray-400">Associated Company</Label>
+                <Select 
+                  name="companyId" 
+                  defaultValue={editingClient?.companyId?.toString() || ""}
+                >
+                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                    <SelectValue placeholder="Select a company (optional)" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-700 border-gray-600">
+                    <SelectItem value="" className="text-white hover:bg-gray-600">
+                      No company
+                    </SelectItem>
+                    {companies.map((company: Company) => (
+                      <SelectItem key={company.id} value={company.id.toString()} className="text-white hover:bg-gray-600">
+                        {company.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
@@ -206,7 +230,7 @@ export default function Companies() {
                 <Textarea
                   id="address"
                   name="address"
-                  defaultValue={editingCompany?.address || ''}
+                  defaultValue={editingClient?.address || ''}
                   className="bg-gray-700 border-gray-600 text-white"
                   rows={2}
                 />
@@ -218,7 +242,7 @@ export default function Companies() {
                   <Input
                     id="city"
                     name="city"
-                    defaultValue={editingCompany?.city || ''}
+                    defaultValue={editingClient?.city || ''}
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
@@ -227,7 +251,7 @@ export default function Companies() {
                   <Input
                     id="state"
                     name="state"
-                    defaultValue={editingCompany?.state || ''}
+                    defaultValue={editingClient?.state || ''}
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
@@ -236,63 +260,20 @@ export default function Companies() {
                   <Input
                     id="zipCode"
                     name="zipCode"
-                    defaultValue={editingCompany?.zipCode || ''}
+                    defaultValue={editingClient?.zipCode || ''}
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="country" className="text-gray-400">Country</Label>
-                  <Input
-                    id="country"
-                    name="country"
-                    defaultValue={editingCompany?.country || 'USA'}
-                    className="bg-gray-700 border-gray-600 text-white"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="phone" className="text-gray-400">Phone</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    defaultValue={editingCompany?.phone || ''}
-                    className="bg-gray-700 border-gray-600 text-white"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="website" className="text-gray-400">Website</Label>
-                  <Input
-                    id="website"
-                    name="website"
-                    defaultValue={editingCompany?.website || ''}
-                    className="bg-gray-700 border-gray-600 text-white"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="taxId" className="text-gray-400">Tax ID</Label>
-                  <Input
-                    id="taxId"
-                    name="taxId"
-                    defaultValue={editingCompany?.taxId || ''}
-                    className="bg-gray-700 border-gray-600 text-white"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="isDefault"
-                  name="isDefault"
-                  defaultChecked={editingCompany?.isDefault || false}
-                  className="rounded border-gray-600 bg-gray-700"
+              <div>
+                <Label htmlFor="country" className="text-gray-400">Country</Label>
+                <Input
+                  id="country"
+                  name="country"
+                  defaultValue={editingClient?.country || 'United States'}
+                  className="bg-gray-700 border-gray-600 text-white"
                 />
-                <Label htmlFor="isDefault" className="text-gray-400">Set as default company</Label>
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
@@ -306,10 +287,10 @@ export default function Companies() {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={createCompanyMutation.isPending || updateCompanyMutation.isPending}
+                  disabled={createClientMutation.isPending || updateClientMutation.isPending}
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
-                  {createCompanyMutation.isPending || updateCompanyMutation.isPending ? 'Saving...' : 'Save Company'}
+                  {createClientMutation.isPending || updateClientMutation.isPending ? 'Saving...' : 'Save Client'}
                 </Button>
               </div>
             </form>
@@ -318,51 +299,45 @@ export default function Companies() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {companies.map((company: Company) => (
-          <Card key={company.id} className="bg-gray-800 border-gray-700">
+        {clients.map((client: Client) => (
+          <Card key={client.id} className="bg-gray-800 border-gray-700">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-white text-lg flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-green-400" />
-                  {company.name}
+                  <User className="w-5 h-5 text-green-400" />
+                  {client.name}
                 </CardTitle>
-                {company.isDefault && (
-                  <Badge className="bg-green-600 text-white">
-                    <Star className="w-3 h-3 mr-1" />
-                    Default
-                  </Badge>
-                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
-              {company.address && (
+              {client.contactPerson && (
                 <div className="text-sm text-gray-300">
-                  {company.address}
-                  {company.city && <><br />{company.city}{company.state && `, ${company.state}`} {company.zipCode}</>}
+                  Contact: {client.contactPerson}
                 </div>
               )}
               
-              {company.email && (
+              {client.address && (
                 <div className="text-sm text-gray-300">
-                  Email: {company.email}
+                  {client.address}
+                  {client.city && <><br />{client.city}{client.state && `, ${client.state}`} {client.zipCode}</>}
                 </div>
               )}
               
-              {company.phone && (
+              {client.email && (
                 <div className="text-sm text-gray-300">
-                  Phone: {company.phone}
+                  Email: {client.email}
                 </div>
               )}
-
-              {company.taxId && (
+              
+              {client.phone && (
                 <div className="text-sm text-gray-300">
-                  Tax ID: {company.taxId}
+                  Phone: {client.phone}
                 </div>
               )}
 
               <div className="flex gap-2 pt-3">
                 <Button
-                  onClick={() => handleEdit(company)}
+                  onClick={() => handleEdit(client)}
                   variant="outline"
                   size="sm"
                   className="border-green-600 text-green-400 hover:bg-green-600 hover:text-white"
@@ -371,25 +346,12 @@ export default function Companies() {
                   Edit
                 </Button>
                 
-                {!company.isDefault && (
-                  <Button
-                    onClick={() => handleSetDefault(company.id)}
-                    variant="outline"
-                    size="sm"
-                    className="border-gray-600 text-gray-400 hover:bg-gray-600 hover:text-white"
-                    disabled={setDefaultMutation.isPending}
-                  >
-                    <StarOff className="w-4 h-4 mr-1" />
-                    Set Default
-                  </Button>
-                )}
-                
                 <Button
-                  onClick={() => handleDelete(company.id)}
+                  onClick={() => handleDelete(client.id)}
                   variant="outline"
                   size="sm"
                   className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
-                  disabled={deleteCompanyMutation.isPending}
+                  disabled={deleteClientMutation.isPending}
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
                   Delete
@@ -400,20 +362,20 @@ export default function Companies() {
         ))}
       </div>
 
-      {companies.length === 0 && (
+      {clients.length === 0 && (
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Building2 className="h-12 w-12 text-gray-600 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">No companies found</h3>
+            <User className="h-12 w-12 text-gray-600 mb-4" />
+            <h3 className="text-lg font-semibold text-white mb-2">No clients found</h3>
             <p className="text-gray-400 text-center mb-4">
-              Add your company information to include it on invoices and billing documents.
+              Add clients to create invoices and manage billing information.
             </p>
             <Button
               onClick={() => setIsDialogOpen(true)}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add Your First Company
+              Add Your First Client
             </Button>
           </CardContent>
         </Card>
