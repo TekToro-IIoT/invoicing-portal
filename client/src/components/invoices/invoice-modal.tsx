@@ -40,6 +40,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   
   console.log('Current invoice for display:', currentInvoice);
   console.log('Invoice items:', currentInvoice?.items);
+  console.log('Invoice invoiceItems:', currentInvoice?.invoiceItems);
   
 
 
@@ -74,11 +75,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
       zipCode: '75201'
     },
     // Ensure items is always an array and handle both direct items and nested items
-    items: Array.isArray(currentInvoice.items) 
-      ? currentInvoice.items 
-      : Array.isArray(currentInvoice.invoiceItems) 
-        ? currentInvoice.invoiceItems 
-        : [],
+    items: currentInvoice.invoiceItems || currentInvoice.items || [],
     subtotal: parseFloat(currentInvoice.subtotal || '0'),
     tax: parseFloat(currentInvoice.taxAmount || currentInvoice.tax || '0'),
     total: parseFloat(currentInvoice.total || '0'),

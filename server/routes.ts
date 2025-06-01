@@ -303,7 +303,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!invoice) {
         return res.status(404).json({ message: "Invoice not found" });
       }
-      res.json(invoice);
+      
+      // Ensure items are included
+      const items = await storage.getInvoiceItems(id);
+      const invoiceWithItems = {
+        ...invoice,
+        items,
+        invoiceItems: items
+      };
+      
+      console.log('Fetched invoice with items:', invoiceWithItems);
+      res.json(invoiceWithItems);
     } catch (error) {
       console.error("Error fetching invoice:", error);
       res.status(500).json({ message: "Failed to fetch invoice" });
