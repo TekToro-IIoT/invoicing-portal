@@ -165,6 +165,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
           jobCode: item.jobCode || '',
+          description: item.description || '',
           servicePoint: item.servicePoint || '',
           afeLoe: item.afeLoe || '',
           afeNumber: item.afeNumber || '',
@@ -204,6 +205,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       ...formData,
       items: [...formData.items, { 
         jobCode: "",
+        description: "",
         servicePoint: "", 
         afeLoe: "", 
         afeNumber: "", 
@@ -344,6 +346,15 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         value={item.jobCode}
                         onChange={(e) => updateItem(index, 'jobCode', e.target.value)}
                         placeholder="JC001"
+                        className="bg-gray-700 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="block text-sm font-medium text-white mb-2">Description</label>
+                      <Input
+                        value={item.description || ''}
+                        onChange={(e) => updateItem(index, 'description', e.target.value)}
+                        placeholder="Job description"
                         className="bg-gray-700 border-gray-600 text-white"
                       />
                     </div>
