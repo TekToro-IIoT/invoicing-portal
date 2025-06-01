@@ -443,7 +443,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update invoice status
   app.patch('/api/invoices/:id/status', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const id = parseInt(req.params.id);
       const { status } = req.body;
 
