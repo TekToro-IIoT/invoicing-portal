@@ -313,7 +313,7 @@ function generatePDFHTML(invoice: any): string {
         <table class="items-table">
           <thead>
             <tr>
-              <th style="width: 8%">Job Code#</th>
+              <th style="width: 8%">Job Code</th>
               <th style="width: 10%">Service Point</th>
               <th style="width: 8%">AFE/LOE</th>
               <th style="width: 10%">AFE # (if applicable)</th>
@@ -331,7 +331,7 @@ function generatePDFHTML(invoice: any): string {
               const rate = parseFloat(item.rate || '0');
               const hrs = parseFloat(item.hrs || '0');
               const qty = parseFloat(item.qty || '0');
-              const extended = rate * (hrs + qty);
+              const amount = parseFloat(item.amount || '0');
               
               return `
                 <tr>
@@ -345,7 +345,7 @@ function generatePDFHTML(invoice: any): string {
                   <td class="text-right">$${rate.toFixed(2)}</td>
                   <td class="text-right">${hrs > 0 ? hrs.toFixed(1) : ''}</td>
                   <td class="text-right">${qty > 0 ? qty.toFixed(1) : ''}</td>
-                  <td class="text-right">$${extended.toFixed(2)}</td>
+                  <td class="text-right">$${amount.toFixed(2)}</td>
                 </tr>
               `;
             }).join('') || '<tr><td colspan="11">No items</td></tr>'}
