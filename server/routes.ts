@@ -440,6 +440,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update invoice status
+  app.patch('/api/invoices/:id/status', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+
+      if (!status) {
+        return res.status(400).json({ message: "Status is required" });
+      }
+
+      const updatedInvoice = await storage.updateInvoice(id, { status }, userId);
+      if (!updatedInvoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+
+      res.json(updatedInvoice);
+    } catch (error) {
+      console.error("Error updating invoice status:", error);
+      res.status(500).json({ message: "Failed to update invoice status" });
+    }
+  });
+
   // Invoice item routes
   app.post('/api/invoices/:invoiceId/items', isAuthenticated, async (req: any, res) => {
     try {

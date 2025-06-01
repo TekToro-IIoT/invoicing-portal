@@ -56,6 +56,37 @@ export default function Invoices() {
     },
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: number; status: string }) => {
+      await apiRequest("PATCH", `/api/invoices/${id}/status`, { status });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      toast({
+        title: "Success",
+        description: "Invoice status updated successfully",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error as Error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to update invoice status",
+        variant: "destructive",
+      });
+    },
+  });
+
 
 
   const filteredInvoices = invoices?.filter((invoice: any) => {
@@ -109,6 +140,10 @@ export default function Invoices() {
     if (confirm("Are you sure you want to delete this invoice?")) {
       deleteInvoiceMutation.mutate(id);
     }
+  };
+
+  const handleStatusChange = (id: number, status: string) => {
+    updateStatusMutation.mutate({ id, status });
   };
 
 
@@ -187,7 +222,7 @@ export default function Invoices() {
           onView={handleViewInvoice}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
-
+          onStatusChange={handleStatusChange}
           onNewInvoice={() => {
             setEditingInvoice(null);
             setShowInvoiceForm(true);
