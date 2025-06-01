@@ -21,7 +21,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   // Fetch the latest invoice data when modal is open
   const { data: latestInvoice } = useQuery({
-    queryKey: ['/api/invoices', invoice?.id],
+    queryKey: [`/api/invoices/${invoice?.id}`],
     enabled: isOpen && !!invoice?.id,
   });
 
