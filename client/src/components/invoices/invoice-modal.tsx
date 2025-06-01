@@ -28,13 +28,18 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
         credentials: "include",
       });
       if (!response.ok) throw new Error('Failed to fetch invoice');
-      return response.json();
+      const data = await response.json();
+      console.log('Fetched invoice data:', data);
+      return data;
     },
     enabled: isOpen && !!invoice?.id,
   });
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = Array.isArray(latestInvoice) ? latestInvoice[0] : (latestInvoice || invoice);
+  
+  console.log('Current invoice for display:', currentInvoice);
+  console.log('Invoice items:', currentInvoice?.items);
   
 
 
@@ -57,7 +62,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   }
 
   // Transform invoice data for display
-  const invoiceData = {
+  const invoiceData = currentInvoice ? {
     ...currentInvoice,
     company: defaultCompany, // Include company data with logo
     client: currentInvoice.client || {
@@ -75,8 +80,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     taxRate: parseFloat(currentInvoice.taxRate || '0'),
     issueDate: currentInvoice.issueDate,
     dueDate: currentInvoice.dueDate,
-    invoiceNumber: currentInvoice.invoiceNumber
-  };
+    invoiceNumber: currentInvoice.invoiceNumber,
+    notes: currentInvoice.notes || '',
+    equipmentPurchasedDescription: currentInvoice.equipmentPurchasedDescription || ''
+  } : null;
+  
+  console.log('Final invoice data for display:', invoiceData);
 
   if (!invoiceData) {
     return null;

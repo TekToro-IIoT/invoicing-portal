@@ -32,9 +32,12 @@ export async function generatePDF(invoice: any) {
 
 function generatePDFHTML(invoice: any): string {
   const subtotal = parseFloat(invoice.subtotal || '0');
-  const taxAmount = parseFloat(invoice.taxAmount || '0');
+  const taxAmount = parseFloat(invoice.tax || invoice.taxAmount || '0');
   const total = parseFloat(invoice.total || '0');
   const taxRate = parseFloat(invoice.taxRate || '0');
+  
+  console.log('PDF Invoice data:', invoice);
+  console.log('PDF Invoice items:', invoice.items);
   
   // Get company info from the invoice (it should include the company data)
   const company = invoice.company || {};

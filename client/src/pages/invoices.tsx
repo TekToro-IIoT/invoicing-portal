@@ -70,7 +70,17 @@ export default function Invoices() {
       // Fetch full invoice details including items for viewing
       const fullInvoiceData = await queryClient.fetchQuery({
         queryKey: [`/api/invoices/${invoice.id}`],
+        queryFn: async () => {
+          const response = await fetch(`/api/invoices/${invoice.id}`, {
+            credentials: "include",
+          });
+          if (!response.ok) throw new Error('Failed to fetch invoice');
+          const data = await response.json();
+          console.log('Fetched full invoice data for viewing:', data);
+          return data;
+        }
       });
+      console.log('Setting selected invoice:', fullInvoiceData);
       setSelectedInvoice(fullInvoiceData);
     } catch (error) {
       console.error('Error fetching invoice details for viewing:', error);
