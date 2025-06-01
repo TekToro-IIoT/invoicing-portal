@@ -19,6 +19,15 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     enabled: isOpen,
   });
 
+  // Fetch the latest invoice data when modal is open
+  const { data: latestInvoice } = useQuery({
+    queryKey: ['/api/invoices', invoice?.id],
+    enabled: isOpen && !!invoice?.id,
+  });
+
+  // Use the latest invoice data if available, otherwise fall back to prop
+  const currentInvoice = latestInvoice || invoice;
+
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
     setIsLoading(true);
@@ -33,15 +42,15 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
 
 
-  if (!invoice) {
+  if (!currentInvoice) {
     return null;
   }
 
   // Transform invoice data for display
   const invoiceData = {
-    ...invoice,
+    ...currentInvoice,
     company: defaultCompany, // Include company data with logo
-    client: invoice.client || {
+    client: currentInvoice.client || {
       name: 'Client Name',
       email: 'client@example.com',
       address: '123 Client Street',

@@ -156,20 +156,13 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  console.log('isAuthenticated middleware called for:', req.method, req.path);
-  console.log('Session data:', req.session);
-  console.log('Session ID:', req.sessionID);
-  
   const user = (req.session as any)?.user;
-  console.log('User from session:', user);
   
   if (!user) {
-    console.log('No user found in session, returning 401');
     return res.status(401).json({ message: "Unauthorized" });
   }
 
   // Add user to request for use in route handlers
   (req as any).user = user;
-  console.log('Authentication successful for user:', user.id);
   next();
 };
