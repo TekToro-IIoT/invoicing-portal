@@ -304,12 +304,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Invoice not found" });
       }
       
-      // Ensure items are included
+      // Fetch items separately to ensure they're included
       const items = await storage.getInvoiceItems(id);
+      console.log('Raw invoice items from storage:', items);
+      
       const invoiceWithItems = {
         ...invoice,
-        items,
-        invoiceItems: items
+        items: items || [],
+        invoiceItems: items || []
       };
       
       console.log('Fetched invoice with items:', invoiceWithItems);
