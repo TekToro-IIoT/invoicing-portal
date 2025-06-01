@@ -88,7 +88,9 @@ export default function Invoices() {
       const fullInvoiceData = await queryClient.fetchQuery({
         queryKey: [`/api/invoices/${invoice.id}`],
         queryFn: async () => {
-          const response = await fetch(`/api/invoices/${invoice.id}`);
+          const response = await fetch(`/api/invoices/${invoice.id}`, {
+            credentials: "include",
+          });
           if (!response.ok) throw new Error('Failed to fetch invoice');
           return response.json();
         }
