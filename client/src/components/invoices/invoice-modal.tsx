@@ -1,8 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { generatePDF } from "@/lib/pdf";
+import { useState, useEffect } from "react";
+import { generateInvoicePDF } from "@/lib/pdf";
 
 
 interface InvoiceModalProps {
@@ -19,24 +21,13 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     enabled: isOpen,
   });
 
-  // Fetch the latest invoice data when modal is open
-  const { data: latestInvoice } = useQuery({
-    queryKey: [`invoice-${invoice?.id}`], // Use a unique key that doesn't start with /api
-    queryFn: async () => {
-      if (!invoice?.id) return null;
-      const response = await fetch(`/api/invoices/${invoice.id}`, {
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error('Failed to fetch invoice');
-      return response.json();
-    },
-    enabled: isOpen && !!invoice?.id,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-  });
+  // Use the passed invoice data directly instead of refetching
+  const [currentInvoice, setCurrentInvoice] = useState(invoice);
 
-  // Use the latest invoice data if available, otherwise fall back to prop
-  const currentInvoice = Array.isArray(latestInvoice) ? latestInvoice[0] : (latestInvoice || invoice);
+  // Update current invoice when prop changes
+  useEffect(() => {
+    setCurrentInvoice(invoice);
+  }, [invoice]);
   
 
 
