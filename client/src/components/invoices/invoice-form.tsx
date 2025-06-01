@@ -166,14 +166,14 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         taxRate: formData.taxRate.toString(),
         equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
-          jobCode: item.jobCode || '',
-          description: item.description || '',
-          servicePoint: item.servicePoint || '',
-          afeLoe: item.afeLoe || '',
-          afeNumber: item.afeNumber || '',
-          wellName: item.wellName || '',
-          wellNumber: item.wellNumber || '',
-          service: item.service || '',
+          jobCode: item.jobCode?.trim() || '',
+          description: item.description?.trim() || '',
+          servicePoint: item.servicePoint?.trim() || '',
+          afeLoe: item.afeLoe?.trim() || '',
+          afeNumber: item.afeNumber?.trim() || '',
+          wellName: item.wellName?.trim() || '',
+          wellNumber: item.wellNumber?.trim() || '',
+          service: item.service?.trim() || '',
           rate: parseFloat(item.rate?.toString() || '0'),
           hrs: parseFloat(item.hrs?.toString() || '0'),
           qty: parseFloat(item.qty?.toString() || '0'),
@@ -230,7 +230,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
 
   const updateItem = (index: number, field: string, value: any) => {
     const updatedItems = [...formData.items];
-    updatedItems[index] = { ...updatedItems[index], [field]: value };
+    // Ensure empty strings are stored as empty strings, not undefined or null
+    const cleanValue = typeof value === 'string' ? value.trim() : value;
+    updatedItems[index] = { ...updatedItems[index], [field]: cleanValue };
     setFormData({ ...formData, items: updatedItems });
   };
 
