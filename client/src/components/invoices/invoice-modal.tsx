@@ -59,19 +59,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
       zipCode: 'T2P 2M5'
     },
     items: currentInvoice.items || [],
-    subtotal: currentInvoice.items?.reduce((sum: number, item: any) => {
-      const rate = parseFloat(item.rate || '0');
-      const hrs = parseFloat(item.hrs || '0');
-      const qty = parseFloat(item.qty || '0');
-      return sum + (rate * (hrs + qty));
-    }, 0) || 0,
-    tax: 0,
-    total: currentInvoice.items?.reduce((sum: number, item: any) => {
-      const rate = parseFloat(item.rate || '0');
-      const hrs = parseFloat(item.hrs || '0');
-      const qty = parseFloat(item.qty || '0');
-      return sum + (rate * (hrs + qty));
-    }, 0) || 0
+    subtotal: parseFloat(currentInvoice.subtotal || '0'),
+    tax: parseFloat(currentInvoice.taxAmount || '0'),
+    total: parseFloat(currentInvoice.total || '0'),
+    taxRate: parseFloat(currentInvoice.taxRate || '0')
   };
 
   if (!invoiceData) {
