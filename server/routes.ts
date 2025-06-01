@@ -10,6 +10,7 @@ import {
   insertInvoiceItemSchema,
 } from "@shared/schema";
 import { z } from "zod";
+import { logInfo, logError, logWarn, logDebug } from "./logger";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
