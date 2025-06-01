@@ -368,15 +368,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (items && items.length > 0) {
         for (const item of items) {
           try {
+            const hrs = parseFloat(item.hrs || '0');
+            const qty = parseFloat(item.qty || '0');
+            const rate = parseFloat(item.rate || '0');
+            
             const itemData = {
-              ...item,
               invoiceId: invoice.id,
-              amount: parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))
+              jobCode: item.jobCode || '',
+              servicePoint: item.servicePoint || '',
+              afeLoe: item.afeLoe || '',
+              afeNumber: item.afeNumber || '',
+              wellName: item.wellName || '',
+              wellNumber: item.wellNumber || '',
+              service: item.service || '',
+              rate: rate.toString(),
+              hrs: hrs.toString(),
+              qty: qty.toString(),
+              amount: (rate * (hrs + qty)).toString()
             };
-            console.log('Creating invoice item:', itemData);
+            console.log('Creating invoice item with proper structure:', itemData);
             await storage.createInvoiceItem(itemData);
           } catch (itemError) {
             console.error('Error creating invoice item:', itemError, 'Item data:', item);
+            // Don't throw here, continue creating other items
           }
         }
       }
@@ -412,15 +426,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (items && items.length > 0) {
         for (const item of items) {
           try {
+            const hrs = parseFloat(item.hrs || '0');
+            const qty = parseFloat(item.qty || '0');
+            const rate = parseFloat(item.rate || '0');
+            
             const itemData = {
-              ...item,
               invoiceId: id,
-              amount: parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))
+              jobCode: item.jobCode || '',
+              servicePoint: item.servicePoint || '',
+              afeLoe: item.afeLoe || '',
+              afeNumber: item.afeNumber || '',
+              wellName: item.wellName || '',
+              wellNumber: item.wellNumber || '',
+              service: item.service || '',
+              rate: rate.toString(),
+              hrs: hrs.toString(),
+              qty: qty.toString(),
+              amount: (rate * (hrs + qty)).toString()
             };
-            console.log('Creating updated invoice item:', itemData);
+            console.log('Creating updated invoice item with proper structure:', itemData);
             await storage.createInvoiceItem(itemData);
           } catch (itemError) {
             console.error('Error creating updated invoice item:', itemError, 'Item data:', item);
+            // Don't throw here, continue creating other items
           }
         }
       }
