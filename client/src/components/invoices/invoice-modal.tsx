@@ -28,18 +28,13 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
         credentials: "include",
       });
       if (!response.ok) throw new Error('Failed to fetch invoice');
-      const data = await response.json();
-      console.log('Fetched invoice data:', data);
-      return data;
+      return response.json();
     },
     enabled: isOpen && !!invoice?.id,
   });
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = Array.isArray(latestInvoice) ? latestInvoice[0] : (latestInvoice || invoice);
-  
-  console.log('Current invoice for display:', currentInvoice);
-  console.log('Invoice items:', currentInvoice?.items);
   
 
 
@@ -61,36 +56,27 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     return null;
   }
 
-  // Transform invoice data for display with proper item handling
-  const invoiceData = currentInvoice ? {
+  // Transform invoice data for display
+  const invoiceData = {
     ...currentInvoice,
     company: defaultCompany, // Include company data with logo
     client: currentInvoice.client || {
       name: 'Headington Energy Partners',
       email: 'billing@headingtonenergy.com',
-      address: '456 Energy Blvd',
-      city: 'Dallas',
-      state: 'TX',
-      zipCode: '75201'
+      address: '456 Energy Plaza',
+      city: 'Calgary',
+      state: 'AB',
+      zipCode: 'T2P 2M5'
     },
-    // Ensure items is always an array and handle both direct items and nested items
-    items: Array.isArray(currentInvoice.items) 
-      ? currentInvoice.items 
-      : Array.isArray(currentInvoice.invoiceItems) 
-        ? currentInvoice.invoiceItems 
-        : [],
+    items: currentInvoice.items || [],
     subtotal: parseFloat(currentInvoice.subtotal || '0'),
-    tax: parseFloat(currentInvoice.taxAmount || currentInvoice.tax || '0'),
+    tax: parseFloat(currentInvoice.taxAmount || '0'),
     total: parseFloat(currentInvoice.total || '0'),
     taxRate: parseFloat(currentInvoice.taxRate || '0'),
     issueDate: currentInvoice.issueDate,
     dueDate: currentInvoice.dueDate,
-    invoiceNumber: currentInvoice.invoiceNumber,
-    notes: currentInvoice.notes || '',
-    equipmentPurchasedDescription: currentInvoice.equipmentPurchasedDescription || ''
-  } : null;
-  
-  console.log('Final invoice data for display:', invoiceData);
+    invoiceNumber: currentInvoice.invoiceNumber
+  };
 
   if (!invoiceData) {
     return null;
@@ -198,34 +184,21 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                     </tr>
                   </thead>
                   <tbody>
-                    {invoiceData.items && invoiceData.items.length > 0 ? invoiceData.items.map((item: any, index: number) => {
-                      const rate = parseFloat(item.rate || '0');
-                      const hrs = parseFloat(item.hrs || '0');
-                      const qty = parseFloat(item.qty || '0');
-                      const extended = rate * (hrs + qty);
-                      
-                      return (
-                        <tr key={index}>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.jobCode || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.servicePoint || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeLoe || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeNumber || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellName || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellNumber || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || item.description || ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${rate.toFixed(2)}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{hrs > 0 ? hrs.toFixed(2) : ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{qty > 0 ? qty.toFixed(2) : ''}</td>
-                          <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${extended.toFixed(2)}</td>
-                        </tr>
-                      );
-                    }) : (
-                      <tr>
-                        <td colSpan={11} className="border border-gray-300 px-2 py-4 text-center text-gray-500">
-                          No items found for this invoice
-                        </td>
+                    {invoiceData.items.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.jobCode || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.servicePoint || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeLoe || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeNumber || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellName || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellNumber || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || item.description || ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${parseFloat(item.rate || '0').toFixed(2)}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.hrs || '0') > 0 ? parseFloat(item.hrs || '0').toFixed(2) : ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.qty || '0') > 0 ? parseFloat(item.qty || '0').toFixed(2) : ''}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${(parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))).toFixed(2)}</td>
                       </tr>
-                    )}
+                    ))}
                   </tbody>
                 </table>
               </div>

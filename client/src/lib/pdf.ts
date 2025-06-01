@@ -32,12 +32,9 @@ export async function generatePDF(invoice: any) {
 
 function generatePDFHTML(invoice: any): string {
   const subtotal = parseFloat(invoice.subtotal || '0');
-  const taxAmount = parseFloat(invoice.tax || invoice.taxAmount || '0');
+  const taxAmount = parseFloat(invoice.taxAmount || '0');
   const total = parseFloat(invoice.total || '0');
   const taxRate = parseFloat(invoice.taxRate || '0');
-  
-  console.log('PDF Invoice data:', invoice);
-  console.log('PDF Invoice items:', invoice.items);
   
   // Get company info from the invoice (it should include the company data)
   const company = invoice.company || {};
@@ -330,7 +327,7 @@ function generatePDFHTML(invoice: any): string {
             </tr>
           </thead>
           <tbody>
-            ${(invoice.items || invoice.invoiceItems || []).map((item: any) => {
+            ${invoice.items?.map((item: any) => {
               const rate = parseFloat(item.rate || '0');
               const hrs = parseFloat(item.hrs || '0');
               const qty = parseFloat(item.qty || '0');
@@ -344,14 +341,14 @@ function generatePDFHTML(invoice: any): string {
                   <td class="text-left">${item.afeNumber || ''}</td>
                   <td class="text-left">${item.wellName || ''}</td>
                   <td class="text-left">${item.wellNumber || ''}</td>
-                  <td class="text-left">${item.service || item.description || ''}</td>
+                  <td class="text-left">${item.service || ''}</td>
                   <td class="text-right">$${rate.toFixed(2)}</td>
                   <td class="text-right">${hrs > 0 ? hrs.toFixed(1) : ''}</td>
                   <td class="text-right">${qty > 0 ? qty.toFixed(1) : ''}</td>
                   <td class="text-right">$${extended.toFixed(2)}</td>
                 </tr>
               `;
-            }).join('') || '<tr><td colspan="11" style="text-align: center; padding: 20px;">No items found for this invoice</td></tr>'}
+            }).join('') || '<tr><td colspan="11">No items</td></tr>'}
           </tbody>
         </table>
         
