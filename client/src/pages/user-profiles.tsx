@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Users, DollarSign, Shield, Edit } from "lucide-react";
@@ -256,7 +256,7 @@ export default function UserProfiles() {
               Edit Billing Rates - {editingUser?.firstName} {editingUser?.lastName}
             </DialogTitle>
           </DialogHeader>
-          
+
           <form onSubmit={handleUpdateRates} className="space-y-4">
             <div>
               <Label htmlFor="regularRate" className="text-gray-400">Regular Hourly Rate ($)</Label>
@@ -270,7 +270,7 @@ export default function UserProfiles() {
                 required
               />
             </div>
-            
+
             <div>
               <Label htmlFor="overtimeRate" className="text-gray-400">Overtime Hourly Rate ($)</Label>
               <Input
@@ -313,7 +313,7 @@ export default function UserProfiles() {
               Edit Credentials - {editingUser?.firstName} {editingUser?.lastName}
             </DialogTitle>
           </DialogHeader>
-          
+
           <form onSubmit={handleUpdateCredentials} className="space-y-4">
             <div>
               <Label htmlFor="username" className="text-gray-400">Username</Label>
