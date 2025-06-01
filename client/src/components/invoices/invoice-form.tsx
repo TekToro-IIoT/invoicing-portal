@@ -252,8 +252,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                   <Select 
                     value={formData.clientId} 
                     onValueChange={(value) => setFormData({ ...formData, clientId: value })}
+                    disabled={isEditing}
                   >
-                    <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                    <SelectTrigger className={`border-gray-600 text-white ${isEditing ? 'bg-gray-600 cursor-not-allowed opacity-70' : 'bg-gray-700'}`}>
                       <SelectValue>
                         {formData.clientId ? 
                           companies?.find((c: any) => c.id.toString() === formData.clientId)?.name || "Select company"
@@ -261,14 +262,19 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                         }
                       </SelectValue>
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-700 border-gray-600">
-                      {companies?.map((company: any) => (
-                        <SelectItem key={company.id} value={company.id.toString()} className="text-white hover:bg-gray-600">
-                          {company.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
+                    {!isEditing && (
+                      <SelectContent className="bg-gray-700 border-gray-600">
+                        {companies?.map((company: any) => (
+                          <SelectItem key={company.id} value={company.id.toString()} className="text-white hover:bg-gray-600">
+                            {company.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    )}
                   </Select>
+                  {isEditing && (
+                    <p className="text-xs text-gray-400 mt-1">Client cannot be changed when editing existing invoice</p>
+                  )}
                 </div>
 
                 <div>
