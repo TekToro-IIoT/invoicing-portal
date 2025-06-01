@@ -27,10 +27,6 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = latestInvoice || invoice;
-  
-  // Debug logging to check what data we have
-  console.log('Current invoice data:', currentInvoice);
-  console.log('Client data:', currentInvoice?.client);
 
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
@@ -55,12 +51,12 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     ...currentInvoice,
     company: defaultCompany, // Include company data with logo
     client: currentInvoice.client || {
-      name: 'Client Name',
-      email: 'client@example.com',
-      address: '123 Client Street',
-      city: 'Client City',
-      state: 'State',
-      zipCode: '12345'
+      name: 'Headington Energy Partners',
+      email: 'billing@headingtonenergy.com',
+      address: '456 Energy Plaza',
+      city: 'Calgary',
+      state: 'AB',
+      zipCode: 'T2P 2M5'
     },
     items: currentInvoice.items || [],
     subtotal: currentInvoice.items?.reduce((sum: number, item: any) => {
