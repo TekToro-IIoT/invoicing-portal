@@ -87,6 +87,11 @@ export default function Invoices() {
       // Fetch full invoice details including items using the existing query client
       const fullInvoiceData = await queryClient.fetchQuery({
         queryKey: [`/api/invoices/${invoice.id}`],
+        queryFn: async () => {
+          const response = await fetch(`/api/invoices/${invoice.id}`);
+          if (!response.ok) throw new Error('Failed to fetch invoice');
+          return response.json();
+        }
       });
       setEditingInvoice(fullInvoiceData);
       setShowInvoiceForm(true);
