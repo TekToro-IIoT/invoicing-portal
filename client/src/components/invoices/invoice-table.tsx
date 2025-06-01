@@ -6,7 +6,6 @@ interface InvoiceTableProps {
   onView: (invoice: any) => void;
   onEdit: (invoice: any) => void;
   onDelete: (id: number) => void;
-  onStatusChange: (id: number, status: string) => void;
   onNewInvoice: () => void;
   isDeleting: boolean;
 }
@@ -15,8 +14,7 @@ export default function InvoiceTable({
   invoices, 
   onView, 
   onEdit, 
-  onDelete, 
-  onStatusChange,
+  onDelete,
   onNewInvoice,
   isDeleting
 }: InvoiceTableProps) {
