@@ -37,7 +37,14 @@ function generatePDFHTML(invoice: any): string {
   const taxRate = parseFloat(invoice.taxRate || '0');
   
   // Get company info from the invoice (it should include the company data)
-  const company = invoice.company || {};
+  const company = invoice.company || {
+    name: 'TekToro Digital IIoT Solutions Inc',
+    address: '103 South Church St.',
+    city: 'George Town',
+    state: 'PO Box 472',
+    phone: '5872275305',
+    email: 'al.doucet@tektoro.com'
+  };
 
   return `
     <!DOCTYPE html>
@@ -270,12 +277,20 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
-            ${company.logo ? `
             <div class="logo-section">
               <div class="company-logo-box">
-                <img src="${company.logo}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: contain;" />
+                <div class="logo-content">
+                  <div class="logo-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#22c55e"/>
+                      <path d="m2 17 10 5 10-5M2 12l10 5 10-5" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="logo-text">TEKTORO</div>
+                  <div class="logo-subtitle">DIGITAL</div>
+                </div>
               </div>
-            </div>` : ''}
+            </div>
             <div class="company-details">
               <div class="company-name">${company.name || 'Company Name'}</div>
               ${company.address ? `<div>${company.address}</div>` : ''}
