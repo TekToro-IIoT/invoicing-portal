@@ -131,8 +131,8 @@ export default function Invoices() {
       await apiRequest("PUT", `/api/invoices/${id}`, { status });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
+      // Force refetch the queries by setting their data manually
+      queryClient.refetchQueries({ queryKey: ["/api/invoices"] });
       toast({
         title: "Success",
         description: "Invoice status updated successfully",
