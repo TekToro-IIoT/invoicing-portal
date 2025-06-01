@@ -255,6 +255,9 @@ export default function UserProfiles() {
             <DialogTitle className="text-white">
               Edit Billing Rates - {editingUser?.firstName} {editingUser?.lastName}
             </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Update billing rates for this user
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleUpdateRates} className="space-y-4">
@@ -312,6 +315,9 @@ export default function UserProfiles() {
             <DialogTitle className="text-white">
               Edit Credentials - {editingUser?.firstName} {editingUser?.lastName}
             </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Update login credentials for this user
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleUpdateCredentials} className="space-y-4">
