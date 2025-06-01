@@ -234,7 +234,6 @@ export default function Invoices() {
           onView={handleViewInvoice}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
-          onDownloadPDF={handleDownloadPDF}
           onStatusChange={handleStatusChange}
           onNewInvoice={() => {
             setEditingInvoice(null);
