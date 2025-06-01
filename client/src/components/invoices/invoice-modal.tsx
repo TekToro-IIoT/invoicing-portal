@@ -31,6 +31,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
       return response.json();
     },
     enabled: isOpen && !!invoice?.id,
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 0, // Don't cache the data
   });
 
   // Use the latest invoice data if available, otherwise fall back to prop
