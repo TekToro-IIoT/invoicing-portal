@@ -6,7 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Building2, Plus, Edit, Trash2, Star, StarOff } from "lucide-react";
@@ -176,7 +183,7 @@ export default function Companies() {
                 {editingCompany ? 'Edit Client' : 'Add New Client'}
               </DialogTitle>
               <DialogDescription className="text-gray-400">
-                {editingCompany ? 'Update client information' : 'Add a new client for billing and invoices'}
+                {editingCompany ? 'Modify company details' : 'Enter the company information below'}
               </DialogDescription>
             </DialogHeader>
 

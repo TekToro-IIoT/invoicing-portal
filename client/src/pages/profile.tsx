@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -190,7 +190,7 @@ export default function Profile() {
               Update your personal information
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div>
               <Label htmlFor="firstName" className="text-gray-400">First Name</Label>
@@ -251,10 +251,10 @@ export default function Profile() {
           <DialogHeader>
             <DialogTitle className="text-white">Change Password</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Update your account password
+              Enter your current and new password
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div>
               <Label htmlFor="currentPassword" className="text-gray-400">Current Password</Label>
