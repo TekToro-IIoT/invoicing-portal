@@ -6,14 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Building2, Plus, Edit, Trash2, Star, StarOff } from "lucide-react";
@@ -115,7 +108,7 @@ export default function Companies() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
+    
     const companyData = {
       name: formData.get('name') as string,
       address: formData.get('address') as string,
@@ -166,7 +159,7 @@ export default function Companies() {
             <p className="text-gray-400">Manage client information for billing and invoices</p>
           </div>
         </div>
-
+        
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
@@ -182,11 +175,8 @@ export default function Companies() {
               <DialogTitle className="text-white">
                 {editingCompany ? 'Edit Client' : 'Add New Client'}
               </DialogTitle>
-              <DialogDescription className="text-gray-400">
-                {editingCompany ? 'Modify company details' : 'Enter the company information below'}
-              </DialogDescription>
             </DialogHeader>
-
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -351,13 +341,13 @@ export default function Companies() {
                   {company.city && <><br />{company.city}{company.state && `, ${company.state}`} {company.zipCode}</>}
                 </div>
               )}
-
+              
               {company.email && (
                 <div className="text-sm text-gray-300">
                   Email: {company.email}
                 </div>
               )}
-
+              
               {company.phone && (
                 <div className="text-sm text-gray-300">
                   Phone: {company.phone}
@@ -380,7 +370,7 @@ export default function Companies() {
                   <Edit className="w-4 h-4 mr-1" />
                   Edit
                 </Button>
-
+                
                 {!company.isDefault && (
                   <Button
                     onClick={() => handleSetDefault(company.id)}
@@ -393,7 +383,7 @@ export default function Companies() {
                     Set Default
                   </Button>
                 )}
-
+                
                 <Button
                   onClick={() => handleDelete(company.id)}
                   variant="outline"

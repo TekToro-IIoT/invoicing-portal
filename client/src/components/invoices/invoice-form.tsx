@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,7 +44,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   const isEditing = !!invoice;
 
   const [formData, setFormData] = useState({
-    clientId: invoice?.clientId?.toString() || "",
+    clientId: invoice?.client?.companyId?.toString() || invoice?.clientId?.toString() || "",
     issueDate: invoice?.issueDate || new Date().toISOString().split('T')[0],
     dueDate: invoice?.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     taxRate: invoice?.taxRate || 0,
@@ -73,7 +73,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   useEffect(() => {
     if (invoice) {
       setFormData({
-        clientId: invoice.clientId?.toString() || "",
+        clientId: invoice.client?.companyId?.toString() || invoice.clientId?.toString() || "",
         issueDate: invoice.issueDate || new Date().toISOString().split('T')[0],
         dueDate: invoice.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         taxRate: invoice.taxRate || 0,
@@ -153,11 +153,11 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     try {
       console.log('Form data before validation:', formData);
       console.log('Equipment Description in form:', formData.equipmentPurchasedDescription);
-
+      
       const validatedData = invoiceSchema.parse({
         ...formData,
         clientId: parseInt(formData.clientId),
@@ -176,7 +176,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
           qty: parseFloat(item.qty?.toString() || '0'),
         })),
       });
-
+      
       console.log('Validated data being sent:', validatedData);
       mutation.mutate(validatedData);
     } catch (error) {
@@ -238,13 +238,8 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-auto bg-tektoro-dark border-gray-600">
         <DialogHeader>
-          <DialogTitle className="text-white">
-          {isEditing ? 'Edit Invoice' : 'Create New Invoice'}
-        </DialogTitle>
-        <DialogDescription className="text-gray-400">
-          {isEditing ? 'Update invoice details and line items' : 'Create a new invoice for billing'}
-        </DialogDescription>
-      </DialogHeader>
+          <DialogTitle className="text-white">{isEditing ? 'Edit Invoice' : 'Create New Invoice'}</DialogTitle>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Invoice Header Information */}
