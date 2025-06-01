@@ -106,25 +106,7 @@ export default function Invoices() {
     }
   };
 
-  const handleDownloadPDF = async (invoice: any) => {
-    try {
-      // Fetch full invoice details including items
-      const fullInvoiceData = await queryClient.fetchQuery({
-        queryKey: [`/api/invoices/${invoice.id}`],
-      });
-      
-      // Import generatePDF and call it
-      const { generatePDF } = await import("@/lib/pdf");
-      await generatePDF(fullInvoiceData);
-    } catch (error) {
-      console.error('Error downloading PDF:', error);
-      toast({
-        title: "Error",
-        description: "Failed to download PDF",
-        variant: "destructive",
-      });
-    }
-  };
+
 
 
 
@@ -234,7 +216,6 @@ export default function Invoices() {
           onView={handleViewInvoice}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
-          onDownloadPDF={handleDownloadPDF}
           onStatusChange={handleStatusChange}
           onNewInvoice={() => {
             setEditingInvoice(null);
