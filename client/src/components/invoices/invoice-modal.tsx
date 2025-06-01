@@ -170,10 +170,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 <table className="w-full border-collapse border border-gray-300 text-xs">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Job Code#</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Job Code</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service Point</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE/LOE</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE #</th>
+                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE # (if applicable)</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well Name</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well #</th>
                       <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service/Purchased Item</th>
@@ -196,7 +196,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                         <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${parseFloat(item.rate || '0').toFixed(2)}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.hrs || '0') > 0 ? parseFloat(item.hrs || '0').toFixed(2) : ''}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.qty || '0') > 0 ? parseFloat(item.qty || '0').toFixed(2) : ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${(parseFloat(item.rate || '0') * (parseFloat(item.hrs || '0') + parseFloat(item.qty || '0'))).toFixed(2)}</td>
+                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${parseFloat(item.amount || '0').toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
