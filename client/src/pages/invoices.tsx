@@ -98,9 +98,11 @@ export default function Invoices() {
 
   const handleViewInvoice = async (invoice: any) => {
     try {
-      // Fetch full invoice details including items for viewing
+      // Force fresh fetch of invoice details including items for viewing
+      await queryClient.invalidateQueries({ queryKey: [`/api/invoices/${invoice.id}`] });
       const fullInvoiceData = await queryClient.fetchQuery({
         queryKey: [`/api/invoices/${invoice.id}`],
+        staleTime: 0,
       });
       setSelectedInvoice(fullInvoiceData);
     } catch (error) {

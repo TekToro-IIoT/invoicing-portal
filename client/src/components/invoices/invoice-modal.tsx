@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generatePDF } from "@/lib/pdf";
 
 
@@ -20,7 +20,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
   });
 
   // Fetch the latest invoice data when modal is open
-  const { data: latestInvoice } = useQuery({
+  const { data: latestInvoice, refetch: refetchInvoice } = useQuery({
     queryKey: [`/api/invoices/${invoice?.id}`],
     queryFn: async () => {
       if (!invoice?.id) return null;
@@ -34,6 +34,13 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
     staleTime: 0, // Always fetch fresh data
     gcTime: 0, // Don't cache the data
   });
+
+  // Refetch when modal opens
+  useEffect(() => {
+    if (isOpen && invoice?.id) {
+      refetchInvoice();
+    }
+  }, [isOpen, invoice?.id, refetchInvoice]);
 
   // Use the latest invoice data if available, otherwise fall back to prop
   const currentInvoice = Array.isArray(latestInvoice) ? latestInvoice[0] : (latestInvoice || invoice);

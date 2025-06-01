@@ -124,7 +124,16 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
       if (isEditing && invoice) {
-        queryClient.invalidateQueries({ queryKey: ["/api/invoices", invoice.id] });
+        // Invalidate the specific invoice query
+        queryClient.invalidateQueries({ queryKey: [`/api/invoices/${invoice.id}`] });
+        // Also invalidate any queries that might contain this invoice ID
+        queryClient.invalidateQueries({ 
+          predicate: (query) => {
+            return query.queryKey.some(key => 
+              typeof key === 'string' && key.includes(`/api/invoices/${invoice.id}`)
+            );
+          }
+        });
       }
       toast({
         title: "Success",
