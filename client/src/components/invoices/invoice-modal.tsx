@@ -117,7 +117,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
             </div>
           </div>
         ) : (
-          <div id="invoice-template" className="p-8 bg-white">
+          <div id="invoice-template" className="p-8 bg-gray-800">
             <div className="max-w-3xl mx-auto">
               {/* Invoice Header */}
               <div className="flex justify-between items-start mb-8">
@@ -136,10 +136,10 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                   
                   {/* Company Information */}
                   <div>
-                    <h1 className="text-xl font-bold text-gray-900">
+                    <h1 className="text-xl font-bold text-white">
                       {defaultCompany?.name || 'Company Name'}
                     </h1>
-                    <div className="text-sm text-gray-700">
+                    <div className="text-sm text-gray-300">
                       {defaultCompany?.address && <p>{defaultCompany.address}</p>}
                       {defaultCompany?.city && (
                         <p>{defaultCompany.city}{defaultCompany.state ? `, ${defaultCompany.state}` : ''} {defaultCompany.zipCode}</p>
@@ -152,8 +152,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                 
                 {/* Invoice Details */}
                 <div className="text-right">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
-                  <div className="text-sm text-gray-800">
+                  <h2 className="text-3xl font-bold text-white mb-2">INVOICE</h2>
+                  <div className="text-sm text-gray-300">
                     <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber}</p>
                     <p><strong>Service Date:</strong> {new Date(invoiceData.serviceDate + 'T00:00:00').toLocaleDateString()}</p>
                     <p><strong>Due Date:</strong> {new Date(invoiceData.dueDate + 'T00:00:00').toLocaleDateString()}</p>
@@ -163,8 +163,8 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               
               {/* Bill To */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Bill To:</h3>
-                <div className="text-sm text-gray-700">
+                <h3 className="text-lg font-semibold text-white mb-3">Bill To:</h3>
+                <div className="text-sm text-gray-300">
                   <p className="font-medium">{invoiceData.client.name}</p>
                   {invoiceData.client.address && <p>{invoiceData.client.address}</p>}
                   {invoiceData.client.city && (
@@ -176,36 +176,36 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
 
               {/* Invoice Items */}
               <div className="mb-8 overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-300 text-xs">
+                <table className="w-full border-collapse border border-gray-600 text-xs">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Job Code</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service Point</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE/LOE</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">AFE # (if applicable)</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well Name</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Well #</th>
-                      <th className="border border-gray-300 px-2 py-2 text-left font-medium text-gray-900">Service/Purchased Item</th>
-                      <th className="border border-gray-300 px-2 py-2 text-right font-medium text-gray-900">Rate/Item Cost</th>
-                      <th className="border border-gray-300 px-2 py-2 text-center font-medium text-gray-900">Hrs</th>
-                      <th className="border border-gray-300 px-2 py-2 text-center font-medium text-gray-900">Qty</th>
-                      <th className="border border-gray-300 px-2 py-2 text-right font-medium text-gray-900">Extended</th>
+                    <tr className="bg-gray-700">
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">Job Code</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">Service Point</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">AFE/LOE</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">AFE # (if applicable)</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">Well Name</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">Well #</th>
+                      <th className="border border-gray-600 px-2 py-2 text-left font-medium text-white">Service/Purchased Item</th>
+                      <th className="border border-gray-600 px-2 py-2 text-right font-medium text-white">Rate/Item Cost</th>
+                      <th className="border border-gray-600 px-2 py-2 text-center font-medium text-white">Hrs</th>
+                      <th className="border border-gray-600 px-2 py-2 text-center font-medium text-white">Qty</th>
+                      <th className="border border-gray-600 px-2 py-2 text-right font-medium text-white">Extended</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoiceData.items.map((item: any, index: number) => (
-                      <tr key={index}>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.jobCode || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.servicePoint || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeLoe || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.afeNumber || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellName || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.wellNumber || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-gray-700">{item.service || item.description || ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700">${parseFloat(item.rate || '0').toFixed(2)}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.hrs || '0') > 0 ? parseFloat(item.hrs || '0').toFixed(2) : ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center text-gray-700">{parseFloat(item.qty || '0') > 0 ? parseFloat(item.qty || '0').toFixed(2) : ''}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-right text-gray-700 font-semibold">${parseFloat(item.amount || '0').toFixed(2)}</td>
+                      <tr key={index} className="bg-gray-800">
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.jobCode || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.servicePoint || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.afeLoe || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.afeNumber || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.wellName || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.wellNumber || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-gray-300">{item.service || item.description || ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-right text-gray-300">${parseFloat(item.rate || '0').toFixed(2)}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-center text-gray-300">{parseFloat(item.hrs || '0') > 0 ? parseFloat(item.hrs || '0').toFixed(2) : ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-center text-gray-300">{parseFloat(item.qty || '0') > 0 ? parseFloat(item.qty || '0').toFixed(2) : ''}</td>
+                        <td className="border border-gray-600 px-2 py-2 text-right text-gray-300 font-semibold">${parseFloat(item.amount || '0').toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -215,17 +215,17 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               {/* Totals */}
               <div className="flex justify-end mb-8">
                 <div className="w-64">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-sm font-medium text-gray-900">Subtotal:</span>
-                    <span className="text-sm text-gray-900">${invoiceData.subtotal.toFixed(2)}</span>
+                  <div className="flex justify-between py-2 border-b border-gray-600">
+                    <span className="text-sm font-medium text-white">Subtotal:</span>
+                    <span className="text-sm text-gray-300">${invoiceData.subtotal.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-sm font-medium text-gray-900">Tax:</span>
-                    <span className="text-sm text-gray-900">${invoiceData.tax.toFixed(2)}</span>
+                  <div className="flex justify-between py-2 border-b border-gray-600">
+                    <span className="text-sm font-medium text-white">Tax:</span>
+                    <span className="text-sm text-gray-300">${invoiceData.tax.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between py-3 border-t-2 border-gray-400">
-                    <span className="text-lg font-bold text-gray-900">Total:</span>
-                    <span className="text-lg font-bold text-gray-900">${invoiceData.total.toFixed(2)}</span>
+                  <div className="flex justify-between py-3 border-t-2 border-gray-500">
+                    <span className="text-lg font-bold text-white">Total:</span>
+                    <span className="text-lg font-bold text-white">${invoiceData.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
