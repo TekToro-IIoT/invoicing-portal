@@ -173,6 +173,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       // Only include clientId if it's not empty and not editing
       const dataToValidate: any = {
         ...formData,
+        issueDate: formData.serviceDate, // Use service date as issue date
         taxRate: formData.taxRate.toString(),
         equipmentPurchasedDescription: formData.equipmentPurchasedDescription || '',
         items: formData.items.map((item: any) => ({
@@ -265,7 +266,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
           <Card className="bg-tektoro-dark border-gray-600">
             <CardContent className="p-6">
               <h3 className="text-white text-lg font-semibold mb-4">Invoice Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
                   <Label className="text-white">Client</Label>
                   {isEditing ? (
@@ -297,17 +298,6 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
                       </SelectContent>
                     </Select>
                   )}
-                </div>
-
-                <div>
-                  <Label className="text-white">Issue Date</Label>
-                  <Input
-                    type="date"
-                    value={formData.issueDate}
-                    onChange={(e) => setFormData({ ...formData, issueDate: e.target.value })}
-                    className="bg-gray-700 border-gray-600 text-white"
-                    required
-                  />
                 </div>
 
                 <div>
