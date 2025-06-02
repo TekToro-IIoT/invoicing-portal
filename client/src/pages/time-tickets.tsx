@@ -76,6 +76,7 @@ export default function TimeTickets() {
       setFormData({
         todaysDate: new Date().toISOString().split('T')[0],
         serviceDate: new Date().toISOString().split('T')[0],
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         submittedBy: (user as any)?.email || '',
         client: '',
         project: '',
@@ -125,6 +126,7 @@ export default function TimeTickets() {
       setFormData({
         todaysDate: new Date().toISOString().split('T')[0],
         serviceDate: new Date().toISOString().split('T')[0],
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         submittedBy: (user as any)?.email || '',
         client: '',
         project: '',
