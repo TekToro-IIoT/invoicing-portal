@@ -1,4 +1,3 @@
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 export async function generateMasterInvoicePDF(masterData: any, company: any) {
@@ -7,265 +6,130 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Create HTML content for the master invoice
-  const htmlContent = `
-    <html>
-      <head>
-        <style>
-          body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            background-color: #1f2937; 
-            color: #d1d5db; 
-            font-size: 12px;
-          }
-          .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-start; 
-            margin-bottom: 30px; 
-            border-bottom: 2px solid #374151;
-            padding-bottom: 20px;
-          }
-          .company-info { 
-            flex: 1; 
-          }
-          .company-name { 
-            font-size: 20px; 
-            font-weight: bold; 
-            color: #ffffff; 
-            margin-bottom: 10px; 
-          }
-          .company-details { 
-            color: #d1d5db; 
-            line-height: 1.5; 
-          }
-          .invoice-info { 
-            text-align: right; 
-          }
-          .invoice-title { 
-            font-size: 24px; 
-            font-weight: bold; 
-            color: #ffffff; 
-            margin-bottom: 10px; 
-          }
-          .invoice-details { 
-            color: #d1d5db; 
-            line-height: 1.8; 
-          }
-          .summary-section {
-            background-color: #374151;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-          }
-          .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            text-align: center;
-          }
-          .summary-item {
-            padding: 10px;
-          }
-          .summary-label {
-            color: #9ca3af;
-            font-size: 12px;
-            margin-bottom: 5px;
-          }
-          .summary-value {
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: bold;
-          }
-          .summary-value.total {
-            color: #f97316;
-          }
-          .client-section {
-            margin-bottom: 30px;
-          }
-          .section-title {
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #4b5563;
-            padding-bottom: 5px;
-          }
-          .client-block {
-            background-color: #374151;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-          }
-          .client-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-          }
-          .client-name {
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 14px;
-          }
-          .client-count {
-            color: #9ca3af;
-            font-size: 12px;
-          }
-          .client-total {
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 16px;
-          }
-          .invoice-list {
-            border-top: 1px solid #4b5563;
-            padding-top: 10px;
-          }
-          .invoice-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px 0;
-            color: #9ca3af;
-            font-size: 11px;
-          }
-          .grand-total {
-            background-color: #374151;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: right;
-            margin-top: 30px;
-          }
-          .grand-total-label {
-            color: #9ca3af;
-            font-size: 14px;
-            margin-bottom: 5px;
-          }
-          .grand-total-amount {
-            color: #f97316;
-            font-size: 24px;
-            font-weight: bold;
-          }
-        </style>
-      </head>
-      <body>
-        <!-- Header -->
-        <div class="header">
-          <div class="company-info">
-            <div class="company-name">${company?.name || 'TekToro Digital Solutions Inc'}</div>
-            <div class="company-details">
-              <div>${company?.address || '123 Main Street'}</div>
-              <div>${company?.city || 'Calgary'}, ${company?.state || 'AB'} ${company?.zipCode || 'T2P 0A8'}</div>
-              <div>Phone: ${company?.phone || '(403) 123-4567'}</div>
-              <div>Email: ${company?.email || 'billing@tektoro.com'}</div>
-            </div>
-          </div>
-          
-          <div class="invoice-info">
-            <div class="invoice-title">MASTER INVOICE</div>
-            <div class="invoice-details">
-              <div><strong>Period:</strong> ${monthNames[masterData.month - 1]} ${masterData.year}</div>
-              ${masterData.client ? `<div><strong>Client:</strong> ${masterData.client.name}</div>` : '<div><strong>All Clients</strong></div>'}
-              <div><strong>Generated:</strong> ${new Date().toLocaleDateString('en-GB')}</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Summary Section -->
-        <div class="summary-section">
-          <div class="summary-grid">
-            <div class="summary-item">
-              <div class="summary-label">Total Invoices</div>
-              <div class="summary-value">${masterData.invoices.length}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Total Clients</div>
-              <div class="summary-value">${Object.keys(masterData.subtotalsByClient).length}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Period</div>
-              <div class="summary-value">${monthNames[masterData.month - 1]} ${masterData.year}</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-label">Total Amount</div>
-              <div class="summary-value total">$${masterData.totalAmount.toFixed(2)}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Client Breakdown -->
-        <div class="client-section">
-          <div class="section-title">Client Breakdown</div>
-          ${Object.values(masterData.subtotalsByClient).map((clientData: any) => `
-            <div class="client-block">
-              <div class="client-header">
-                <div>
-                  <div class="client-name">${clientData.client.name}</div>
-                  <div class="client-count">${clientData.invoices.length} invoice(s)</div>
-                </div>
-                <div class="client-total">$${clientData.total.toFixed(2)}</div>
-              </div>
-              
-              <div class="invoice-list">
-                ${clientData.invoices.map((invoice: any) => `
-                  <div class="invoice-item">
-                    <span>${invoice.invoiceNumber} - ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-GB')}</span>
-                    <span>$${parseFloat(invoice.total).toFixed(2)}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `).join('')}
-        </div>
-
-        <!-- Grand Total -->
-        <div class="grand-total">
-          <div class="grand-total-label">Grand Total</div>
-          <div class="grand-total-amount">$${masterData.totalAmount.toFixed(2)}</div>
-        </div>
-      </body>
-    </html>
-  `;
-
-  // Create a temporary element
-  const tempElement = document.createElement('div');
-  tempElement.innerHTML = htmlContent;
-  tempElement.style.position = 'absolute';
-  tempElement.style.left = '-9999px';
-  tempElement.style.top = '-9999px';
-  tempElement.style.width = '210mm'; // A4 width
-  document.body.appendChild(tempElement);
-
   try {
-    // Generate canvas from HTML
-    const canvas = await html2canvas(tempElement.firstElementChild as HTMLElement, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#1f2937'
+    // Create PDF directly without html2canvas
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 20;
+    let currentY = margin;
+
+    // Helper function to add text with word wrapping
+    const addText = (text: string, x: number, y: number, maxWidth?: number, fontSize = 10) => {
+      pdf.setFontSize(fontSize);
+      if (maxWidth) {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        pdf.text(lines, x, y);
+        return y + (lines.length * fontSize * 0.352778); // Convert pt to mm
+      } else {
+        pdf.text(text, x, y);
+        return y + (fontSize * 0.352778);
+      }
+    };
+
+    // Header
+    pdf.setFontSize(20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(company?.name || 'TekToro Digital Solutions Inc', margin, currentY);
+    currentY += 10;
+
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    currentY = addText(`${company?.address || '123 Main Street'}`, margin, currentY);
+    currentY = addText(`${company?.city || 'Calgary'}, ${company?.state || 'AB'} ${company?.zipCode || 'T2P 0A8'}`, margin, currentY);
+    currentY = addText(`Phone: ${company?.phone || '(403) 123-4567'}`, margin, currentY);
+    currentY = addText(`Email: ${company?.email || 'billing@tektoro.com'}`, margin, currentY);
+
+    // Invoice Title (right side)
+    pdf.setFontSize(24);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('MASTER INVOICE', pageWidth - margin - 80, margin + 5);
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, pageWidth - margin - 80, margin + 20);
+    if (masterData.client) {
+      pdf.text(`Client: ${masterData.client.name}`, pageWidth - margin - 80, margin + 25);
+    } else {
+      pdf.text('All Clients', pageWidth - margin - 80, margin + 25);
+    }
+    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - margin - 80, margin + 30);
+
+    currentY += 20;
+
+    // Summary Section
+    currentY += 10;
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Summary', margin, currentY);
+    currentY += 10;
+
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Total Invoices: ${masterData.invoices.length}`, margin, currentY);
+    pdf.text(`Total Clients: ${Object.keys(masterData.subtotalsByClient).length}`, margin + 50, currentY);
+    currentY += 5;
+    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, margin, currentY);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(`Total Amount: $${masterData.totalAmount.toFixed(2)}`, margin + 50, currentY);
+    currentY += 15;
+
+    // Client Breakdown
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Client Breakdown', margin, currentY);
+    currentY += 10;
+
+    // Table headers
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Client', margin, currentY);
+    pdf.text('Invoices', margin + 80, currentY);
+    pdf.text('Amount', margin + 120, currentY);
+    currentY += 5;
+
+    // Draw line under headers
+    pdf.line(margin, currentY, pageWidth - margin, currentY);
+    currentY += 5;
+
+    // Client data
+    pdf.setFont('helvetica', 'normal');
+    Object.values(masterData.subtotalsByClient).forEach((clientData: any) => {
+      if (currentY > pageHeight - 30) {
+        pdf.addPage();
+        currentY = margin;
+      }
+
+      pdf.text(clientData.client.name, margin, currentY);
+      pdf.text(clientData.invoices.length.toString(), margin + 80, currentY);
+      pdf.text(`$${clientData.total.toFixed(2)}`, margin + 120, currentY);
+      currentY += 7;
+
+      // Individual invoice details
+      clientData.invoices.forEach((invoice: any) => {
+        if (currentY > pageHeight - 20) {
+          pdf.addPage();
+          currentY = margin;
+        }
+        
+        pdf.setFontSize(8);
+        pdf.text(`  ${invoice.invoiceNumber} - ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-GB')}`, margin + 5, currentY);
+        pdf.text(`$${parseFloat(invoice.total).toFixed(2)}`, margin + 120, currentY);
+        currentY += 4;
+      });
+      
+      pdf.setFontSize(10);
+      currentY += 3;
     });
 
-    // Create PDF
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 210;
-    const pageHeight = 295;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-
-    let position = 0;
-
-    // Add first page
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    // Add additional pages if needed
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
+    // Grand Total
+    currentY += 10;
+    pdf.line(margin + 100, currentY, pageWidth - margin, currentY);
+    currentY += 5;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('GRAND TOTAL:', margin + 100, currentY);
+    pdf.text(`$${masterData.totalAmount.toFixed(2)}`, margin + 140, currentY);
 
     // Generate filename
     const clientName = masterData.client ? `_${masterData.client.name.replace(/[^a-zA-Z0-9]/g, '_')}` : '_AllClients';
@@ -274,8 +138,8 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
     // Download PDF
     pdf.save(filename);
 
-  } finally {
-    // Clean up
-    document.body.removeChild(tempElement);
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    throw error;
   }
 }
