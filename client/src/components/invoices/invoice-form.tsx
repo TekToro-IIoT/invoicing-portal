@@ -21,6 +21,7 @@ interface InvoiceFormProps {
 const invoiceSchema = z.object({
   clientId: z.number(),
   issueDate: z.string(),
+  serviceDate: z.string(),
   dueDate: z.string(),
   taxRate: z.string(),
   notes: z.string().optional(),
@@ -34,8 +35,8 @@ const invoiceSchema = z.object({
     wellNumber: z.string().optional(),
     service: z.string().optional(),
     rate: z.number().min(0),
-    hrs: z.number().min(0).optional(),
-    qty: z.number().min(0).optional(),
+    hrs: z.number().min(0),
+    qty: z.number().min(0),
   })).min(1),
 });
 
