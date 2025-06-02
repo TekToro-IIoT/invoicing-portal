@@ -97,6 +97,10 @@ export interface IStorage {
   updateTimeTicket(id: number, timeTicket: Partial<InsertTimeTicket>, userId: string): Promise<TimeTicket | undefined>;
   deleteTimeTicket(id: number, userId: string): Promise<boolean>;
   submitTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined>;
+
+  // Master invoice operations
+  getInvoicesByMonth(userId: string, year: number, month: number): Promise<InvoiceWithDetails[]>;
+  getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<InvoiceWithDetails[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -761,6 +765,82 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return submittedTicket;
+  }
+
+  // Master invoice operations
+  async getInvoicesByMonth(userId: string, year: number, month: number): Promise<InvoiceWithDetails[]> {
+    const startDate = new Date(year, month - 1, 1).toISOString().split('T')[0];
+    const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+    
+    const invoicesData = await db
+      .select({
+        invoice: invoices,
+        client: clients,
+        company: companies,
+      })
+      .from(invoices)
+      .leftJoin(clients, eq(invoices.clientId, clients.id))
+      .leftJoin(companies, eq(clients.companyId, companies.id))
+      .where(
+        and(
+          eq(invoices.userId, userId),
+          gte(invoices.serviceDate, startDate),
+          lte(invoices.serviceDate, endDate)
+        )
+      )
+      .orderBy(invoices.serviceDate);
+
+    const invoicesWithItems = await Promise.all(
+      invoicesData.map(async (row) => {
+        const items = await this.getInvoiceItems(row.invoice.id);
+        return {
+          ...row.invoice,
+          client: row.client,
+          company: row.company,
+          items,
+        };
+      })
+    );
+
+    return invoicesWithItems;
+  }
+
+  async getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<InvoiceWithDetails[]> {
+    const startDate = new Date(year, month - 1, 1).toISOString().split('T')[0];
+    const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+    
+    const invoicesData = await db
+      .select({
+        invoice: invoices,
+        client: clients,
+        company: companies,
+      })
+      .from(invoices)
+      .leftJoin(clients, eq(invoices.clientId, clients.id))
+      .leftJoin(companies, eq(clients.companyId, companies.id))
+      .where(
+        and(
+          eq(invoices.userId, userId),
+          eq(invoices.clientId, clientId),
+          gte(invoices.serviceDate, startDate),
+          lte(invoices.serviceDate, endDate)
+        )
+      )
+      .orderBy(invoices.serviceDate);
+
+    const invoicesWithItems = await Promise.all(
+      invoicesData.map(async (row) => {
+        const items = await this.getInvoiceItems(row.invoice.id);
+        return {
+          ...row.invoice,
+          client: row.client,
+          company: row.company,
+          items,
+        };
+      })
+    );
+
+    return invoicesWithItems;
   }
 }
 

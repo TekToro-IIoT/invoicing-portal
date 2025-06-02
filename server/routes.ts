@@ -119,6 +119,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Master invoice routes
+  app.get("/api/invoices/master/:year/:month", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const { year, month } = req.params;
+      const invoices = await storage.getInvoicesByMonth(userId, parseInt(year), parseInt(month));
+      res.json(invoices);
+    } catch (error) {
+      console.error("Error fetching monthly invoices:", error);
+      res.status(500).json({ message: "Failed to fetch monthly invoices" });
+    }
+  });
+
+  app.get("/api/invoices/master/:year/:month/client/:clientId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const { year, month, clientId } = req.params;
+      const invoices = await storage.getClientInvoicesByMonth(userId, parseInt(clientId), parseInt(year), parseInt(month));
+      res.json(invoices);
+    } catch (error) {
+      console.error("Error fetching client monthly invoices:", error);
+      res.status(500).json({ message: "Failed to fetch client monthly invoices" });
+    }
+  });
+
   // Company routes
   app.get('/api/companies', isAuthenticated, async (req: any, res) => {
     try {
