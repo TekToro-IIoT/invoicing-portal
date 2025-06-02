@@ -9,6 +9,7 @@ export default function Sidebar() {
   const navItems = [
     { path: "/", label: "Dashboard", icon: "fas fa-chart-line" },
     { path: "/invoices", label: "Invoices", icon: "fas fa-file-invoice" },
+    { path: "/master-invoices", label: "Master Invoices", icon: "fas fa-file-invoice-dollar" },
   ];
 
   const adminNavItems = [

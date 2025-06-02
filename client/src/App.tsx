@@ -10,6 +10,7 @@ import Landing from "@/pages/landing";
 import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
 import Invoices from "@/pages/invoices";
+import MasterInvoices from "@/pages/master-invoices";
 
 
 import UserProfiles from "@/pages/user-profiles";
@@ -43,6 +44,7 @@ function Router() {
         <>
           <Route path="/" component={DashboardLayout} />
           <Route path="/invoices" component={InvoicesLayout} />
+          <Route path="/master-invoices" component={MasterInvoicesLayout} />
           <Route path="/profile" component={ProfileLayout} />
           <Route path="/user-profiles" component={UserProfilesLayout} />
           <Route path="/companies" component={CompaniesLayout} />
@@ -73,6 +75,18 @@ function InvoicesLayout() {
       <div className="flex-1 ml-64">
         <Header title="Invoice Management" subtitle="Create, edit, and manage your invoices" />
         <Invoices />
+      </div>
+    </div>
+  );
+}
+
+function MasterInvoicesLayout() {
+  return (
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 ml-64">
+        <Header title="Master Invoices" subtitle="Generate consolidated monthly invoices by client" />
+        <MasterInvoices />
       </div>
     </div>
   );
