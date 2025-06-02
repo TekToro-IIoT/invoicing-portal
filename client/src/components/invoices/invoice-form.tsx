@@ -264,7 +264,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
           <Card className="bg-tektoro-dark border-gray-600">
             <CardContent className="p-6">
               <h3 className="text-white text-lg font-semibold mb-4">Invoice Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 <div>
                   <Label className="text-white">Client</Label>
                   {isEditing ? (
@@ -311,6 +311,17 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
 
                 <div>
                   <Label className="text-white">Service Date</Label>
+                  <Input
+                    type="date"
+                    value={formData.serviceDate}
+                    onChange={(e) => setFormData({ ...formData, serviceDate: e.target.value })}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-white">Due Date</Label>
                   <Input
                     type="date"
                     value={formData.dueDate}

@@ -156,6 +156,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
                   <div className="text-sm text-gray-800">
                     <p><strong>Invoice #:</strong> {invoiceData.invoiceNumber}</p>
                     <p><strong>Date:</strong> {new Date(invoiceData.issueDate).toLocaleDateString()}</p>
+                    <p><strong>Service Date:</strong> {new Date(invoiceData.serviceDate).toLocaleDateString()}</p>
                     <p><strong>Due Date:</strong> {new Date(invoiceData.dueDate).toLocaleDateString()}</p>
                   </div>
                 </div>
