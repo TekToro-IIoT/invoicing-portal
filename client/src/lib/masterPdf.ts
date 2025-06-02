@@ -6,6 +6,8 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  console.log('Generating Master Invoice PDF with updated formatting');
+  
   try {
     // Create PDF directly without html2canvas
     const pdf = new jsPDF('p', 'mm', 'a4');
