@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { generateMasterInvoicePDF } from "@/lib/masterPdf";
 
 interface MasterInvoiceData {
   month: number;
@@ -115,7 +116,7 @@ export default function MasterInvoices() {
   };
 
   const downloadMasterInvoicePDF = async () => {
-    if (!masterInvoiceData) {
+    if (!masterInvoiceData || !defaultCompany) {
       toast({
         title: "Error",
         description: "Master invoice data not available",
@@ -124,10 +125,20 @@ export default function MasterInvoices() {
       return;
     }
 
-    toast({
-      title: "Feature coming soon",
-      description: "PDF export will be available in a future update",
-    });
+    try {
+      await generateMasterInvoicePDF(masterInvoiceData, defaultCompany);
+      toast({
+        title: "PDF Generated",
+        description: "Master invoice PDF has been downloaded",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF",
+        variant: "destructive",
+      });
+    }
   };
 
   const monthNames = [
