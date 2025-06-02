@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { generateMasterInvoicePDF } from "@/lib/masterPdf";
 
 interface MasterInvoiceData {
   month: number;
@@ -59,6 +58,11 @@ export default function MasterInvoices() {
         return;
       }
 
+      // Fetch client details for each invoice to build the aggregation
+      const clientsResponse = await fetch('/api/clients');
+      const allClients = await clientsResponse.json();
+      const clientMap = new Map(allClients.map((c: any) => [c.id, c]));
+
       // Calculate totals and group by client
       let totalAmount = 0;
       const subtotalsByClient: { [clientId: number]: { client: any; total: number; invoices: any[] } } = {};
@@ -67,9 +71,14 @@ export default function MasterInvoices() {
         const amount = parseFloat(invoice.total);
         totalAmount += amount;
 
+        const client = clientMap.get(invoice.clientId) || { 
+          id: invoice.clientId, 
+          name: `Client ${invoice.clientId}` 
+        };
+
         if (!subtotalsByClient[invoice.clientId]) {
           subtotalsByClient[invoice.clientId] = {
-            client: invoice.client,
+            client,
             total: 0,
             invoices: []
           };
@@ -81,9 +90,9 @@ export default function MasterInvoices() {
       const masterData: MasterInvoiceData = {
         month: selectedMonth,
         year: selectedYear,
-        clientId: selectedClientId === 'all' ? undefined : selectedClientId,
+        clientId: selectedClientId === 'all' ? undefined : selectedClientId as number,
         invoices,
-        client: selectedClientId !== 'all' ? clients.find(c => c.id === selectedClientId) : undefined,
+        client: selectedClientId !== 'all' ? clientMap.get(selectedClientId as number) : undefined,
         totalAmount,
         subtotalsByClient
       };
@@ -106,7 +115,7 @@ export default function MasterInvoices() {
   };
 
   const downloadMasterInvoicePDF = async () => {
-    if (!masterInvoiceData || !defaultCompany) {
+    if (!masterInvoiceData) {
       toast({
         title: "Error",
         description: "Master invoice data not available",
@@ -115,20 +124,10 @@ export default function MasterInvoices() {
       return;
     }
 
-    try {
-      await generateMasterInvoicePDF(masterInvoiceData, defaultCompany);
-      toast({
-        title: "PDF Generated",
-        description: "Master invoice PDF has been downloaded",
-      });
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      toast({
-        title: "Error",
-        description: "Failed to generate PDF",
-        variant: "destructive",
-      });
-    }
+    toast({
+      title: "Feature coming soon",
+      description: "PDF export will be available in a future update",
+    });
   };
 
   const monthNames = [
@@ -187,7 +186,7 @@ export default function MasterInvoices() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Clients</SelectItem>
-                  {clients.map((client: any) => (
+                  {(clients as any[]).map((client: any) => (
                     <SelectItem key={client.id} value={client.id.toString()}>
                       {client.name}
                     </SelectItem>

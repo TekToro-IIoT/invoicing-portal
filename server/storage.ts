@@ -32,7 +32,7 @@ import {
   type InvoiceWithDetails,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, or, desc, asc } from "drizzle-orm";
+import { eq, and, or, desc, asc, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (required for Replit Auth)
@@ -99,8 +99,8 @@ export interface IStorage {
   submitTimeTicket(id: number, userId: string): Promise<TimeTicket | undefined>;
 
   // Master invoice operations
-  getInvoicesByMonth(userId: string, year: number, month: number): Promise<InvoiceWithClient[]>;
-  getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<InvoiceWithClient[]>;
+  getInvoicesByMonth(userId: string, year: number, month: number): Promise<Invoice[]>;
+  getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<Invoice[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -768,95 +768,43 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Master invoice operations
-  async getInvoicesByMonth(userId: string, year: number, month: number): Promise<InvoiceWithClient[]> {
+  async getInvoicesByMonth(userId: string, year: number, month: number): Promise<Invoice[]> {
     const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
     const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
     
     const result = await db
-      .select({
-        invoice: invoices,
-        client: clients,
-      })
+      .select()
       .from(invoices)
-      .leftJoin(clients, eq(invoices.clientId, clients.id))
       .where(
         and(
           eq(invoices.userId, userId),
-          and(
-            sql`${invoices.serviceDate} >= ${startDate}`,
-            sql`${invoices.serviceDate} <= ${endDate}`
-          )
+          sql`${invoices.serviceDate} >= ${startDate}`,
+          sql`${invoices.serviceDate} <= ${endDate}`
         )
       )
       .orderBy(invoices.serviceDate);
 
-    return result.map(row => ({
-      ...row.invoice,
-      client: row.client || {
-        id: 0,
-        name: 'Unknown Client',
-        email: null,
-        phone: null,
-        address: null,
-        city: null,
-        state: null,
-        zipCode: null,
-        country: null,
-        website: null,
-        contactPerson: null,
-        servicePoint: null,
-        companyId: null,
-        userId: userId,
-        createdAt: null,
-        updatedAt: null
-      }
-    }));
+    return result;
   }
 
-  async getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<InvoiceWithClient[]> {
+  async getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<Invoice[]> {
     const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
     const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
     
     const result = await db
-      .select({
-        invoice: invoices,
-        client: clients,
-      })
+      .select()
       .from(invoices)
-      .leftJoin(clients, eq(invoices.clientId, clients.id))
       .where(
         and(
           eq(invoices.userId, userId),
           eq(invoices.clientId, clientId),
-          and(
-            sql`${invoices.serviceDate} >= ${startDate}`,
-            sql`${invoices.serviceDate} <= ${endDate}`
-          )
+          sql`${invoices.serviceDate} >= ${startDate}`,
+          sql`${invoices.serviceDate} <= ${endDate}`
         )
       )
       .orderBy(invoices.serviceDate);
 
-    return result.map(row => ({
-      ...row.invoice,
-      client: row.client || {
-        id: 0,
-        name: 'Unknown Client',
-        email: null,
-        phone: null,
-        address: null,
-        city: null,
-        state: null,
-        zipCode: null,
-        country: null,
-        website: null,
-        contactPerson: null,
-        servicePoint: null,
-        companyId: null,
-        userId: userId,
-        createdAt: null,
-        updatedAt: null
-      }
-    }));
+    return result;
   }
 }
 
