@@ -27,52 +27,60 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
       }
     };
 
-    // Header
-    pdf.setFontSize(20);
+    // Header - Company Info (Left Side)
+    pdf.setFontSize(18);
     pdf.setFont('helvetica', 'bold');
     pdf.text(company?.name || 'TekToro Digital Solutions Inc', margin, currentY);
-    currentY += 10;
+    currentY += 8;
 
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
-    currentY = addText(`${company?.address || '123 Main Street'}`, margin, currentY);
-    currentY = addText(`${company?.city || 'Calgary'}, ${company?.state || 'AB'} ${company?.zipCode || 'T2P 0A8'}`, margin, currentY);
-    currentY = addText(`Phone: ${company?.phone || '(403) 123-4567'}`, margin, currentY);
-    currentY = addText(`Email: ${company?.email || 'billing@tektoro.com'}`, margin, currentY);
+    currentY = addText(`${company?.address || '71 Fort Street PO Box 1569'}`, margin, currentY);
+    currentY = addText(`${company?.city || 'George Town'}, ${company?.state || 'Grand Cayman'} ${company?.zipCode || 'KY1-1110'}`, margin, currentY);
+    currentY = addText(`${company?.country || 'Cayman Islands'}`, margin, currentY);
+    currentY = addText(`Phone: ${company?.phone || '18558358676'}`, margin, currentY);
+    currentY = addText(`Email: ${company?.email || 'al.doucet@tektoro.com'}`, margin, currentY);
+    if (company?.website) {
+      currentY = addText(`Web: ${company.website}`, margin, currentY);
+    }
 
-    // Invoice Title (right side)
-    pdf.setFontSize(24);
+    // Invoice Title (Right Side)
+    pdf.setFontSize(28);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('MASTER INVOICE', pageWidth - margin - 80, margin + 5);
+    pdf.text('MASTER INVOICE', pageWidth - margin - 90, margin + 5);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, pageWidth - margin - 80, margin + 20);
+    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, pageWidth - margin - 90, margin + 20);
     if (masterData.client) {
-      pdf.text(`Client: ${masterData.client.name}`, pageWidth - margin - 80, margin + 25);
+      pdf.text(`Client: ${masterData.client.name}`, pageWidth - margin - 90, margin + 27);
     } else {
-      pdf.text('All Clients', pageWidth - margin - 80, margin + 25);
+      pdf.text('All Clients', pageWidth - margin - 90, margin + 27);
     }
-    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - margin - 80, margin + 30);
+    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - margin - 90, margin + 34);
 
-    currentY += 20;
+    // Add line separator
+    currentY += 15;
+    pdf.line(margin, currentY, pageWidth - margin, currentY);
+    currentY += 15;
 
     // Summary Section
-    currentY += 10;
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Summary', margin, currentY);
     currentY += 10;
 
+    // Summary table layout
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text(`Total Invoices: ${masterData.invoices.length}`, margin, currentY);
-    pdf.text(`Total Clients: ${Object.keys(masterData.subtotalsByClient).length}`, margin + 50, currentY);
-    currentY += 5;
+    pdf.text(`Total Clients: ${Object.keys(masterData.subtotalsByClient).length}`, margin + 70, currentY);
+    currentY += 6;
     pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, margin, currentY);
     pdf.setFont('helvetica', 'bold');
-    pdf.text(`Total Amount: $${masterData.totalAmount.toFixed(2)}`, margin + 50, currentY);
-    currentY += 15;
+    pdf.setFontSize(12);
+    pdf.text(`Total Amount: $${masterData.totalAmount.toFixed(2)}`, margin + 70, currentY);
+    currentY += 20;
 
     // Client Breakdown
     pdf.setFontSize(14);
