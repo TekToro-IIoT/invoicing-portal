@@ -17,6 +17,7 @@ export default function TimeTickets() {
   const [formData, setFormData] = useState({
     todaysDate: new Date().toISOString().split('T')[0],
     serviceDate: new Date().toISOString().split('T')[0],
+    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     submittedBy: (user as any)?.email || '',
     client: '',
     project: '',
@@ -200,9 +201,9 @@ export default function TimeTickets() {
         <Card className="bg-tektoro-dark border-gray-600">
           <CardContent className="p-6">
             {/* Date and Submission Info */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
               <div>
-                <Label className="text-white">Today's Date</Label>
+                <Label className="text-white">Time Entry Date</Label>
                 <Input
                   type="date"
                   value={formData.todaysDate}
@@ -217,6 +218,16 @@ export default function TimeTickets() {
                   type="date"
                   value={formData.serviceDate}
                   onChange={(e) => handleInputChange('serviceDate', e.target.value)}
+                  className="bg-gray-700 border-gray-600 text-white"
+                />
+              </div>
+              
+              <div>
+                <Label className="text-white">Due Date</Label>
+                <Input
+                  type="date"
+                  value={formData.dueDate}
+                  onChange={(e) => handleInputChange('dueDate', e.target.value)}
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               </div>
