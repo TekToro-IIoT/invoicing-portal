@@ -29,37 +29,77 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
       }
     };
 
-    // Header - Company Info (Left Side)
-    pdf.setFontSize(18);
+    // Header - Company Info (Left Side) - Max width 100mm
+    const maxCompanyWidth = 100;
+    pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
     pdf.text(company?.name || 'TekToro Digital Solutions Inc', margin, currentY);
-    currentY += 8;
+    currentY += 6;
 
     pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
-    currentY = addText(`${company?.address || '71 Fort Street PO Box 1569'}`, margin, currentY);
-    currentY = addText(`${company?.city || 'George Town'}, ${company?.state || 'Grand Cayman'} ${company?.zipCode || 'KY1-1110'}`, margin, currentY);
-    currentY = addText(`${company?.country || 'Cayman Islands'}`, margin, currentY);
-    currentY = addText(`Phone: ${company?.phone || '18558358676'}`, margin, currentY);
-    currentY = addText(`Email: ${company?.email || 'al.doucet@tektoro.com'}`, margin, currentY);
+    pdf.text(`${company?.address || '71 Fort Street PO Box 1569'}`, margin, currentY);
+    currentY += 4;
+    pdf.text(`${company?.city || 'George Town'}, ${company?.state || 'Grand Cayman'} ${company?.zipCode || 'KY1-1110'}`, margin, currentY);
+    currentY += 4;
+    pdf.text(`${company?.country || 'Cayman Islands'}`, margin, currentY);
+    currentY += 4;
+    pdf.text(`Phone: ${company?.phone || '18558358676'}`, margin, currentY);
+    currentY += 4;
+    pdf.text(`Email: ${company?.email || 'al.doucet@tektoro.com'}`, margin, currentY);
+    currentY += 4;
     if (company?.website) {
-      currentY = addText(`Web: ${company.website}`, margin, currentY);
+      pdf.text(`Web: ${company.website}`, margin, currentY);
+      currentY += 4;
     }
 
-    // Invoice Title (Right Side)
-    pdf.setFontSize(28);
+    // Invoice Title (Right Side) - Start at 120mm from left
+    const invoiceX = 120;
+    pdf.setFontSize(24);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('MASTER INVOICE', pageWidth - margin - 90, margin + 5);
+    pdf.text('MASTER INVOICE', invoiceX, margin);
     
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, pageWidth - margin - 90, margin + 20);
+    pdf.text(`Period: ${monthNames[masterData.month - 1]} ${masterData.year}`, invoiceX, margin + 15);
     if (masterData.client) {
-      pdf.text(`Client: ${masterData.client.name}`, pageWidth - margin - 90, margin + 27);
+      pdf.text(`Client: ${masterData.client.name}`, invoiceX, margin + 20);
     } else {
-      pdf.text('All Clients', pageWidth - margin - 90, margin + 27);
+      pdf.text('All Clients', invoiceX, margin + 20);
     }
-    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - margin - 90, margin + 34);
+    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, invoiceX, margin + 25);
+
+    // Client Information Section (if single client)
+    if (masterData.client) {
+      currentY += 10;
+      
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Bill To:', margin, currentY);
+      currentY += 6;
+      
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(masterData.client.name || 'Headington Energy Partners LLC', margin, currentY);
+      currentY += 4;
+      
+      // Use Headington's known address if client address is not available
+      const clientAddress = masterData.client.address || '500 N Shoreline Blvd, Suite 902';
+      pdf.text(clientAddress, margin, currentY);
+      currentY += 4;
+      
+      const clientCity = masterData.client.city || 'Corpus Christi';
+      const clientState = masterData.client.state || 'TX';
+      const clientZip = masterData.client.zipCode || '78401';
+      const cityLine = `${clientCity}, ${clientState} ${clientZip}`;
+      pdf.text(cityLine, margin, currentY);
+      currentY += 4;
+      
+      if (masterData.client.email) {
+        pdf.text(masterData.client.email, margin, currentY);
+        currentY += 4;
+      }
+    }
 
     // Add line separator
     currentY += 15;
