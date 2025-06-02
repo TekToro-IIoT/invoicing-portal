@@ -190,7 +190,7 @@ export default function TimeTickets() {
           <div>
             <h1 className="text-2xl font-bold text-white">Time Tickets</h1>
             <p className="text-gray-400">
-              {new Date().toLocaleDateString('en-US', { 
+              {new Date().toLocaleDateString('en-GB', { 
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
@@ -501,7 +501,7 @@ export default function TimeTickets() {
                         {ticket.client} - {ticket.project}
                       </div>
                       <div className="text-gray-400 text-sm">
-                        {new Date(ticket.serviceDate).toLocaleDateString()} • {ticket.totalHours}h
+                        {new Date(ticket.serviceDate).toLocaleDateString('en-GB')} • {ticket.totalHours}h
                       </div>
                     </div>
                     <div className="flex items-center gap-2">

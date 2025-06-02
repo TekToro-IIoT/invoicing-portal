@@ -48,7 +48,7 @@ export default function TimeEntries({ timeEntries }: TimeEntriesProps) {
     } else if (date.toDateString() === yesterday.toDateString()) {
       return "Yesterday";
     } else {
-      return date.toLocaleDateString('en-US', { 
+      return date.toLocaleDateString('en-GB', { 
         weekday: 'short',
         month: 'short', 
         day: 'numeric' 

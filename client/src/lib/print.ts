@@ -463,8 +463,8 @@ function generateInvoicePrintHTML(invoice: any): string {
             <div class="invoice-title">INVOICE</div>
             <div style="font-size: 14px; color: #6b7280;">
               <div><strong>Invoice #:</strong> ${invoice.invoiceNumber}</div>
-              <div><strong>Date:</strong> ${new Date(invoice.issueDate).toLocaleDateString()}</div>
-              <div><strong>Due Date:</strong> ${new Date(invoice.dueDate).toLocaleDateString()}</div>
+              <div><strong>Date:</strong> ${new Date(invoice.issueDate).toLocaleDateString('en-GB')}</div>
+              <div><strong>Due Date:</strong> ${new Date(invoice.dueDate).toLocaleDateString('en-GB')}</div>
             </div>
           </div>
         </div>
