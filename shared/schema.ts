@@ -94,6 +94,7 @@ export const invoices = pgTable("invoices", {
   invoiceNumber: varchar("invoice_number", { length: 50 }).notNull().unique(),
   clientId: integer("client_id").references(() => clients.id).notNull(),
   issueDate: date("issue_date").notNull(),
+  serviceDate: date("service_date").notNull(),
   dueDate: date("due_date").notNull(),
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull(),
   taxRate: decimal("tax_rate", { precision: 5, scale: 2 }).default("0"),

@@ -46,6 +46,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
   const [formData, setFormData] = useState({
     clientId: invoice?.client?.companyId?.toString() || invoice?.clientId?.toString() || "",
     issueDate: invoice?.issueDate || new Date().toISOString().split('T')[0],
+    serviceDate: invoice?.serviceDate || new Date().toISOString().split('T')[0],
     dueDate: invoice?.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     taxRate: invoice?.taxRate || 0,
     notes: invoice?.notes || "",
@@ -76,6 +77,7 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
       setFormData({
         clientId: invoice.client?.id?.toString() || invoice.clientId?.toString() || "",
         issueDate: invoice.issueDate || new Date().toISOString().split('T')[0],
+        serviceDate: invoice.serviceDate || new Date().toISOString().split('T')[0],
         dueDate: invoice.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         taxRate: invoice.taxRate || 0,
         notes: invoice.notes || "",
