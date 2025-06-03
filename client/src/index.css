@@ -6,22 +6,22 @@
 @tailwind utilities;
 
 :root {
-  --background: 217 19% 27%; /* #3A4A5C */
-  --foreground: 210 40% 92%; /* #E2E8F0 */
+  --background: 217 19% 18%; /* #1E293B - Dark navy background */
+  --foreground: 210 40% 98%; /* #F8FAFC - Very light text */
   --muted: 217 19% 22%; /* #2D3748 */
   --muted-foreground: 210 20% 70%; /* #94A3B8 */
-  --popover: 217 19% 18%; /* #1E293B */
-  --popover-foreground: 210 40% 92%; /* #E2E8F0 */
-  --card: 217 19% 18%; /* #1E293B */
-  --card-foreground: 210 40% 92%; /* #E2E8F0 */
-  --border: 217 19% 35%; /* #475569 */
-  --input: 217 19% 22%; /* #2D3748 */
+  --popover: 217 19% 15%; /* #1A202C */
+  --popover-foreground: 210 40% 98%; /* #F8FAFC */
+  --card: 217 19% 22%; /* #2D3748 - Card background */
+  --card-foreground: 210 40% 98%; /* #F8FAFC - Card text */
+  --border: 217 19% 30%; /* #4A5568 - Lighter borders */
+  --input: 217 19% 25%; /* #374151 - Input background */
   --primary: 145 63% 49%; /* #22C55E */
   --primary-foreground: 0 0% 100%; /* #FFFFFF */
-  --secondary: 217 19% 22%; /* #2D3748 */
-  --secondary-foreground: 210 40% 92%; /* #E2E8F0 */
-  --accent: 217 19% 22%; /* #2D3748 */
-  --accent-foreground: 210 40% 92%; /* #E2E8F0 */
+  --secondary: 217 19% 25%; /* #374151 */
+  --secondary-foreground: 210 40% 98%; /* #F8FAFC */
+  --accent: 217 19% 25%; /* #374151 */
+  --accent-foreground: 210 40% 98%; /* #F8FAFC */
   --destructive: 0 84% 60%; /* #EF4444 */
   --destructive-foreground: 0 0% 100%; /* #FFFFFF */
   --ring: 145 63% 49%; /* #22C55E */
@@ -29,9 +29,52 @@
   
   /* TekToro brand colors */
   --tektoro-primary: 145 63% 49%; /* #22C55E - Green */
-  --tektoro-dark: 217 19% 18%; /* #1E293B - Dark Navy */
-  --tektoro-bg: 217 19% 27%; /* #3A4A5C - Background */
-  --tektoro-text: 210 40% 92%; /* #E2E8F0 - Light text */
+  --tektoro-dark: 217 19% 15%; /* #1A202C - Darker navy */
+  --tektoro-bg: 217 19% 18%; /* #1E293B - Background */
+  --tektoro-text: 210 40% 98%; /* #F8FAFC - Light text */
+  --tektoro-orange: 25 95% 53%; /* #FF6B35 - Orange accent */
+}
+
+/* Global dark theme styling */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Ensure all text inputs and buttons match dark theme */
+input, textarea, select {
+  background-color: hsl(var(--input));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Button styling consistency */
+button {
+  color: hsl(var(--foreground));
+}
+
+/* Card components */
+.card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Table styling */
+table {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+th, td {
+  border-color: hsl(var(--border));
+}
+
+/* Modal and popover styling */
+.modal, .popover {
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  border-color: hsl(var(--border));
 }
 
 /* Print styles for invoice logo background */
