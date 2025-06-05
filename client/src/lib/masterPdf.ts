@@ -67,7 +67,7 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
     } else {
       pdf.text('All Clients', invoiceX, margin + 20);
     }
-    pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, invoiceX, margin + 25);
+    pdf.text(`Generated: ${new Date().toLocaleDateString('en-US')}`, invoiceX, margin + 25);
 
     // Client Information Section (if single client)
     if (masterData.client) {
@@ -163,7 +163,7 @@ export async function generateMasterInvoicePDF(masterData: any, company: any) {
         }
         
         pdf.setFontSize(8);
-        pdf.text(`  ${invoice.invoiceNumber} - ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-GB')}`, margin + 5, currentY);
+        pdf.text(`  ${invoice.invoiceNumber} - ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-US')}`, margin + 5, currentY);
         pdf.text(`$${parseFloat(invoice.total).toFixed(2)}`, margin + 120, currentY);
         currentY += 4;
       });

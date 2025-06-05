@@ -277,7 +277,7 @@ export default function MasterInvoices() {
                       <div className="mt-3 space-y-1">
                         {clientData.invoices.map((invoice: any) => (
                           <div key={invoice.id} className="flex justify-between text-sm text-gray-400">
-                            <span>{invoice.invoiceNumber} - {new Date(invoice.serviceDate).toLocaleDateString('en-GB')}</span>
+                            <span>{invoice.invoiceNumber} - {new Date(invoice.serviceDate).toLocaleDateString('en-US')}</span>
                             <span>${parseFloat(invoice.total).toFixed(2)}</span>
                           </div>
                         ))}

@@ -290,8 +290,8 @@ function generatePDFHTML(invoice: any): string {
             <h2 class="invoice-title">INVOICE</h2>
             <div class="invoice-details">
               <div><strong>Invoice #:</strong> ${invoice.invoiceNumber}</div>
-              <div><strong>Service Date:</strong> ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-GB')}</div>
-              <div><strong>Due Date:</strong> ${new Date(invoice.dueDate + 'T00:00:00').toLocaleDateString('en-GB')}</div>
+              <div><strong>Service Date:</strong> ${new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-US')}</div>
+              <div><strong>Due Date:</strong> ${new Date(invoice.dueDate + 'T00:00:00').toLocaleDateString('en-US')}</div>
             </div>
           </div>
         </div>
