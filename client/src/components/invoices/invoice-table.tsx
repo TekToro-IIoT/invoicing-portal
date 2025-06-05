@@ -82,7 +82,7 @@ export default function InvoiceTable({
                 <div className="text-gray-900">{invoice.client?.name || 'Unknown Client'}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                {new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-GB')}
+                {new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-US')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="font-semibold text-gray-900">
