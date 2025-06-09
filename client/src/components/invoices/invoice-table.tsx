@@ -23,15 +23,15 @@ export default function InvoiceTable({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-500/20 text-green-400';
       case 'sent':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-500/20 text-blue-400';
       case 'overdue':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-500/20 text-red-400';
       case 'draft':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-600 text-gray-300';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-600 text-gray-300';
     }
   };
 
@@ -74,48 +74,48 @@ export default function InvoiceTable({
         </thead>
         <tbody className="bg-tektoro-dark divide-y divide-gray-600">
           {invoices.map((invoice) => (
-            <tr key={invoice.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => onView(invoice)}>
+            <tr key={invoice.id} className="hover:bg-gray-700 cursor-pointer" onClick={() => onView(invoice)}>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="font-medium text-gray-900">{invoice.invoiceNumber}</div>
+                <div className="font-medium text-white">{invoice.invoiceNumber}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-gray-900">{invoice.client?.name || 'Unknown Client'}</div>
+                <div className="text-white">{invoice.client?.name || 'Unknown Client'}</div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+              <td className="px-6 py-4 whitespace-nowrap text-gray-400">
                 {new Date(invoice.serviceDate + 'T00:00:00').toLocaleDateString('en-US')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="font-semibold text-gray-900">
+                <div className="font-semibold text-white">
                   ${parseFloat(invoice.total).toLocaleString()}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                 <Select value={invoice.status} onValueChange={(value) => onStatusChange(invoice.id, value)}>
-                  <SelectTrigger className="w-32 h-8 text-xs">
+                  <SelectTrigger className="w-32 h-8 text-xs bg-gray-700 border-gray-600">
                     <SelectValue>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
                         {invoice.status}
                       </span>
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  <SelectContent className="bg-gray-700 border-gray-600">
+                    <SelectItem value="draft" className="text-white hover:bg-gray-600">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-600 text-gray-300">
                         draft
                       </span>
                     </SelectItem>
-                    <SelectItem value="sent">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <SelectItem value="sent" className="text-white hover:bg-gray-600">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400">
                         sent
                       </span>
                     </SelectItem>
-                    <SelectItem value="paid">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <SelectItem value="paid" className="text-white hover:bg-gray-600">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
                         paid
                       </span>
                     </SelectItem>
-                    <SelectItem value="overdue">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <SelectItem value="overdue" className="text-white hover:bg-gray-600">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400">
                         overdue
                       </span>
                     </SelectItem>
@@ -129,7 +129,7 @@ export default function InvoiceTable({
                       e.stopPropagation();
                       onView(invoice);
                     }}
-                    className="text-blue-600 hover:text-blue-800 p-1"
+                    className="text-blue-400 hover:text-blue-300 p-1"
                     title="View"
                   >
                     <i className="fas fa-eye"></i>
@@ -139,7 +139,7 @@ export default function InvoiceTable({
                       e.stopPropagation();
                       onEdit(invoice);
                     }}
-                    className="text-blue-600 hover:text-blue-800 p-1"
+                    className="text-blue-400 hover:text-blue-300 p-1"
                     title="Edit"
                   >
                     <i className="fas fa-edit"></i>
@@ -149,7 +149,7 @@ export default function InvoiceTable({
                       e.stopPropagation();
                       onDelete(invoice.id);
                     }}
-                    className="text-red-600 hover:text-red-800 p-1"
+                    className="text-red-400 hover:text-red-300 p-1"
                     title="Delete"
                     disabled={isDeleting}
                   >
