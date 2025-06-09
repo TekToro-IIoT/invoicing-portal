@@ -37,15 +37,13 @@ export default function Sidebar() {
           {navItems.map((item) => {
             const isActive = location === item.path;
             return (
-              <Link key={item.path} href={item.path}>
-                <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
-                  isActive 
-                    ? 'bg-tektoro-primary text-white' 
-                    : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
-                }`}>
-                  <i className={`${item.icon} w-5`}></i>
-                  <span>{item.label}</span>
-                </div>
+              <Link key={item.path} href={item.path} className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
+                isActive 
+                  ? 'bg-tektoro-primary text-white' 
+                  : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
+              }`}>
+                <i className={`${item.icon} w-5`}></i>
+                <span>{item.label}</span>
               </Link>
             );
           })}
@@ -58,15 +56,13 @@ export default function Sidebar() {
                 {adminNavItems.map((item) => {
                   const isActive = location === item.path;
                   return (
-                    <Link key={item.path} href={item.path}>
-                      <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
-                        isActive 
-                          ? 'bg-tektoro-primary text-white' 
-                          : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
-                      }`}>
-                        <i className={`${item.icon} w-5`}></i>
-                        <span>{item.label}</span>
-                      </div>
+                    <Link key={item.path} href={item.path} className={`flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer ${
+                      isActive 
+                        ? 'bg-tektoro-primary text-white' 
+                        : 'hover:bg-tektoro-primary/20 text-gray-300 hover:text-white'
+                    }`}>
+                      <i className={`${item.icon} w-5`}></i>
+                      <span>{item.label}</span>
                     </Link>
                   );
                 })}
