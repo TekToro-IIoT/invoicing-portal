@@ -89,12 +89,12 @@ export default function Invoices() {
 
 
 
-  const filteredInvoices = invoices?.filter((invoice: any) => {
+  const filteredInvoices = Array.isArray(invoices) ? invoices.filter((invoice: any) => {
     const matchesSearch = invoice.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          invoice.client?.name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || invoice.status === statusFilter;
     return matchesSearch && matchesStatus;
-  }) || [];
+  }) : [];
 
   const handleViewInvoice = async (invoice: any) => {
     try {
@@ -156,12 +156,12 @@ export default function Invoices() {
 
   if (isLoading) {
     return (
-      <main className="p-6">
-        <Card className="invoice-shadow scada-border">
+      <main className="p-6 bg-tektoro-bg min-h-screen">
+        <Card className="bg-tektoro-dark border-gray-600">
           <CardContent className="p-6">
             <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+              <div className="h-32 bg-gray-600 rounded"></div>
             </div>
           </CardContent>
         </Card>
@@ -170,13 +170,13 @@ export default function Invoices() {
   }
 
   return (
-    <main className="p-6">
-      <Card className="invoice-shadow scada-border">
-        <div className="p-6 border-b border-gray-200">
+    <main className="p-6 bg-tektoro-bg min-h-screen">
+      <Card className="bg-tektoro-dark border-gray-600">
+        <div className="p-6 border-b border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Invoice Management</h3>
-              <p className="text-sm text-gray-500">Create, edit, and manage your invoices</p>
+              <h3 className="text-lg font-semibold text-white">Invoice Management</h3>
+              <p className="text-sm text-gray-400">Create, edit, and manage your invoices</p>
             </div>
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -185,20 +185,20 @@ export default function Invoices() {
                   placeholder="Search invoices..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64"
+                  className="pl-10 pr-4 py-2 w-64 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
                 <i className="fas fa-search absolute left-3 top-3 text-gray-400"></i>
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-40 bg-gray-700 border-gray-600 text-white">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="sent">Sent</SelectItem>
-                  <SelectItem value="paid">Paid</SelectItem>
-                  <SelectItem value="overdue">Overdue</SelectItem>
+                <SelectContent className="bg-gray-700 border-gray-600">
+                  <SelectItem value="all" className="text-white hover:bg-gray-600">All Status</SelectItem>
+                  <SelectItem value="draft" className="text-white hover:bg-gray-600">Draft</SelectItem>
+                  <SelectItem value="sent" className="text-white hover:bg-gray-600">Sent</SelectItem>
+                  <SelectItem value="paid" className="text-white hover:bg-gray-600">Paid</SelectItem>
+                  <SelectItem value="overdue" className="text-white hover:bg-gray-600">Overdue</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -206,9 +206,9 @@ export default function Invoices() {
         </div>
 
         {/* Add New Invoice Button Above Table */}
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <div className="px-6 py-4 border-t border-gray-600 bg-gray-800">
           <Button 
-            className="bg-tektoro-orange hover:bg-orange-600 text-white"
+            className="bg-tektoro-primary hover:bg-green-600 text-white"
             onClick={() => {
               setEditingInvoice(null);
               setShowInvoiceForm(true);
