@@ -154,34 +154,34 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-4">
                   {recentInvoices.map((invoice: any) => (
-                    <div key={invoice.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div key={invoice.id} className="flex items-center justify-between p-4 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
                       <div className="flex items-center space-x-4">
                         <button
                           onClick={() => setSelectedInvoice(invoice)}
                           className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors hover:scale-105 ${
-                            invoice.status === 'paid' ? 'bg-green-100 hover:bg-green-200' :
-                            invoice.status === 'sent' ? 'bg-blue-100 hover:bg-blue-200' :
-                            invoice.status === 'overdue' ? 'bg-red-100 hover:bg-red-200' : 'bg-gray-100 hover:bg-gray-200'
+                            invoice.status === 'paid' ? 'bg-green-500/20 hover:bg-green-500/30' :
+                            invoice.status === 'sent' ? 'bg-blue-500/20 hover:bg-blue-500/30' :
+                            invoice.status === 'overdue' ? 'bg-red-500/20 hover:bg-red-500/30' : 'bg-gray-600 hover:bg-gray-500'
                           }`}
                         >
                           <i className={`fas fa-file-invoice ${
-                            invoice.status === 'paid' ? 'text-green-600' :
-                            invoice.status === 'sent' ? 'text-blue-600' :
-                            invoice.status === 'overdue' ? 'text-red-600' : 'text-gray-600'
+                            invoice.status === 'paid' ? 'text-green-400' :
+                            invoice.status === 'sent' ? 'text-blue-400' :
+                            invoice.status === 'overdue' ? 'text-red-400' : 'text-gray-400'
                           }`}></i>
                         </button>
                         <div>
-                          <p className="font-medium text-gray-900">{invoice.invoiceNumber}</p>
-                          <p className="text-sm text-gray-500">{invoice.client?.name || 'Unknown Client'}</p>
+                          <p className="font-medium text-white">{invoice.invoiceNumber}</p>
+                          <p className="text-sm text-gray-400">{invoice.client?.name || 'Unknown Client'}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">${parseFloat(invoice.total).toLocaleString()}</p>
+                        <p className="font-semibold text-white">${parseFloat(invoice.total).toLocaleString()}</p>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
-                          invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
-                          invoice.status === 'overdue' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
+                          invoice.status === 'paid' ? 'bg-green-500/20 text-green-400' :
+                          invoice.status === 'sent' ? 'bg-blue-500/20 text-blue-400' :
+                          invoice.status === 'overdue' ? 'bg-red-500/20 text-red-400' :
+                          'bg-gray-600 text-gray-300'
                         }`}>
                           {invoice.status}
                         </span>
