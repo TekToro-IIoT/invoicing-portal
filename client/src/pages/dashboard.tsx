@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FileText, Plus, Clock, DollarSign, TrendingUp, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ export default function Dashboard() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [, setLocation] = useLocation();
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -145,11 +146,12 @@ export default function Dashboard() {
                     <i className="fas fa-file-invoice text-gray-400 text-xl"></i>
                   </div>
                   <p className="text-gray-400">No invoices created yet</p>
-                  <Link href="/invoices">
-                    <Button className="mt-4 bg-tektoro-primary hover:bg-green-600">
-                      Create Your First Invoice
-                    </Button>
-                  </Link>
+                  <Button 
+                    className="mt-4 bg-tektoro-primary hover:bg-green-600"
+                    onClick={() => setLocation("/invoices")}
+                  >
+                    Create Your First Invoice
+                  </Button>
                 </div>
               ) : (
                 <div className="space-y-4">
