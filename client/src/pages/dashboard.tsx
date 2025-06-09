@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { FileText, Plus, Clock, DollarSign, TrendingUp, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -59,17 +60,16 @@ export default function Dashboard() {
   const recentInvoices = Array.isArray(invoices) ? invoices.slice(0, 3) : [];
 
   return (
-    <main className="p-6 bg-tektoro-bg min-h-screen">
+    <main className="p-6 space-y-8 bg-tektoro-bg min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
         <p className="text-gray-400">Welcome back, manage your invoices and time tracking</p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Enhanced Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-
-        <Card className="bg-tektoro-dark border-gray-600">
+        <Card className="bg-tektoro-dark border-gray-600 hover:scale-105 transition-transform">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -87,7 +87,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-tektoro-dark border-gray-600">
+        <Card className="bg-tektoro-dark border-gray-600 hover:scale-105 transition-transform">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -107,7 +107,7 @@ export default function Dashboard() {
 
 
 
-        <Card className="bg-tektoro-dark border-gray-600">
+        <Card className="bg-tektoro-dark border-gray-600 hover:scale-105 transition-transform">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
