@@ -56,9 +56,6 @@ export async function setupAuth(app: Express) {
 
       const user = userByUsername[0] || userByEmail[0];
 
-      console.log("Login attempt for:", username);
-      console.log("Found user:", user ? { id: user.id, username: user.username, email: user.email } : "None");
-
       if (!user || !user.password) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
