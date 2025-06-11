@@ -41,12 +41,23 @@ export async function setupAuth(app: Express) {
         return res.status(400).json({ message: "Username and password required" });
       }
 
-      // Find user in database
-      const [user] = await db
+      // Find user in database by username or email
+      const userByUsername = await db
         .select()
         .from(users)
         .where(eq(users.username, username))
         .limit(1);
+
+      const userByEmail = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, username))
+        .limit(1);
+
+      const user = userByUsername[0] || userByEmail[0];
+
+      console.log("Login attempt for:", username);
+      console.log("Found user:", user ? { id: user.id, username: user.username, email: user.email } : "None");
 
       if (!user || !user.password) {
         return res.status(401).json({ message: "Invalid credentials" });
