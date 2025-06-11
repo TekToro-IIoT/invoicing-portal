@@ -26,18 +26,18 @@ const pool = new Pool({
 
 // Data to import
 const userData = {
-  id: '42614138',
-  email: 'al.doucet@tektoro.com',
-  first_name: 'Alain',
-  last_name: 'Doucet',
+  id: 'masteradmin',
+  email: 'admin@tektoro.com',
+  first_name: 'Admin',
+  last_name: 'User',
   profile_image_url: '',
   role: 'admin',
   created_at: '2025-05-31 02:20:13.076903',
   updated_at: '2025-05-31 23:30:14.937',
   regular_rate: 100,
   overtime_rate: 150,
-  username: 'aldoucet',
-  password: '$2b$10$sr3y7F4bQCpfNCmIo2N8J.agRj/zC3qlTYlN5P9a8DGRYAptTI926'
+  username: 'masteradmin',
+  password: '$2b$10$CRrv7f4VYDL1KsKw0eml7O4PhuW3mz1a2lN0..BH8zb03dDMFwLM.'
 };
 
 const clientsData = [

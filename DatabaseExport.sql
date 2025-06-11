@@ -4,7 +4,7 @@
 
 -- ========================= USERS =========================
 INSERT INTO users (id, email, first_name, last_name, profile_image_url, role, created_at, updated_at, regular_rate, overtime_rate, username, password) VALUES
-('42614138', 'al.doucet@tektoro.com', 'Alain', 'Doucet', '', 'admin', '2025-05-31 02:20:13.076903', '2025-05-31 23:30:14.937', 100, 150, 'aldoucet', '$2b$10$sr3y7F4bQCpfNCmIo2N8J.agRj/zC3qlTYlN5P9a8DGRYAptTI926');
+('masteradmin', 'admin@tektoro.com', 'Admin', 'User', '', 'admin', '2025-05-31 02:20:13.076903', '2025-05-31 23:30:14.937', 100, 150, 'masteradmin', '$2b$10$CRrv7f4VYDL1KsKw0eml7O4PhuW3mz1a2lN0..BH8zb03dDMFwLM.');
 
 -- ========================= CLIENTS =========================
 INSERT INTO clients (id, name, email, phone, address, city, state, zip_code, country, contact_person, user_id, created_at, updated_at, company_id) VALUES
