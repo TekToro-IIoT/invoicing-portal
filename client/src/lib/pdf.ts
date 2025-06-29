@@ -270,20 +270,24 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
-            ${company.logo ? `
             <div class="logo-section">
               <div class="company-logo-box">
-                <img src="${company.logo}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: contain;" />
+                ${company?.logo ? `<img src="${company.logo}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: contain;" />` : `
+                <div class="logo-content">
+                  <div class="logo-icon">🔧</div>
+                  <div class="logo-text">TEKTORO</div>
+                  <div class="logo-subtitle">DIGITAL</div>
+                </div>`}
               </div>
-            </div>` : ''}
+            </div>
             <div class="company-details">
-              <div class="company-name">${company.name || 'Company Name'}</div>
-              ${company.address ? `<div>${company.address}</div>` : ''}
-              ${company.city || company.state || company.zipCode ? `<div>${company.city || ''}${company.state ? `, ${company.state}` : ''}${company.zipCode ? ` ${company.zipCode}` : ''}</div>` : ''}
-              ${company.country ? `<div>${company.country}</div>` : ''}
-              ${company.phone ? `<div>Phone: ${company.phone}</div>` : ''}
-              ${company.email ? `<div>Email: ${company.email}</div>` : ''}
-              ${company.website ? `<div>Web: ${company.website}</div>` : ''}
+              <div class="company-name">${company?.name || 'TekToro Digital Solutions Inc'}</div>
+              ${company?.address ? `<div>${company.address}</div>` : '<div>71 Fort Street PO Box 1569</div>'}
+              ${company?.city || company?.state || company?.zipCode ? `<div>${company?.city || 'George Town'}${company?.state ? `, ${company.state}` : ', Grand Cayman'}${company?.zipCode ? ` ${company.zipCode}` : ' KY1-1110'}</div>` : '<div>George Town, Grand Cayman KY1-1110</div>'}
+              ${company?.country ? `<div>${company.country}</div>` : '<div>Cayman Islands</div>'}
+              ${company?.phone ? `<div>Phone: ${company.phone}</div>` : '<div>Phone: 18558358676</div>'}
+              ${company?.email ? `<div>Email: ${company.email}</div>` : '<div>Email: al.doucet@tektoro.com</div>'}
+              ${company?.website ? `<div>Web: ${company.website}</div>` : '<div>Web: https://tektoro.com/</div>'}
             </div>
           </div>
           <div class="invoice-info">
