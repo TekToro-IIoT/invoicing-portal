@@ -535,7 +535,8 @@ export class DatabaseStorage implements IStorage {
       inv.invoiceNumber.startsWith(yearPrefix)
     );
     
-    let maxNumber = 0;
+    // Start from 025 as the minimum number
+    let maxNumber = 24; // Start at 24 so next number will be 025
     yearInvoices.forEach(inv => {
       const numberPart = inv.invoiceNumber.replace(yearPrefix, '');
       const num = parseInt(numberPart, 10);
