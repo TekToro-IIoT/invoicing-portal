@@ -121,11 +121,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **June 29, 2025**: Fixed PDF invoice generation to display authentic company and client information
-  - Updated PDF generation to show "TekToro Digital Solutions Inc" instead of placeholder text
-  - Corrected client database records to show proper Headington Energy Partners address
-  - All invoices now generate with authentic TekToro and client contact details
-  - PDF system now displays professional branding with real company data
+- **June 29, 2025**: Updated invoice numbering system and verified data integrity
+  - Changed invoice numbering to start from INV-TDS-2025-025 instead of 002
+  - Modified generation logic to continue sequence from 027 for new invoices
+  - Verified 4 invoices (025-028) are correctly displayed in application
+  - All invoices show authentic Headington Energy Partners LLC client data
+  - PDF system maintains professional branding with real company information
 
 ## Changelog
 
