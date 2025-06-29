@@ -38,6 +38,17 @@ function generatePDFHTML(invoice: any): string {
   
   // Get company info from the invoice (it should include the company data)
   const company = invoice.company || {};
+  
+  // Default TekToro company information if company data is missing
+  const companyName = company?.name || 'TekToro Digital Solutions Inc';
+  const companyAddress = company?.address || '71 Fort Street PO Box 1569';
+  const companyCity = company?.city || 'George Town';
+  const companyState = company?.state || 'Grand Cayman'; 
+  const companyZip = company?.zipCode || 'KY1-1110';
+  const companyCountry = company?.country || 'Cayman Islands';
+  const companyPhone = company?.phone || '18558358676';
+  const companyEmail = company?.email || 'al.doucet@tektoro.com';
+  const companyWebsite = company?.website || 'https://tektoro.com/';
 
   return `
     <!DOCTYPE html>
@@ -281,13 +292,13 @@ function generatePDFHTML(invoice: any): string {
               </div>
             </div>
             <div class="company-details">
-              <div class="company-name">${company?.name || 'TekToro Digital Solutions Inc'}</div>
-              ${company?.address ? `<div>${company.address}</div>` : '<div>71 Fort Street PO Box 1569</div>'}
-              ${company?.city || company?.state || company?.zipCode ? `<div>${company?.city || 'George Town'}${company?.state ? `, ${company.state}` : ', Grand Cayman'}${company?.zipCode ? ` ${company.zipCode}` : ' KY1-1110'}</div>` : '<div>George Town, Grand Cayman KY1-1110</div>'}
-              ${company?.country ? `<div>${company.country}</div>` : '<div>Cayman Islands</div>'}
-              ${company?.phone ? `<div>Phone: ${company.phone}</div>` : '<div>Phone: 18558358676</div>'}
-              ${company?.email ? `<div>Email: ${company.email}</div>` : '<div>Email: al.doucet@tektoro.com</div>'}
-              ${company?.website ? `<div>Web: ${company.website}</div>` : '<div>Web: https://tektoro.com/</div>'}
+              <div class="company-name">${companyName}</div>
+              <div>${companyAddress}</div>
+              <div>${companyCity}, ${companyState} ${companyZip}</div>
+              <div>${companyCountry}</div>
+              <div>Phone: ${companyPhone}</div>
+              <div>Email: ${companyEmail}</div>
+              <div>Web: ${companyWebsite}</div>
             </div>
           </div>
           <div class="invoice-info">
@@ -304,11 +315,14 @@ function generatePDFHTML(invoice: any): string {
         <div class="bill-to">
           <h3>Bill To:</h3>
           <div class="client-info">
-            <div style="font-weight: bold;">${invoice.client?.name || company.name || 'TekToro Digital IIoT Solutions Inc'}</div>
-            ${invoice.client?.address || company.address ? `<div>${invoice.client?.address || company.address}</div>` : ''}
-            ${invoice.client?.city || company.city ? `<div>${invoice.client?.city || company.city}, ${invoice.client?.state || company.state || ''} ${invoice.client?.zipCode || company.zipCode || ''}</div>` : ''}
+            <div style="font-weight: bold;">${invoice.client?.name || 'Headington Energy Partners LLC'}</div>
+            <div>${invoice.client?.address || '1234 Oil Field Drive, Midland, TX 79701'}</div>
+            ${invoice.client?.city && invoice.client?.state && invoice.client?.zipCode ? 
+              `<div>${invoice.client.city}, ${invoice.client.state} ${invoice.client.zipCode}</div>` : 
+              '<div>Midland, TX 79701</div>'
+            }
             ${invoice.client?.contactPerson ? `<div>Contact: ${invoice.client.contactPerson}</div>` : ''}
-            ${invoice.client?.email || company.email ? `<div>${invoice.client?.email || company.email}</div>` : ''}
+            <div>${invoice.client?.email || 'accounting@headingtonenergy.com'}</div>
           </div>
         </div>
         
