@@ -119,6 +119,14 @@ This is a comprehensive invoice management system built with React, Express.js, 
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+- **June 29, 2025**: Fixed PDF invoice generation to display authentic company and client information
+  - Updated PDF generation to show "TekToro Digital Solutions Inc" instead of placeholder text
+  - Corrected client database records to show proper Headington Energy Partners address
+  - All invoices now generate with authentic TekToro and client contact details
+  - PDF system now displays professional branding with real company data
+
 ## Changelog
 
 Changelog:
