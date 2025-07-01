@@ -129,18 +129,23 @@ export default function MasterInvoices() {
       return;
     }
 
-    if (!defaultCompany) {
-      toast({
-        title: "Error",
-        description: "Company information not available. Please check your company settings.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       console.log("Attempting to generate PDF...");
-      await generateMasterInvoicePDF(masterInvoiceData, defaultCompany);
+      
+      // Use default company data if not available from API
+      const companyData = defaultCompany || {
+        name: "TekToro Digital Solutions Inc",
+        address: "71 Fort Street PO Box 1569",
+        city: "George Town",
+        state: "Grand Cayman",
+        zipCode: "KY1-1110",
+        country: "Cayman Islands",
+        phone: "18558358676",
+        email: "al.doucet@tektoro.com",
+        website: "www.tektoro.com"
+      };
+      
+      await generateMasterInvoicePDF(masterInvoiceData, companyData);
       toast({
         title: "PDF Generated",
         description: "Master invoice PDF has been downloaded",
