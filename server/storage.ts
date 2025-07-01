@@ -770,8 +770,12 @@ export class DatabaseStorage implements IStorage {
 
   // Master invoice operations
   async getInvoicesByMonth(userId: string, year: number, month: number): Promise<Invoice[]> {
-    const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
-    const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
+    // Use JavaScript Date to properly calculate the last day of the month
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0); // Day 0 gets the last day of the previous month
+    
+    const startDateStr = startDate.toISOString().split('T')[0];
+    const endDateStr = endDate.toISOString().split('T')[0];
     
     const result = await db
       .select()
@@ -779,8 +783,8 @@ export class DatabaseStorage implements IStorage {
       .where(
         and(
           eq(invoices.userId, userId),
-          sql`${invoices.serviceDate} >= ${startDate}`,
-          sql`${invoices.serviceDate} <= ${endDate}`
+          sql`${invoices.serviceDate} >= ${startDateStr}`,
+          sql`${invoices.serviceDate} <= ${endDateStr}`
         )
       )
       .orderBy(invoices.serviceDate);
@@ -789,8 +793,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getClientInvoicesByMonth(userId: string, clientId: number, year: number, month: number): Promise<Invoice[]> {
-    const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
-    const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
+    // Use JavaScript Date to properly calculate the last day of the month
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0); // Day 0 gets the last day of the previous month
+    
+    const startDateStr = startDate.toISOString().split('T')[0];
+    const endDateStr = endDate.toISOString().split('T')[0];
     
     const result = await db
       .select()
@@ -799,8 +807,8 @@ export class DatabaseStorage implements IStorage {
         and(
           eq(invoices.userId, userId),
           eq(invoices.clientId, clientId),
-          sql`${invoices.serviceDate} >= ${startDate}`,
-          sql`${invoices.serviceDate} <= ${endDate}`
+          sql`${invoices.serviceDate} >= ${startDateStr}`,
+          sql`${invoices.serviceDate} <= ${endDateStr}`
         )
       )
       .orderBy(invoices.serviceDate);
