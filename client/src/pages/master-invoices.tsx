@@ -116,16 +116,30 @@ export default function MasterInvoices() {
   };
 
   const downloadMasterInvoicePDF = async () => {
-    if (!masterInvoiceData || !defaultCompany) {
+    console.log("Download PDF clicked");
+    console.log("Master invoice data:", masterInvoiceData);
+    console.log("Default company:", defaultCompany);
+    
+    if (!masterInvoiceData) {
       toast({
         title: "Error",
-        description: "Master invoice data not available",
+        description: "Master invoice data not available. Please generate the master invoice first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!defaultCompany) {
+      toast({
+        title: "Error",
+        description: "Company information not available. Please check your company settings.",
         variant: "destructive",
       });
       return;
     }
 
     try {
+      console.log("Attempting to generate PDF...");
       await generateMasterInvoicePDF(masterInvoiceData, defaultCompany);
       toast({
         title: "PDF Generated",
@@ -135,7 +149,7 @@ export default function MasterInvoices() {
       console.error('Error generating PDF:', error);
       toast({
         title: "Error",
-        description: "Failed to generate PDF",
+        description: `Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
     }
