@@ -101,6 +101,8 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
+      console.log("Mutation function called with data:", data);
+      
       // Calculate totals
       const subtotal = data.items.reduce((sum: number, item: any) => sum + (item.rate * (item.hrs + item.qty)), 0);
       const taxAmount = (subtotal * data.taxRate) / 100;
@@ -117,9 +119,13 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         items: data.items || [],
       };
 
+      console.log("Processed invoice data:", invoiceData);
+
       if (isEditing) {
+        console.log("Editing existing invoice");
         return await apiRequest(`/api/invoices/${invoice.id}`, "PUT", invoiceData);
       } else {
+        console.log("Creating new invoice");
         return await apiRequest("/api/invoices", "POST", invoiceData);
       }
     },
@@ -168,6 +174,9 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
     e.preventDefault();
     
     try {
+      console.log("Form submission started");
+      console.log("Form data:", formData);
+      
       // Validate form data before submission
       
       // Only include clientId if it's not empty and not editing
@@ -195,11 +204,13 @@ export default function InvoiceForm({ invoice, isOpen, onClose }: InvoiceFormPro
         dataToValidate.clientId = parseInt(formData.clientId);
       }
       
+      console.log("Data to validate:", dataToValidate);
       const validatedData = invoiceSchema.parse(dataToValidate);
-      
+      console.log("Validation passed, submitting:", validatedData);
 
       mutation.mutate(validatedData);
     } catch (error) {
+      console.error("Form submission error:", error);
       if (error instanceof z.ZodError) {
         console.error("Validation errors:", error.errors);
         const errorMessages = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
