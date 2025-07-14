@@ -89,60 +89,6 @@ function generatePDFHTML(invoice: any): string {
         
         .company-info {
           flex: 1;
-          display: flex;
-          align-items: flex-start;
-        }
-        
-        .logo-section {
-          margin-right: 20px;
-        }
-        
-        .company-logo-box {
-          width: 80px;
-          height: 80px;
-          background-color: #1e293b;
-          border: 1px solid #475569;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          padding: 4px;
-          -webkit-print-color-adjust: exact;
-          color-adjust: exact;
-        }
-        
-        .logo-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-        }
-        
-        .logo-icon {
-          margin-bottom: 2px;
-        }
-        
-        .logo-text {
-          color: #22c55e;
-          font-weight: bold;
-          font-size: 10px;
-          line-height: 1;
-          margin-bottom: 1px;
-        }
-        
-        .logo-subtitle {
-          color: #22c55e;
-          font-size: 6px;
-          line-height: 1;
-          opacity: 0.8;
-        }
-        
-        .logo-img {
-          width: 60px;
-          height: 60px;
-          object-fit: contain;
         }
         
         .company-details {
@@ -281,16 +227,6 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
-            <div class="logo-section">
-              <div class="company-logo-box">
-                ${company?.logo ? `<img src="${company.logo}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: contain;" />` : `
-                <div class="logo-content">
-                  <div class="logo-icon">🔧</div>
-                  <div class="logo-text">TEKTORO</div>
-                  <div class="logo-subtitle">DIGITAL</div>
-                </div>`}
-              </div>
-            </div>
             <div class="company-details">
               <div class="company-name">${companyName}</div>
               <div>${companyAddress}</div>
