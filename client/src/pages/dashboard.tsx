@@ -134,8 +134,8 @@ export default function Dashboard() {
             <div className="p-6 border-b border-gray-600">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-white">Recent Invoices</h3>
-                <Link href="/invoices">
-                  <a className="text-tektoro-primary hover:text-green-400 text-sm font-medium">View All</a>
+                <Link href="/invoices" className="text-tektoro-primary hover:text-green-400 text-sm font-medium">
+                  View All
                 </Link>
               </div>
             </div>
