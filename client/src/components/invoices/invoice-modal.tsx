@@ -249,7 +249,7 @@ export default function InvoiceModal({ invoice, isOpen, onClose }: InvoiceModalP
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-2">Payment Terms</h4>
                 <p className="text-sm text-gray-600">
-                  Payment is due within 30 days of invoice date. Late payments may be subject to a 1.5% monthly service charge.
+                  Payment is due within 14 days of invoice date. Late payments may be subject to a 2.5% monthly service charge.
                 </p>
               </div>
             </div>

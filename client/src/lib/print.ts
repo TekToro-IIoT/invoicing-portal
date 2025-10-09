@@ -529,7 +529,7 @@ function generateInvoicePrintHTML(invoice: any): string {
         
         <div class="notes">
           <h4 style="font-weight: 600; margin-bottom: 8px;">Payment Terms</h4>
-          <p style="font-size: 14px; color: #6b7280;">Payment is due within 30 days of invoice date. Late payments may be subject to a 1.5% monthly service charge.</p>
+          <p style="font-size: 14px; color: #6b7280;">Payment is due within 14 days of invoice date. Late payments may be subject to a 2.5% monthly service charge.</p>
         </div>
       </div>
     </body>
