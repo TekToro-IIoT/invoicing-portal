@@ -360,7 +360,7 @@ function generatePDFHTML(invoice: any): string {
         
         <div class="notes-section">
           <h4>Payment Terms:</h4>
-          <p>Payment is due within 30 days of invoice date. Late payments may be subject to a 1.5% monthly service charge.</p>
+          <p>Payment is due within 14 days of invoice date. Late payments may be subject to a 2.5% monthly service charge.</p>
         </div>
       </div>
     </body>
