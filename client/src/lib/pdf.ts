@@ -49,6 +49,7 @@ function generatePDFHTML(invoice: any): string {
   const companyPhone = company?.phone || '18558358676';
   const companyEmail = company?.email || 'al.doucet@tektoro.com';
   const companyWebsite = company?.website || 'https://tektoro.com/';
+  const companyLogo = company?.logo || '';
 
   return `
     <!DOCTYPE html>
@@ -89,6 +90,21 @@ function generatePDFHTML(invoice: any): string {
         
         .company-info {
           flex: 1;
+          display: flex;
+          align-items: flex-start;
+          gap: 15px;
+        }
+        
+        .company-logo {
+          width: 80px;
+          height: 80px;
+          flex-shrink: 0;
+        }
+        
+        .company-logo img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
         
         .company-details {
@@ -227,6 +243,7 @@ function generatePDFHTML(invoice: any): string {
         <!-- Header -->
         <div class="header">
           <div class="company-info">
+            ${companyLogo ? `<div class="company-logo"><img src="${companyLogo}" alt="Company Logo" /></div>` : ''}
             <div class="company-details">
               <div class="company-name">${companyName}</div>
               <div>${companyAddress}</div>
