@@ -116,7 +116,7 @@ function generatePDFHTML(invoice: any): string {
           font-size: 16px;
           font-weight: bold;
           margin-bottom: 5px;
-          color: #1e3a8a;
+          color: #000000;
         }
         
         .invoice-info {
