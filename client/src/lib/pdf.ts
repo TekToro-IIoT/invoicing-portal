@@ -59,6 +59,17 @@ function generatePDFHTML(invoice: any): string {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Invoice ${invoice.invoiceNumber} - TekToro</title>
       <style>
+        @page {
+          margin: 0.5in;
+          size: auto;
+        }
+        
+        @media print {
+          body {
+            margin: 0;
+          }
+        }
+        
         * {
           margin: 0;
           padding: 0;
