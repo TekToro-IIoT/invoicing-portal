@@ -45,6 +45,7 @@ export interface IStorage {
   updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
   updateUserRole(id: string, role: string): Promise<User | undefined>;
   updateUserCredentials(id: string, username?: string, email?: string, password?: string): Promise<User | undefined>;
+  deleteUser(id: string): Promise<boolean>;
   
   // Profile management (for authenticated users)
   updateProfile(id: string, firstName?: string, lastName?: string, email?: string): Promise<User | undefined>;
@@ -212,6 +213,13 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return updatedUser;
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const result = await db
+      .delete(users)
+      .where(eq(users.id, id));
+    return true;
   }
 
   async updateProfile(id: string, firstName?: string, lastName?: string, email?: string): Promise<User | undefined> {
