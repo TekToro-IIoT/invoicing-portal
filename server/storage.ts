@@ -41,6 +41,7 @@ export interface IStorage {
   
   // User management operations (for admin)
   getAllUsers(): Promise<User[]>;
+  createUser(username: string, email: string, password: string, firstName: string, lastName: string, regularRate?: string, overtimeRate?: string, role?: string): Promise<User>;
   updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined>;
   updateUserRole(id: string, role: string): Promise<User | undefined>;
   updateUserCredentials(id: string, username?: string, email?: string, password?: string): Promise<User | undefined>;
@@ -131,6 +132,37 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(users)
       .orderBy(asc(users.firstName), asc(users.lastName));
+  }
+
+  async createUser(
+    username: string, 
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
+    regularRate: string = "100", 
+    overtimeRate: string = "150", 
+    role: string = "user"
+  ): Promise<User> {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const [newUser] = await db
+      .insert(users)
+      .values({
+        id: userId,
+        username,
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+        regularRate,
+        overtimeRate,
+        role,
+      })
+      .returning();
+    
+    return newUser;
   }
 
   async updateUserRates(id: string, regularRate: string, overtimeRate: string): Promise<User | undefined> {
