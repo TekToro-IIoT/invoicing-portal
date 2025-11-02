@@ -51,8 +51,10 @@ This is a comprehensive invoice management system built with React, Express.js, 
 
 ### User Management
 - Admin-only user profile management
+- **New user creation** with comprehensive form (username, email, password, rates, role)
 - Billing rate configuration per user
 - Role assignment and permissions
+- Credential management (username, email, password updates)
 - Profile self-management for authenticated users
 
 ### Time Tracking (Prepared)
@@ -121,6 +123,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **November 2, 2025**: Added user creation functionality
+  - Implemented "Add New User" button on User Profiles page
+  - Created comprehensive user registration form with all required fields
+  - Added backend API endpoint (POST /api/admin/users) for user creation
+  - Implemented storage method with bcrypt password hashing
+  - Tested successfully: new users can be created with custom rates and roles
+  
 - **June 29, 2025**: Updated invoice numbering system and verified data integrity
   - Changed invoice numbering to start from INV-TDS-2025-025 instead of 002
   - Modified generation logic to continue sequence from 027 for new invoices
