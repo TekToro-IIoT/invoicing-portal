@@ -7,17 +7,22 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Users, DollarSign, Shield, Edit, UserPlus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Users, DollarSign, Shield, Edit, UserPlus, Trash2 } from "lucide-react";
 import type { User } from "@shared/schema";
 
 export default function UserProfiles() {
   const { toast } = useToast();
+  const { user: currentUser } = useAuth();
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [deletingUser, setDeletingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCredentialsDialogOpen, setIsCredentialsDialogOpen] = useState(false);
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
@@ -106,6 +111,28 @@ export default function UserProfiles() {
     },
   });
 
+  const deleteUserMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      await apiRequest(`/api/admin/users/${userId}`, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+      setIsDeleteDialogOpen(false);
+      setDeletingUser(null);
+      toast({
+        title: "Success",
+        description: "User deleted successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete user",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleEditRates = (user: User) => {
     setEditingUser(user);
     setIsEditDialogOpen(true);
@@ -189,6 +216,17 @@ export default function UserProfiles() {
       overtimeRate: overtimeRate || "150",
       role: role || "user"
     });
+  };
+
+  const handleDeleteUser = (user: User) => {
+    setDeletingUser(user);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteUser = () => {
+    if (deletingUser) {
+      deleteUserMutation.mutate(deletingUser.id);
+    }
   };
 
   if (isLoading) {
@@ -308,6 +346,18 @@ export default function UserProfiles() {
                     <Shield className="w-4 h-4 mr-2" />
                     Edit Credentials
                   </Button>
+                  {currentUser?.id !== user.id && (
+                    <Button
+                      onClick={() => handleDeleteUser(user)}
+                      variant="outline"
+                      size="sm"
+                      className="w-full border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                      data-testid={`button-delete-user-${user.id}`}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete User
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -580,6 +630,35 @@ export default function UserProfiles() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Delete User Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent className="bg-gray-800 border-gray-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete User</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Are you sure you want to delete <span className="font-semibold text-white">{deletingUser?.firstName} {deletingUser?.lastName}</span>? 
+              This action cannot be undone and will permanently remove this user and all associated data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600"
+              data-testid="button-cancel-delete"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteUser}
+              className="bg-red-600 hover:bg-red-700 text-white"
+              disabled={deleteUserMutation.isPending}
+              data-testid="button-confirm-delete"
+            >
+              {deleteUserMutation.isPending ? 'Deleting...' : 'Delete User'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
