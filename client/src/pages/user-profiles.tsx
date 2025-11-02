@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Users, DollarSign, Shield, Edit } from "lucide-react";
+import { Users, DollarSign, Shield, Edit, UserPlus } from "lucide-react";
 import type { User } from "@shared/schema";
 
 export default function UserProfiles() {
@@ -17,6 +17,7 @@ export default function UserProfiles() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCredentialsDialogOpen, setIsCredentialsDialogOpen] = useState(false);
+  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
 
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
@@ -84,6 +85,27 @@ export default function UserProfiles() {
     },
   });
 
+  const createUserMutation = useMutation({
+    mutationFn: async (userData: { username: string, email: string, password: string, firstName: string, lastName: string, regularRate?: string, overtimeRate?: string, role?: string }) => {
+      await apiRequest('/api/admin/users', 'POST', userData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+      setIsAddUserDialogOpen(false);
+      toast({
+        title: "Success",
+        description: "New user created successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create user",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleEditRates = (user: User) => {
     setEditingUser(user);
     setIsEditDialogOpen(true);
@@ -135,18 +157,62 @@ export default function UserProfiles() {
     updateCredentialsMutation.mutate(updates);
   };
 
+  const handleAddUser = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get('username') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    const regularRate = formData.get('regularRate') as string;
+    const overtimeRate = formData.get('overtimeRate') as string;
+    const role = formData.get('role') as string;
+
+    if (!username || !email || !password || !firstName || !lastName) {
+      toast({
+        title: "Missing Fields",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    createUserMutation.mutate({
+      username: username.trim(),
+      email: email.trim(),
+      password: password.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      regularRate: regularRate || "100",
+      overtimeRate: overtimeRate || "150",
+      role: role || "user"
+    });
+  };
+
   if (isLoading) {
     return <div className="flex justify-center items-center h-64">Loading users...</div>;
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Users className="h-8 w-8 text-green-400" />
-        <div>
-          <h1 className="text-2xl font-bold text-white">User Profiles</h1>
-          <p className="text-gray-400">Manage user billing rates and permissions</p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Users className="h-8 w-8 text-green-400" />
+          <div>
+            <h1 className="text-2xl font-bold text-white">User Profiles</h1>
+            <p className="text-gray-400">Manage user billing rates and permissions</p>
+          </div>
         </div>
+        <Button
+          onClick={() => setIsAddUserDialogOpen(true)}
+          className="bg-green-600 hover:bg-green-700 text-white"
+          data-testid="button-add-user"
+        >
+          <UserPlus className="w-4 h-4 mr-2" />
+          Add New User
+        </Button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -368,6 +434,147 @@ export default function UserProfiles() {
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {updateCredentialsMutation.isPending ? 'Updating...' : 'Update Credentials'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add New User Dialog */}
+      <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
+        <DialogContent className="bg-gray-800 border-gray-700 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white">Add New User</DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleAddUser} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="newFirstName" className="text-gray-400">First Name *</Label>
+                <Input
+                  id="newFirstName"
+                  name="firstName"
+                  type="text"
+                  placeholder="Enter first name"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  required
+                  data-testid="input-firstName"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="newLastName" className="text-gray-400">Last Name *</Label>
+                <Input
+                  id="newLastName"
+                  name="lastName"
+                  type="text"
+                  placeholder="Enter last name"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  required
+                  data-testid="input-lastName"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="newUsername" className="text-gray-400">Username *</Label>
+              <Input
+                id="newUsername"
+                name="username"
+                type="text"
+                placeholder="Enter username"
+                className="bg-gray-700 border-gray-600 text-white"
+                required
+                data-testid="input-username"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="newEmail" className="text-gray-400">Email Address *</Label>
+              <Input
+                id="newEmail"
+                name="email"
+                type="email"
+                placeholder="Enter email address"
+                className="bg-gray-700 border-gray-600 text-white"
+                required
+                data-testid="input-email"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="newPassword" className="text-gray-400">Password *</Label>
+              <Input
+                id="newPassword"
+                name="password"
+                type="password"
+                placeholder="Enter password"
+                className="bg-gray-700 border-gray-600 text-white"
+                required
+                data-testid="input-password"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="newRegularRate" className="text-gray-400">Regular Rate ($/hr)</Label>
+                <Input
+                  id="newRegularRate"
+                  name="regularRate"
+                  type="number"
+                  step="0.01"
+                  placeholder="100"
+                  defaultValue="100"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  data-testid="input-regularRate"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="newOvertimeRate" className="text-gray-400">Overtime Rate ($/hr)</Label>
+                <Input
+                  id="newOvertimeRate"
+                  name="overtimeRate"
+                  type="number"
+                  step="0.01"
+                  placeholder="150"
+                  defaultValue="150"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  data-testid="input-overtimeRate"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="newRole" className="text-gray-400">Role</Label>
+              <Select name="role" defaultValue="user">
+                <SelectTrigger className="bg-gray-700 border-gray-600 text-white" data-testid="select-role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="user">User</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddUserDialogOpen(false)}
+                className="border-gray-600 text-gray-400"
+                data-testid="button-cancel-add-user"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={createUserMutation.isPending}
+                className="bg-green-600 hover:bg-green-700 text-white"
+                data-testid="button-submit-add-user"
+              >
+                {createUserMutation.isPending ? 'Creating...' : 'Create User'}
               </Button>
             </div>
           </form>
