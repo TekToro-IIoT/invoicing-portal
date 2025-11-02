@@ -52,6 +52,7 @@ This is a comprehensive invoice management system built with React, Express.js, 
 ### User Management
 - Admin-only user profile management
 - **New user creation** with comprehensive form (username, email, password, rates, role)
+- **User deletion** with confirmation dialog and self-deletion protection
 - Billing rate configuration per user
 - Role assignment and permissions
 - Credential management (username, email, password updates)
@@ -123,12 +124,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **November 2, 2025**: Added user creation functionality
+- **November 2, 2025**: Added complete user management (create & delete)
   - Implemented "Add New User" button on User Profiles page
   - Created comprehensive user registration form with all required fields
   - Added backend API endpoint (POST /api/admin/users) for user creation
   - Implemented storage method with bcrypt password hashing
-  - Tested successfully: new users can be created with custom rates and roles
+  - Added "Delete User" functionality with confirmation dialog
+  - Implemented self-deletion protection (users cannot delete their own account)
+  - Backend endpoint (DELETE /api/admin/users/:id) validates and prevents self-deletion
+  - Tested successfully: users can be created and deleted with proper safeguards
   
 - **June 29, 2025**: Updated invoice numbering system and verified data integrity
   - Changed invoice numbering to start from INV-TDS-2025-025 instead of 002
