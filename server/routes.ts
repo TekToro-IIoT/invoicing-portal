@@ -44,6 +44,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/admin/users', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { username, email, password, firstName, lastName, regularRate, overtimeRate, role } = req.body;
+      
+      if (!username || !email || !password || !firstName || !lastName) {
+        return res.status(400).json({ message: "Username, email, password, first name, and last name are required" });
+      }
+
+      const newUser = await storage.createUser(
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+        regularRate,
+        overtimeRate,
+        role
+      );
+      
+      res.status(201).json(newUser);
+    } catch (error: any) {
+      console.error("Error creating user:", error);
+      if (error.code === '23505') {
+        return res.status(400).json({ message: "Username or email already exists" });
+      }
+      res.status(500).json({ message: "Failed to create user" });
+    }
+  });
+
   app.put('/api/admin/users/:id/rates', isAuthenticated, isAdmin, async (req: any, res) => {
     try {
       const userId = req.params.id;
